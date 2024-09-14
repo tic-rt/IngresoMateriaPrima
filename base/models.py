@@ -1,5 +1,6 @@
 from django.db import models
 from simple_history.models import HistoricalRecords
+from django.contrib.auth.models import User
 # Create your models here.
 
 class Base(models.Model):
@@ -9,7 +10,7 @@ class Base(models.Model):
     created_date = models.DateField('Fecha de creación', auto_now=False, auto_now_add=True)
     modified_date = models.DateField('Fecha de Modificacion', auto_now=True, auto_now_add=False)
     deleted_date = models.DateField('Fecha de eliminacion')
-    historical = HistoricalRecords(user_model="users.Users", inherit=True)
+    historical = HistoricalRecords(user_model=User, inherit=True)
     
     property
     def _history_user(self):
