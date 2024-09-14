@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="15.1">
+  <zoom_level>8</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>368</x>
+      <y>296</y>
+      <w>168</w>
+      <h>200</h>
+    </coordinates>
+    <panel_attributes>Package::proveedores
+*Proveedores*
+--
+-id: int
+-nombre:String
+-producto:Producto
+--
++ agregarProveedor
++ agregarProducto
++ nombreProveedor
++ nombreProducto 
+--
+Responsibilidad
+*Registro de proveedores*
+
+bg=yellow</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>544</x>
+      <y>328</y>
+      <w>168</w>
+      <h>184</h>
+    </coordinates>
+    <panel_attributes>Package::personal
+*Personal*
+--
+-sector: Sectores
+-legajo: String
+-nombre: String
+-apellido: String
+-dni: String
+
+--
+
+--
+Responsibilidad
+*-- Registro de Personal*
+Personal que registra HDR
+bg=orange</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>888</x>
+      <y>272</y>
+      <w>200</w>
+      <h>440</h>
+    </coordinates>
+    <panel_attributes>Package::porteria2
+*Ingreso*
+--
+id: int
+-horaLlegada:Date
+-ingresoCalefaccion: boolean
+-empresaTransporte: int
+-conductor: int
+-dniConductor:String
+-producto: int
+-remito: String
+-vehiculo: int
+-patente: id
+-patenteChasis
+-responsable:String
+-ingresado:boolean
+--
+-agregarHora
++calefaccion
++seleccionarEmpresaTransporte
++seleccionarConductor
++seleccionarProveedor:int
++seleccionarProducto:String
++agregarRemito
++seleccionarVehiculo
+-seleccionarPatente
++seleccionarSemi
+-seleccionarPatenteSemi
++agregarResponsable
+--
+Responsibilidad
+*-- Registro de Ingreso a Porteria 2*
+Inicio de HDR, ingreso de vehiculo con 
+producto</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>528</x>
+      <y>304</y>
+      <w>376</w>
+      <h>32</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=1..1</panel_attributes>
+    <additional_attributes>10.0;10.0;450.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>704</x>
+      <y>344</y>
+      <w>200</w>
+      <h>32</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=1..2</panel_attributes>
+    <additional_attributes>10.0;10.0;230.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>488</x>
+      <y>520</y>
+      <w>224</w>
+      <h>192</h>
+    </coordinates>
+    <panel_attributes>Package::transporte
+*Transporte*
+--
+-id: int
+-nombre: String
+-camion: int
+-semi:int
+--
++agregarTransporte
++agregarCamion
++agregarSemi
+
+--
+Responsibilidad
+*-- Registro de Empresas de Transporte*
+
+bg=pink</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>96</x>
+      <y>520</y>
+      <w>168</w>
+      <h>152</h>
+    </coordinates>
+    <panel_attributes>Package::transporte
+*Camion*
+--
+-marca
+-patente
+--
++seleccionarMarca
++agregarPatente
+--
+Responsabilidad
+*-- Registro de camiones *
+camiones de una empresa
+bg=pink</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>272</x>
+      <y>552</y>
+      <w>168</w>
+      <h>128</h>
+    </coordinates>
+    <panel_attributes>Package::transporte
+*Semi*
+--
+-patente
+--
++agregarPatente
+--
+Responsabilidad
+-- Resp1
+*-- Registro de semis*
+semis de una empresa
+
+bg=pink
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>256</x>
+      <y>528</y>
+      <w>248</w>
+      <h>32</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=n..1</panel_attributes>
+    <additional_attributes>10.0;10.0;290.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>432</x>
+      <y>560</y>
+      <w>72</w>
+      <h>32</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=n..1</panel_attributes>
+    <additional_attributes>10.0;10.0;70.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>704</x>
+      <y>528</y>
+      <w>200</w>
+      <h>32</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=1..1</panel_attributes>
+    <additional_attributes>10.0;10.0;230.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>128</x>
+      <y>296</y>
+      <w>168</w>
+      <h>128</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Enumerador&gt;&gt;
+Package::proveedores
+*Producto*
+--
+-id: int
+-producto
+--
++ agregarProducto
+--
+Responsibilidad
+*Registro de productos*
+
+bg=yellow</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>288</x>
+      <y>312</y>
+      <w>96</w>
+      <h>32</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=n..1</panel_attributes>
+    <additional_attributes>10.0;10.0;100.0;10.0</additional_attributes>
+  </element>
+</diagram>

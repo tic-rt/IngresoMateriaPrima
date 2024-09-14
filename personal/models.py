@@ -12,9 +12,9 @@ class Persona(models.Model):
     """Esta clase representa el personal responsable de cada áera"""
     
     sector = models.CharField(choices=sectores, max_length=100)
-    nombre = models.CharField('Nombre', verbose_name='Nombre',null=False, blank=False, max_length=30)
-    apellido = models.CharField('Apellido', verbose_name='Apellido', null=False, blank=False, max_length=30)
-    legajo = models.CharField('Nº Legajo', verbose_name='Nº Legajo', null=False,blank=False, default=0, unique=True)
+    nombre = models.CharField(verbose_name='Nombre',null=False, blank=False, max_length=30)
+    apellido = models.CharField(verbose_name='Apellido', null=False, blank=False, max_length=30)
+    legajo = models.CharField(verbose_name='Nº Legajo', null=False,blank=False, default=0, unique=True)
     
     class meta:
         """Meta definicion para Personal"""
