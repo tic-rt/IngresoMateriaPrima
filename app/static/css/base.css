@@ -1,0 +1,41 @@
+/* Estilos para el header */
+.header{
+    background-color: #00498d;
+    color: aliceblue;
+  }
+  .logo{
+    margin-left: 5%;
+    min-width: 60px;
+    min-height: auto;
+  }
+  
+/* Ajustes para la navbar */
+.navbar {
+  background-color: rgb(193, 195, 197);
+  z-index: 1000; /* Asegura que la navbar esté sobre la barra lateral */
+  min-height: 70px;
+}
+/* Ajustes para la barra lateral */
+.lateral {
+  padding-top: 2%;
+  background-color: #00498d;
+  height: 100vh;
+} 
+
+.lateral .nav-item .nav-link {
+  color: rgb(199, 204, 209);
+}
+
+h4 {
+  color : aliceblue;
+}
+
+.link-side {
+  color:  rgb(193, 195, 197);
+  transition: 200ms; /* Suaviza la transición del cambio de tamaño */
+  ;
+}
+.link-side:hover {
+  font-size: 1.3rem;
+  color: aliceblue;
+}
