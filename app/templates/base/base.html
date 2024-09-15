@@ -39,34 +39,40 @@
             <a class="nav-link" href="{% url 'porteria2' %}">Porteria</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">Pricing</a>
+            <a class="nav-link" href="#">Shyma</a>
           </li>
-          <li class="nav-item dropdown">
+          <li class="nav-item">
+            <a class="nav-link" href="#">Balanza</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Inspeccion Quimica</a>
+          </li>
+          <!-- <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
               Dropdown link
             </a>
             <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="#">Action</a></li>
+              <li><a class="dropdown-item" href="#">Balanza</a></li>
               <li><a class="dropdown-item" href="#">Another action</a></li>
               <li><a class="dropdown-item" href="#">Something else here</a></li>
             </ul>
-          </li>
+          </li> -->
         </ul>
       </div>
     </div>
   </nav>
 <!-- contengo en un row la barra lateral y el contenido -->
 <div class="container-fluid">
-  <div class="row">
+  <aside class="row">
     <!-- barra lateral -->
     <div class="lateral col-4 col-sm-2">
       <div>
         <h4>Porteria 2</h4>
       <ul class="nav flex-column">
-        <li class="nav-item">
+        <!-- <li class="nav-item">
           <i class="bi i"></i>
           <a class="nav-link active link-side" href="#">Nuevo Ingreso</a>
-        </li>
+        </li> -->
         <li class="nav-item">
           <a class="nav-link link-side" href="#">Finalizar Ingreso</a>
         </li>
@@ -87,7 +93,7 @@
       {% block content %}
       {% endblock %}
      </div>
-  </div>
+  </aside>
 </div>
 
   <!-- Barra Lateral y contenido -->
