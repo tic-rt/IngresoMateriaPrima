@@ -37,7 +37,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django-simple-history',
+    'simple_history',
+    'app',
+    'porteria2',
+    'personal',
+    'proveedores',
+    'transporte',
 ]
 
 MIDDLEWARE = [
