@@ -12,7 +12,7 @@ class Personal(models.Model):
     sector = models.CharField(choices=sectores, max_length=100)
     nombre = models.CharField(verbose_name='Nombre',null=False, blank=False, max_length=30)
     apellido = models.CharField(verbose_name='Apellido', null=False, blank=False, max_length=30)
-    legajo = models.CharField(verbose_name='Nº Legajo', null=False,blank=False, default=0, unique=True)
+    legajo = models.CharField(verbose_name='Nº Legajo', null=False,blank=False, default=0, unique=True, max_length=5)
     
     class meta:
         """Meta definicion para Personal"""
