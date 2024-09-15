@@ -1,14 +1,12 @@
 from django.db import models
 
-from base.models import Base
-
 # Create your models here.
 
 sectores = [
     ('Porteria 2', 'porteria 2'),
 ]
 
-class Persona(models.Model):
+class Personal(models.Model):
     """Esta clase representa el personal responsable de cada áera"""
     
     sector = models.CharField(choices=sectores, max_length=100)
