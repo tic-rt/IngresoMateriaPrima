@@ -3,10 +3,10 @@ from django.db import models
 from base.models import Base
 
 # Create your models here.
-productos = [
-    ('azufre','Azufre Liquido'),
-    ('azufre_solido','Azufre solido a granel'),
-    ('amoniaco','Amoniaco'),
+productos = [ # No deberia estar hardcodeado ,por ahora puede salir asi,esta es la lista completa?  
+    ('Azufre','Azufre Liquido'),
+    ('Azufre solido','Azufre solido a granel'),
+    ('Amoniaco','Amoniaco'),
 ]
 
 class Producto(Base):
@@ -36,5 +36,8 @@ class Proveedores(Base):
         verbose_name = 'Proveedor'
         verbose_name_plural = 'Proveedores'
         ordering = ['nombre']
+
+    def __str__(self):
+        return self.nombre
     
     
