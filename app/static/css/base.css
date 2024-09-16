@@ -39,3 +39,8 @@ h4 {
   font-size: 1.3rem;
   color: aliceblue;
 }
+
+/*Capitalizar la primer letra de cada palabra*/
+.cap{
+  text-transform: capitalize;
+}
