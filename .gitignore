@@ -1,0 +1,52 @@
+# Archivos y directorios generales
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+db.sqlite3
+*.log
+
+# Entorno virtual
+venv/
+env/
+ENV/
+.venv/
+.env/
+
+# Archivos de configuración del sistema
+.DS_Store
+Thumbs.db
+
+# Directorios específicos de Django
+staticfiles/
+media/
+
+# Archivos de configuración de IDE
+.vscode/
+.idea/
+
+# Archivos temporales de sistema
+*.tmp
+*.swp
+*.swo
+
+# Archivos de configuración de Docker
+docker-compose.override.yml
+
+# Configuración de pytest
+*.cover
+.coverage
+.cache
+
+# PyCharm
+*.iml
+.idea/
+
+# Configuración de MySQL
+*.sql
+
+# Archivos de seguridad
+*.key
+*.pem
+
+# Ignorar configur
