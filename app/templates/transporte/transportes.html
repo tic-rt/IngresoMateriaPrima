@@ -1,0 +1,116 @@
+{% extends "base/base.html" %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'vendor/bootstrap-5.3.2-dist/css/bootstrap.css' %}">
+<script src="{% static 'vendor/bootstrap-5.3.2-dist/js/bootstrap.bundle.js' %}"></script>
+
+{% block content %}
+<div class="container mt-5 pt-5 d-flex flex-column">
+    <div class="container">
+        <div class="container col-4 justify-content-center">
+            <table class="table table-bordered table-striped">
+                <div class="container-fluid d-flex align-items-center justify-content-between mb-3">
+                    <div class="text-center"> Listado de empresas</div>
+                        <div>
+                            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modal">Agregar</button>
+                        </div>
+                    </div>
+                <thead>
+                    <tr class="text-center">
+                        <th>Empresa</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for transporte in transportes %}
+                        <tr>
+                            <td>
+                                {{transportes.nombre}}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="container col-4 justify-content-center mt-5">
+        <table class="table table-bordered table-striped">
+           <div class="container-fluid d-flex align-items-center justify-content-between mb-3">
+            <div class="text-center"> Listado de Camiones</div>
+            <div>
+                <button class="btn btn-success">Agregar</button>
+            </div>
+           </div>
+            <thead>
+                <tr class="text-center">
+                    <th>Marca</th>
+                    <th>Patente</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for camion in camiones %}
+                    <tr>
+                        <td>
+                            {{camion.marca}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            {{ camion.patente}}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+         
+    <div class="container col-4 justify-content-center mt-5">
+        <table class="table table-bordered table-striped">
+           <div class="container-fluid d-flex align-items-center justify-content-between mb-3">
+                <div class="text-center"> Listado de Semis</div>
+                    <div>
+                        <button class="btn btn-success">Agregar</button>
+                    </div>
+           </div>
+            <thead>
+                <tr class="text-center">
+                    <th>Patente</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for semi in semis %}
+                    <tr>
+                        <td>
+                            {{semi.patente}}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="modal fade" id="modal" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="ModalLabel"></h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" id="contenidoModal">
+            <!-- <div class="container border-2">
+                <div>Aca va el formulario</div>
+                <form method="post" action="">
+                    {% csrf_token %}
+                    {{ form_camion.as_p }}
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </form>
+            </div> -->
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock content %}
