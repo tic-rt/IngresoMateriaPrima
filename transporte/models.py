@@ -7,7 +7,7 @@ from base.models import Base
 class Transporte(Base):
     """Esta clase representa una empresa de transporte"""
     
-    nombre = models.CharField(verbose_name='Transporte', max_length=50)
+    nombre = models.CharField(verbose_name='Transporte', max_length=50, unique=True)
     
     class Meta:
         """Metas definicion para Transporte"""
@@ -17,27 +17,27 @@ class Transporte(Base):
         
     def __str__(self):
             return self.nombre
-
-class Marca(Base):
-        """Esta clase interna representa la marca de un camion"""
-        marca = models.CharField(verbose_name='Marca',max_length=20)
-        
-        class Meta:
-            """meta definicion para marca"""
-            verbose_name = 'Marca'
-            verbose_name_plural = 'Marcas'
-            ordering = ['marca']
-
-        def __str__(self):
-            return self.marca
         
 class Camion(Base):
     """Esta clase representa un camion que pertenece a una empresa de transporte"""
     
+    marcas = [
+            ('Mercedes-Benz', 'Mercedes-Benz'),
+            ('Volvo', 'Volvo'),
+            ('Scania', 'Scania'),
+            ('Iveco', 'Iveco'),
+            ('Ford', 'Ford'),
+            ('MAN', 'MAN'),
+            ('Hino', 'Hino'),
+            ('Isuzu', 'Isuzu'),
+            ('Chevrolet', 'Chevrolet'),
+            ('Kenworth', 'Kenworth'),
+            ]
+    
     transporte = models.ForeignKey(Transporte, on_delete=models.PROTECT, verbose_name='Transporte')
-    marca = models.ForeignKey(Marca,on_delete=models.PROTECT, verbose_name='Marca')
+    marca = models.CharField(verbose_name='Marca',choices=marcas,max_length=30)
     patente = models.CharField(verbose_name='Patente', max_length=10, null=False, blank=False, default='AAA000AAA')
-    vencimientoSeguro = models.DateField(verbose_name='Vencimiento Seguro') #Preguntar si va o no va
+    vencimiento_seguro = models.DateField(verbose_name='Vencimiento Seguro') #Preguntar si va o no va
     
     class Meta:
         """Meta definicion  para Camion"""
