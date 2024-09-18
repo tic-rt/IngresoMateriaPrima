@@ -11,7 +11,7 @@
                 <div class="container-fluid d-flex align-items-center justify-content-between mb-3">
                     <div class="text-center"> Listado de empresas</div>
                         <div>
-                            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modal">Agregar</button>
+                            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modal" id="nuevaEmpresa">Agregar</button>
                         </div>
                     </div>
                 <thead>
@@ -23,7 +23,7 @@
                     {% for transporte in transportes %}
                         <tr>
                             <td>
-                                {{transportes.nombre}}
+                                {{transporte.nombre}}
                             </td>
                         </tr>
                     {% endfor %}
@@ -37,7 +37,7 @@
            <div class="container-fluid d-flex align-items-center justify-content-between mb-3">
             <div class="text-center"> Listado de Camiones</div>
             <div>
-                <button class="btn btn-success">Agregar</button>
+                <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modal" id="nuevoCamion">Agregar</button>
             </div>
            </div>
             <thead>
@@ -49,14 +49,7 @@
             <tbody>
                 {% for camion in camiones %}
                     <tr>
-                        <td>
-                            {{camion.marca}}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            {{ camion.patente}}
-                        </td>
+                        <td>{{camion.marca}}</td><td>{{ camion.patente}}</td>
                     </tr>
                 {% endfor %}
             </tbody>
@@ -68,7 +61,7 @@
            <div class="container-fluid d-flex align-items-center justify-content-between mb-3">
                 <div class="text-center"> Listado de Semis</div>
                     <div>
-                        <button class="btn btn-success">Agregar</button>
+                        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modal" id="nuevoSemi">Agregar</button>
                     </div>
            </div>
             <thead>
@@ -96,26 +89,58 @@
           <h5 class="modal-title" id="ModalLabel"></h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <div class="modal-body" id="contenidoModal">
-                Aca va el formulario
+        <div class="modal-body" id="contenido">
+               <!--  Aca va el formulario
                 <form method="post" action="">
                     {% csrf_token %}
                     {{ form_camion.as_p }}
-                   <!--  <button type="submit" class="btn btn-primary">Guardar</button> -->
-                </form>       
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </form>        -->
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-          <button type="button" class="btn btn-primary">Guardar</button>
+          <!-- <button type="button" class="btn btn-primary">Guardar</button> -->
         </div>
       </div>
     </div>
   </div>
-{% endblock content %}
-<script>
+
+  <script>
     document.addEventListener('DOMContentLoaded', function () {
-        //ponerle un listener a cada boton para seleccionar el titulo y elegir 
-        //que formulario mostrar cuando tenga datos seguir con porteria
+        console.log('script cargado')
+        botones = document.querySelectorAll('.btn')
+        botones.forEach(boton => {
+            boton.addEventListener('click',function(){
+                const id = boton.id
+                console.log(id)
+                const titulo = document.querySelector('#ModalLabel')
+                const cuerpo = document.querySelector('#contenido')
+                console.log(titulo)
+                if(id === 'nuevaEmpresa'){
+                    titulo.textContent='Nueva Empresa de transporte'
+                    cuerpo.innerHTML =  `
+                    <form method="post" action="{% url 'agregarTransporte' %}">
+                    {% csrf_token %}
+                        {{ form_transporte.as_p }}
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                    </form>`   
+                }                 
+    
+                if(id === 'nuevoCamion'){
+                    titulo.textContent = 'Nuevo Camion'
+                    cuerpo.innerHTML =  `
+                    <form method="post" action="">
+                    {% csrf_token %}
+                        {{ form_camion.as_p }}
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                    </form>`   
+                }
+                if(id === 'nuevoSemi'){
+                    titulo.textContent = 'Nuevo Semi'
+                }
+            })
+        });
             
     });
 </script>
+{% endblock content %}

@@ -14,7 +14,7 @@ class FormTransporte(ModelForm):
             'nombre'
         ]
         widgets = {
-            'nombre': forms.TextInput(attrs={'type':'text','class':'form-control'})
+            'nombre': forms.TextInput(attrs={'type':'text','class':'form-control cap'})
         }
         
 class FormCamion(ModelForm):
