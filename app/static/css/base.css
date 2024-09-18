@@ -44,3 +44,7 @@ h4 {
 .cap{
   text-transform: capitalize;
 }
+/*poner odo en mayuscula */
+.mayus{
+  text-transform: uppercase;
+}

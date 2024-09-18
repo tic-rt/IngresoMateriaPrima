@@ -7,7 +7,7 @@ from base.models import Base
 class Transporte(Base):
     """Esta clase representa una empresa de transporte"""
     
-    nombre = models.CharField(verbose_name='Transporte', max_length=50, unique=True)
+    nombre  = models.CharField(verbose_name='Transporte', max_length=50, unique=True) 
     
     class Meta:
         """Metas definicion para Transporte"""
@@ -36,7 +36,7 @@ class Camion(Base):
     
     transporte = models.ForeignKey(Transporte, on_delete=models.PROTECT, verbose_name='Transporte')
     marca = models.CharField(verbose_name='Marca',choices=marcas,max_length=30)
-    patente = models.CharField(verbose_name='Patente', max_length=10, null=False, blank=False, default='AAA000AAA')
+    patente = models.CharField(verbose_name='Patente', max_length=10, null=False, blank=False)
     vencimiento_seguro = models.DateField(verbose_name='Vencimiento Seguro') #Preguntar si va o no va
     
     class Meta:

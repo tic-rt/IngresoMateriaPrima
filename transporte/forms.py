@@ -14,8 +14,18 @@ class FormTransporte(ModelForm):
             'nombre'
         ]
         widgets = {
-            'nombre': forms.TextInput(attrs={'type':'text','class':'form-control cap'})
+            'nombre': forms.TextInput(attrs={
+                'type':'text',
+                'class':'form-control cap',
+                'placeholder':'Nombre de empresa de transporte',
+                'autocomplete':'off'})
         }
+        
+    def clean_nombre(self):
+        nombre : str = self.cleaned_data.get('nombre')
+        if nombre:
+            nombre = nombre.title()
+            return nombre
         
 class FormCamion(ModelForm):
 
@@ -29,6 +39,13 @@ class FormCamion(ModelForm):
             'vencimiento_seguro'
         ]
         widgets = {
-            'vencimiento_seguro':forms.DateInput(attrs={'type':'date','class':'form-control'})
+            'vencimiento_seguro':forms.DateInput(attrs={'type':'date','class':'form-control'}),
+            'patente':forms.TextInput(attrs={'type':'text','class':'form-control','placeholder':'Patente del camión'})
         }
+        
+    def clean_patente(self):
+        patente : str = self.cleaned_data.get('patente')
+        if patente :
+            patente = patente.upper()
+            return patente
        

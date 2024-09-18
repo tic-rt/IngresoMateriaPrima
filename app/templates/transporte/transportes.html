@@ -106,7 +106,6 @@
   </div>
 
   <script>
-    document.addEventListener('DOMContentLoaded', function () {
         console.log('script cargado')
         botones = document.querySelectorAll('.btn')
         botones.forEach(boton => {
@@ -129,7 +128,7 @@
                 if(id === 'nuevoCamion'){
                     titulo.textContent = 'Nuevo Camion'
                     cuerpo.innerHTML =  `
-                    <form method="post" action="">
+                    <form method="post" action="{% url 'agregarCamion' %}">
                     {% csrf_token %}
                         {{ form_camion.as_p }}
                         <button type="submit" class="btn btn-primary">Guardar</button>
@@ -141,6 +140,5 @@
             })
         });
             
-    });
 </script>
 {% endblock content %}
