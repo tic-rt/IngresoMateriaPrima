@@ -11,9 +11,11 @@ class FormTransporte(ModelForm):
     class Meta:
         
         model = Transporte
+
         fields = [
             'nombre'
         ]
+
         widgets = {
             'nombre': forms.TextInput(attrs={
                 'type':'text',
@@ -24,38 +26,45 @@ class FormTransporte(ModelForm):
         
     def clean_nombre(self):
         nombre : str = self.cleaned_data.get('nombre')
+
         if nombre:
             nombre = nombre.title()
             return nombre
         
 class FormCamion(ModelForm):
     """Formulario basado en Camion"""
+
     class Meta:
         
         model = Camion
+
         fields = [
             'transporte',
             'marca',
             'patente',
             'vencimiento_seguro'
         ]
+
         widgets = {
             'transporte':forms.Select(attrs={'class':'form-control'}),
             'marca': forms.Select(attrs={'class':'form-control'}),
-            'patente':forms.TextInput(attrs={'type':'text','class':'form-control','placeholder':'Patente del camión'}),
+            'patente':forms.TextInput(attrs={'type':'text','class':'form-control','placeholder':'Patente del camión','autocomplete':'off'}),
             'vencimiento_seguro':forms.DateInput(attrs={'type':'date','class':'form-control'}),
         }
         
     def clean_patente(self):
         patente : str = self.cleaned_data.get('patente')
+
         if patente :
             patente = patente.upper()
             return patente
 
-class formSemi(ModelForm):
+class FormSemi(ModelForm):
     """formulario basado en Semi"""
+
     class Meta:
         model = Semi
+
         fields = [
             'transporte',
             'patente',
@@ -64,11 +73,13 @@ class formSemi(ModelForm):
         
         widgets={
             'transporte':forms.Select(attrs={'class':'form-control'}),
-            'patente': forms.TextInput(attrs={'class':'form-control','placeholder':'Patente del semi'}),
+            'patente': forms.TextInput(attrs={'class':'form-control','placeholder':'Patente del semi','autocomplete':'off'}),
             'vencimiento_seguro' :forms.DateInput(attrs={'type':'date','class':'form-control'})
         }
         
     def clean_patente(self):
-        patente = self.cleaned_data.get('patente')
+        patente : str = self.cleaned_data.get('patente')
+        
         if patente:
+            patente = patente.upper()
             return patente        
