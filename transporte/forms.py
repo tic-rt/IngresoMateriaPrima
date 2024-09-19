@@ -2,10 +2,11 @@
 from django import forms
 from django.forms import ModelForm
 
-from transporte.models import Camion, Transporte
+from transporte.models import Camion, Semi, Transporte
 
 
 class FormTransporte(ModelForm):
+    """Formulario basado en modelo Transporte"""
     
     class Meta:
         
@@ -28,7 +29,7 @@ class FormTransporte(ModelForm):
             return nombre
         
 class FormCamion(ModelForm):
-
+    """Formulario basado en Camion"""
     class Meta:
         
         model = Camion
@@ -39,8 +40,10 @@ class FormCamion(ModelForm):
             'vencimiento_seguro'
         ]
         widgets = {
+            'transporte':forms.Select(attrs={'class':'form-control'}),
+            'marca': forms.Select(attrs={'class':'form-control'}),
+            'patente':forms.TextInput(attrs={'type':'text','class':'form-control','placeholder':'Patente del camión'}),
             'vencimiento_seguro':forms.DateInput(attrs={'type':'date','class':'form-control'}),
-            'patente':forms.TextInput(attrs={'type':'text','class':'form-control','placeholder':'Patente del camión'})
         }
         
     def clean_patente(self):
@@ -48,4 +51,24 @@ class FormCamion(ModelForm):
         if patente :
             patente = patente.upper()
             return patente
-       
+
+class formSemi(ModelForm):
+    """formulario basado en Semi"""
+    class Meta:
+        model = Semi
+        fields = [
+            'transporte',
+            'patente',
+            'vencimiento_seguro'
+        ]
+        
+        widgets={
+            'transporte':forms.Select(attrs={'class':'form-control'}),
+            'patente': forms.TextInput(attrs={'class':'form-control'}),
+            'vencimiento_seguro' :forms.DateInput(attrs={'class':'form-control'})
+        }
+        
+    def clean_patente(self):
+        patente = self.cleaned_data.get('patente')
+        if patente:
+            return patente        
