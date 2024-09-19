@@ -1,15 +1,17 @@
 {% extends "base/base.html" %}
 {% load static %}
-<link rel="stylesheet" href="{% static 'vendor/bootstrap-5.3.2-dist/css/bootstrap.css' %}">
-<script src="{% static 'vendor/bootstrap-5.3.2-dist/js/bootstrap.bundle.js' %}"></script>
+<!-- <link rel="stylesheet" href="{% static 'vendor/bootstrap-5.3.2-dist/css/bootstrap.css' %}">
+<script src="{% static 'vendor/bootstrap-5.3.2-dist/js/bootstrap.bundle.js' %}"></script> -->
+<link rel="stylesheet" href="{% static 'css/transpote.css'%}">
 
 {% block content %}
-<div class="container mt-5 pt-5 d-flex flex-column">
-    <div class="container">
+<div class="container-fluid d-flex flex-column fondo">
+
+    {% comment %} <div class="container">
         <div class="container col-4 justify-content-center">
             <table class="table table-bordered table-striped">
                 <div class="container-fluid d-flex align-items-center justify-content-between mb-3">
-                    <div class="text-center"> Listado de empresas</div>
+                    <div class="text-center"><h5>Listado de empresas</h5></div>
                         <div>
                             <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modal" id="nuevaEmpresa">Agregar</button>
                         </div>
@@ -30,9 +32,9 @@
                 </tbody>
             </table>
         </div>
-    </div>
+    </div> {% endcomment %}
 
-    <div class="container col-4 justify-content-center mt-5">
+    {% comment %} <div class="container col-4 justify-content-center mt-5">
         <table class="table table-bordered table-striped">
            <div class="container-fluid d-flex align-items-center justify-content-between mb-3">
             <div class="text-center"> Listado de Camiones</div>
@@ -72,9 +74,7 @@
             <tbody>
                 {% for semi in semis %}
                     <tr>
-                        <td>
-                            {{semi.patente}}
-                        </td>
+                        <td>{{semi.patente}}</td>
                     </tr>
                 {% endfor %}
             </tbody>
@@ -90,20 +90,15 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body" id="contenido">
-               <!--  Aca va el formulario
-                <form method="post" action="">
-                    {% csrf_token %}
-                    {{ form_camion.as_p }}
-                    <button type="submit" class="btn btn-primary">Guardar</button>
-                </form>        -->
+               
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
           <!-- <button type="button" class="btn btn-primary">Guardar</button> -->
         </div>
       </div>
-    </div>
-  </div>
+    </div> {% endcomment %}
+  </div> 
 
   <script>
         console.log('script cargado')
@@ -136,6 +131,12 @@
                 }
                 if(id === 'nuevoSemi'){
                     titulo.textContent = 'Nuevo Semi'
+                    cuerpo.innerHTML =  `
+                    <form method="post" action="{% url 'agregarCamion' %}">
+                    {% csrf_token %}
+                        {{ form_semi.as_p }}
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                    </form>`   
                 }
             })
         });

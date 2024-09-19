@@ -1,6 +1,8 @@
 /* Estilos para el header */
 .header{
-    background-color: #00498d;
+    /* background-color: #00498d; */
+    background: indigo-400;
+    background: linear-gradient(90deg, rgba(0,73,141,1) 67%, rgba(240,238,247,0.5466561624649859) 92%);
     color: aliceblue;
   }
   .logo{
@@ -19,6 +21,7 @@
 .lateral {
   padding-top: 2%;
   background-color: #00498d;
+  
   height: 100vh;
 } 
 
@@ -36,7 +39,7 @@ h4 {
   ;
 }
 .link-side:hover {
-  font-size: 1.3rem;
+  font-size: 1.1rem;
   color: aliceblue;
 }
 
@@ -47,4 +50,25 @@ h4 {
 /*poner odo en mayuscula */
 .mayus{
   text-transform: uppercase;
+}
+
+/*fondo para transportes.html*/
+.fondo {
+  position: relative; /* Necesario para posicionar el pseudo-elemento */
+  overflow: hidden; /* Evitar desbordamiento */
+}
+
+.fondo::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('../img/productos_quimicos.jpg'); /* Ruta a tu imagen */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 0.1; /* Ajusta este valor para cambiar la transparencia */
+  z-index: -1; /* Coloca el pseudo-elemento detrás del contenido */
 }

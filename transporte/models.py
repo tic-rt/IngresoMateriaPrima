@@ -53,7 +53,7 @@ class Semi(Base):
     """Esta clase representa un semi que pertenece a una empresa de transporte"""
     
     transporte = models.ForeignKey(Transporte, on_delete=models.PROTECT, verbose_name='Transporte')
-    patente = models.CharField(verbose_name='Patente', max_length=10, null=False, blank= False, default='AAA000AAA')
+    patente = models.CharField(verbose_name='Patente', max_length=10, null=False, blank= False)
     vencimiento_seguro = models.DateField(verbose_name='Vencimiento Seguro Semi') #Preguntar si va o no va 
     
     class Meta:

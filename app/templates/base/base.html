@@ -68,10 +68,12 @@
 <div class="container-fluid">
   <aside class="row">
     <!-- barra lateral -->
-    <div class="lateral col-4 col-sm-2">
+    <div class="lateral col-4 col-sm-2 d-flex justify-content-center">
       <div>
+       <div class="container">
         <h4>Porteria 2</h4>
-      <ul class="nav flex-column">
+       </div>
+      <ul class="navbar-nav flex-column ">
         <!-- <li class="nav-item">
           <i class="bi i"></i>
           <a class="nav-link active link-side" href="#">Nuevo Ingreso</a>
@@ -95,7 +97,7 @@
       </div>
     </div>
     <!-- contenido -->
-     <div class="col-8 col-sm-10 ">
+     <div class="col-8 col-sm-10 container-fluid">
       {% block content %}
       {% endblock %}
      </div>

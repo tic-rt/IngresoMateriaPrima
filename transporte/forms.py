@@ -64,8 +64,8 @@ class formSemi(ModelForm):
         
         widgets={
             'transporte':forms.Select(attrs={'class':'form-control'}),
-            'patente': forms.TextInput(attrs={'class':'form-control'}),
-            'vencimiento_seguro' :forms.DateInput(attrs={'class':'form-control'})
+            'patente': forms.TextInput(attrs={'class':'form-control','placeholder':'Patente del semi'}),
+            'vencimiento_seguro' :forms.DateInput(attrs={'type':'date','class':'form-control'})
         }
         
     def clean_patente(self):

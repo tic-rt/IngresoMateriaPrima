@@ -1,7 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
 
-from transporte.forms import FormCamion, FormTransporte
+from transporte.forms import FormCamion, FormTransporte, formSemi
 from transporte.models import Camion, Semi, Transporte
 import sweetify
 
@@ -15,12 +15,16 @@ def transportes(request):
     semis = Semi.objects.all()
     form_transporte = FormTransporte()
     form_camion = FormCamion()
+    form_semi = formSemi()
     return render(request,'transporte/transportes.html',
+                  
                   {'transportes':transportes,
                    'camiones':camiones,
                    'semis':semis,
                    'form_transporte': form_transporte,
-                   'form_camion':form_camion})
+                   'form_camion':form_camion,
+                   'form_semi':form_semi
+                   })
 
 def agregarTransporte(request):
     """esta funcion agrega una empresa de transporte nueva"""
