@@ -1,13 +1,11 @@
 /* Estilos para el header */
 .header{
-    /* background-color: #00498d; */
-    background: indigo-400;
-    background: linear-gradient(90deg, rgba(0,73,141,1) 67%, rgba(240,238,247,0.5466561624649859) 92%);
+    background-color: #00498d; 
     color: aliceblue;
   }
   .logo{
     margin-left: 5%;
-    min-width: 60px;
+    min-width: 40px;
     min-height: auto;
   }
   
