@@ -8,25 +8,41 @@ import sweetify
 # Create your views here.
 
 def transportes(request):
-    """Esta funcion devolvera todas las empresas de transportes registradas ,camiones y semis
-        junto a los formularios correspondientes para la carga"""
+    """Esta funcion devolvera todas las empresas de transportes registradas junto a los formularios correspondientes para la carga"""
     
     transportes = Transporte.objects.all()
-    camiones = Camion.objects.all()
-    semis = Semi.objects.all()
 
     form_transporte = FormTransporte()
-    form_camion = FormCamion()
-    form_semi = FormSemi()
 
     return render(request,'transporte/transportes.html', 
                   {'transportes':transportes,
-                   'camiones':camiones,
-                   'semis':semis,
-                   'form_transporte': form_transporte,
-                   'form_camion':form_camion,
-                   'form_semi':form_semi
+                   'form_transporte': form_transporte
                    })
+
+def camiones(request):
+    """Esta funcion devolvera todos los camiones de transportes registrados junto a los formularios correspondientes para la carga"""
+    
+    camiones = Camion.objects.all()
+
+    form_camion = FormCamion()
+
+    return render(request,'transporte/camiones.html', 
+                  {'camiones':camiones,
+                   'form_camion':form_camion
+                   })
+
+def semis(request):
+    """Esta funcion devolvera todos los semis de transportes registradas junto a los formularios correspondientes para la carga"""
+    
+    semis = Semi.objects.all()
+
+    form_semi = FormSemi()
+
+    return render(request,'transporte/semis.html', 
+                  {'semis':semis,
+                   'form_semi': form_semi
+                   })
+
 
 def agregarTransporte(request):
     """esta funcion agrega una empresa de transporte nueva"""

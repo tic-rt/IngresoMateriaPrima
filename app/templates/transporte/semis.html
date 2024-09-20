@@ -4,26 +4,28 @@
 
 {% block content %}
 <div class="container-fluid d-flex flex-column mb-5">
-    <div class="container fondo-transportes" style="height: 100px;"></div>
+    <div class="container fondo-semis" style="height: 100px;"></div>
 
-    <!-- tabla de empresas -->
+    <!-- tabla de semis -->
     <div class="text-center pt-4 mb-5">
         <div>
-            <h3>Lista de empresas</h3>
+            <h3>Lista de Semis</h3>
         </div>
         <div class="d-flex justify-content-center">
             <div class="col-10 col-sm-8">
                 <div class="float-end">
-                    <button class="btn btn-primary mb-2" data-bs-toggle="modal" data-bs-target="#modal" id="nuevaEmpresa">Agregar</button>
+                    <button class="btn btn-primary mb-2" data-bs-toggle="modal" data-bs-target="#modal" id="nuevoSemi">Agregar</button>
                 </div>
-                <table class="table table-bordered table-striped table-hover" id="tablaEmpresas">
+                <table class="table table-bordered table-striped table-hover" id="tablaSemis">
                     <thead>
-                        <th>Nombre de Empresa</th>
+                        <th>Empresa</th>
+                        <th>Patente</th>
                     </thead>
                     <tbody>
-                        {% for transporte in transportes%}
+                        {% for semi in semis %}
                         <tr>
-                            <td>{{ transporte.nombre }}</td>
+                            <td>{{semi.transporte}}</td>
+                            <td>{{semi.patente}}</td>
                         </tr>
                         {% endfor %}
                     </tbody>
@@ -32,18 +34,18 @@
         </div>
     </div>
 
-     <!-- Modal -->
-     <div class="modal fade" id="modal" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">
+    <!-- Modal -->
+    <div class="modal fade" id="modal" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="ModalLabel">Nueva Empresa de Transporte</h5>
+                    <h5 class="modal-title" id="ModalLabel"></h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body" id="contenido">
-                    <form method="post" action="{% url 'agregarTransporte' %}">
+                    <form method="post" action="{% url 'agregarSemi' %}">
                         {% csrf_token %}
-                            {{ form_transporte.as_p }}
+                            {{ form_semi.as_p }}
                             <button type="submit" class="btn btn-primary">Guardar</button>
                         </form>
                 </div>
@@ -56,13 +58,12 @@
     </div>
 
 </div>
-
 {% endblock content %}
-
 {% block js %}
 <script>
-    let tablaEmpresas = new DataTable('#tablaEmpresas',{
+    let tablaSemis = new DataTable('#tablaSemis',{
         responsive : true
     });
 </script>
 {% endblock js %}
+

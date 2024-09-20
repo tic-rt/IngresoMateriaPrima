@@ -84,5 +84,3 @@ class FormSemi(ModelForm):
             patente = patente.upper()
             return patente        
         
-class FormConductor(self):
-    

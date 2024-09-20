@@ -27,7 +27,7 @@
 
 </head>
 
-<body>
+<body style="height: fit-content;">
   <header class="header d-flex">
     <img src="{% static '/img/fm.jpg' %}" alt="FMRT" srcset="" class="logo img-fluid">
       <div class="container-fluid text-center align-content-center">
@@ -76,9 +76,9 @@
   </nav>
 <!-- contengo en un row la barra lateral y el contenido -->
 <div class="container-fluid">
-  <aside class="row">
+  <div class="row">
     <!-- barra lateral -->
-    <div class="lateral col-4 col-sm-2 d-flex justify-content-center">
+    <aside class="lateral col-4 col-sm-2 d-flex justify-content-center">
       <div class="pt-4">
         <div class="pb-4 container-fluid">
           <h2 style="color: aliceblue;">Porteria 2</h2>
@@ -100,22 +100,31 @@
             <li class="nav-item">
               <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'transportes' %}">Transportes</a>
-            </li>
+            <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Transportes
+            </a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="{% url 'transportes' %}">Empresas</a></li>
+              <li><a class="dropdown-item" href="{% url 'camiones' %}">Camiones</a></li>
+              <li><a class="dropdown-item" href="{% url 'semis' %}">Semis</a></li>
+            </ul>
+          </li> 
           </ul>
       </div>
-    </div>
+    </aside>
     <!-- contenido -->
-     <div class="col-8 col-sm-10 justify-content-center">
+     <div class="col-8 col-sm-10 justify-content-center align-content-center">
       {% block content %}
-      {% endblock %}
+      {% endblock content %}
      </div>
-  </aside>
+  </div>
 </div>
 
   {% load sweetify %}
   {% sweetify %}
 </body>
+{% block js %}
+{% endblock js %}
 
 </html>
