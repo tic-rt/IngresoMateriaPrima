@@ -1,6 +1,6 @@
 {% extends "base/base.html" %}
 {% load static %}
-
+{% load crispy_forms_tags %}
 
 {% block content %}
 <div class="container-fluid d-flex flex-column mb-5">
@@ -45,7 +45,7 @@
                 <div class="modal-body" id="contenido">
                     <form method="post" action="{% url 'agregarSemi' %}">
                         {% csrf_token %}
-                            {{ form_semi.as_p }}
+                            {% crispy form_semi %}
                             <button type="submit" class="btn btn-primary">Guardar</button>
                         </form>
                 </div>

@@ -38,6 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'simple_history',
+    'crispy_forms',
+    'crispy_bootstrap5',
     'sweetify',
     'app',
     'porteria2',
@@ -131,3 +133,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 #configuraciones adicionales
 SWEETIFY_SWEETALERT_LIBRARY = 'sweetalert2'
+
+#Configuracion Crispy forms
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+
+CRISPY_TEMPLATE_PACK = "bootstrap5"
