@@ -2,7 +2,6 @@
 {% load static %}
 {% load crispy_forms_tags %}
 
-
 {% block content %}
 <div class="container-fluid d-flex flex-column mb-5">
     <div class="container fondo-camiones" style="height: 100px;"></div>
@@ -49,9 +48,9 @@
                 <div class="modal-body" id="contenido">
                     <form method="post" action="{% url 'agregarCamion' %}">
                         {% csrf_token %}
-                            {% crispy form_camion %}
-                            <button type="submit" class="btn btn-primary">Guardar</button>
-                        </form>
+                        {{ form_camion|crispy }}
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                    </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>

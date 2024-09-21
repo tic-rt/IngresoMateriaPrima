@@ -79,7 +79,7 @@ def agregarCamion(request):
             if(camion.is_valid()):
                 camion.save()
                 sweetify.toast(request,f'Camion patente {camion.clean_patente()} agregado', icon='success', timer=5000)
-                return redirect('transportes')
+                return redirect('camiones')
             else:
                 errores = []
                 for campo, mensajes in camion.errors.items():
@@ -88,14 +88,15 @@ def agregarCamion(request):
 
                 errores_str = '<br>'.join(errores)
                 sweetify.warning(request,'Error al agregar empresa de transporte', text = errores_str, persistent = 'Aceptar')
-                return redirect('transportes')
+                return redirect('camiones')
             
     except Exception as excepcion:
         sweetify.error(request,'Error al agregar camion',persistent=f'ocurrio un error {str(excepcion)}')
-        return redirect('transportes')
+        return redirect('camiones')
             
 def agregarSemi(request):
     """Esta funcion agrega un nuevo semi"""
+    print('me llamaron desde afuera para guardar un semi')
 
     try:
         if request.method == 'POST':
@@ -104,7 +105,7 @@ def agregarSemi(request):
             if semi.is_valid():
                 semi.save()
                 sweetify.toast(request,f'Semi patente {semi.clean_patente()} agregado',icon='success', timer=5000)
-                return redirect('transportes')
+                return redirect('semis')
             else:
                 errores = []
                 for campo, mensajes in semi.errors.items():
@@ -113,8 +114,8 @@ def agregarSemi(request):
 
                     errores_str = '<br>'.join(errores)
                     sweetify.warning(request,'Error al agregar empresa de transporte', text = errores_str, persistent = 'Aceptar')
-                    return redirect('transportes')
+                    return redirect('semis')
                 
     except Exception as excepcion:
         sweetify.error(request,'Error al agregar camion',persistent=f'ocurrio un error {str(excepcion)}')
-        return redirect('transportes')
+        return redirect('semis')
