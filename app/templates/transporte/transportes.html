@@ -27,8 +27,17 @@
                             <td>{{ transporte.nombre }}</td>
                             <td>
                                 <div class=" d-flex justify-content-around">
-                                    <button class="btn btn-warning bi bi-pencil-square editar" data-id = "{{transporte.id}}"></button>
-                                    <button class="btn btn-danger bi bi-trash3 eliminar" data-id = "{{transporte.id}}"></button>
+                                    <form action="{% url 'eliminarTransporte' %}" method="POST" class="eliminar-form"></form>
+                                        {% csrf_token %}
+                                        <input type="hidden" name="id" value="{{ transporte.id }}">
+                                        <button class="btn btn-warning bi bi-pencil-square editar" data-id = "{{transporte.id}}" data-nombre ="{{transporte.nombre}}"></button>
+                                    </form>
+                                    
+                                    <form action="{% url 'eliminarTransporte' %}" method="POST" class="eliminar-form">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="id" value="{{ transporte.id }}">
+                                        <button class="btn btn-danger bi bi-trash3 eliminar" data-id = "{{transporte.id}}" data-nombre = "{{transporte.nombre}}"></button>
+                                    </form>
                                 </div>
                             </td>
                         </tr>
@@ -71,10 +80,34 @@
     let tablaEmpresas = new DataTable('#tablaEmpresas',{
         responsive : true,
     });
+
+    const csrf = `{{csrf_token}}`
+
     document.getElementById('tablaEmpresas').addEventListener('click',(evento) => {
-        if (evento.target.closest('.editar')){
+        const botonEliminar = evento.target.closest('.eliminar')
+
+        if (botonEliminar){
+            evento.preventDefault()
             id = evento.target.getAttribute('data-id')
-            console.log(id)
+            nombre = evento.target.getAttribute('data-nombre')
+    
+            Swal.fire({
+                title: 'Atención!',
+                text: `Vas a eliminar a la empresa ${nombre}`,
+                icon: 'warning',
+                confirmButtonText: 'Aceptar',
+                confirmButtonColor: '#DC3545',
+                showCancelButton: true,
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const form = evento.target.closest('form');
+                    console.log(form)
+                    if (form) {
+                        form.submit(); // Envía el formulario
+                    }
+                }
+            })
         }
     })
 </script>
