@@ -2,7 +2,7 @@
 from django import forms
 from django.forms import ModelForm
 
-from transporte.models import Camion, Semi, Transporte
+from transporte.models import Camion, Conductor, Semi, Transporte
 
 
 class FormTransporte(ModelForm):
@@ -83,4 +83,37 @@ class FormSemi(ModelForm):
         if patente:
             patente = patente.upper()
             return patente        
+    
+class formConductor(ModelForm):
+    """Formulario basado en conductor"""
+    class Meta:
+        model = Conductor
+        fields = [
+            'transporte',
+            'nombre',
+            'apellido',
+            'dni',
+            'vencimiento_carnet'
+        ]
+        widgets={
+            'transporte': forms.Select(attrs={'class':'form-control'}),
+            'nombre': forms.TextInput(attrs={'class':'form-control', 'autocomplete':'off', 'placeholder':'Nombre del conductor'}),
+            'apellido': forms.TextInput(attrs={'class':'form-control', 'autocomplete':'off', 'placeholder':'Apellido del conductor'}),
+            'dni' :  forms.TextInput(attrs={'class':'form-control', 'autocomplete':'off', 'placeholder':'DNI', 'pattern':'/d*'}),
+            'vencimiento_carnet' : forms.DateInput(attrs={'class':'form-control', 'type':'date'})
+        }
+
+    def clean_nombre(self):
+        nombre : str = self.cleaned_data.get('nombre')
+
+        if nombre:
+            nombre = nombre.upper()
+            return nombre
         
+    def clean_apellido(self):
+        apellido : str = self.cleaned_data.get('apellido')
+
+        if apellido:
+            apellido = apellido.upper()
+            return apellido
+    
