@@ -1,6 +1,6 @@
 from django.urls import path
 
-from transporte.views import agregarCamion, agregarSemi, agregarTransporte, camiones, semis, transportes
+from transporte.views import agregarCamion, agregarSemi, agregarTransporte, camiones, semis, transportes, eliminarTransporte
 
 
 urlpatterns = [
@@ -9,5 +9,6 @@ urlpatterns = [
     path('semis',semis,name='semis'),
     path('agregarTransporte',agregarTransporte, name='agregarTransporte'),
     path('agregarCamion',agregarCamion,name='agregarCamion'),
-    path('agregarSemi',agregarSemi,name='agregarSemi')
+    path('agregarSemi',agregarSemi,name='agregarSemi'),
+    path('eliminarTransporte',eliminarTransporte,name = 'eliminarTransporte')
 ]
