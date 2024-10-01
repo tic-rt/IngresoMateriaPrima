@@ -70,7 +70,7 @@ class Conductor(Base):
     nombre = models.CharField(verbose_name='Nombre', null=False, blank=False, max_length=30)
     apellido = models.CharField(verbose_name='Apellido', null=False, blank= False, max_length=30)
     dni = models.CharField(verbose_name='DNI',blank=False, null= False, unique=True,  max_length=15)
-    vencimientoCarnet = models.DateField(verbose_name='Vencimiento Carnet', blank=False, null=False)
+    vencimiento_carnet = models.DateField(verbose_name='Vencimiento Carnet', blank=False, null=False)
     #Que mas del conductor??hablar con ramos
     #Finalizar esto!!!
     
