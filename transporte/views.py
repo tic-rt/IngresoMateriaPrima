@@ -10,8 +10,7 @@ import sweetify
 def transportes(request):
     """Esta funcion devolvera todas las empresas de transportes registradas junto a los formularios correspondientes para la carga"""
     
-    transportes = Transporte.objects.all()
-
+    transportes = Transporte.objects.filter(is_deleted = False)
     form_transporte = FormTransporte()
 
     return render(request,'transporte/transportes.html', 
@@ -52,7 +51,7 @@ def agregarTransporte(request):
             transporte = FormTransporte(request.POST)
             
             if(transporte.is_valid()):
-                 transporte.save()
+                 #transporte.save()
                  sweetify.toast(request,f'Empresa de transporte {transporte.clean_nombre()} agregada',icon='success',timer = 5000)
                  return redirect('transportes')
             else:
@@ -119,3 +118,31 @@ def agregarSemi(request):
     except Exception as excepcion:
         sweetify.error(request,'Error al agregar camion',persistent=f'ocurrio un error {str(excepcion)}')
         return redirect('semis')
+    
+def eliminarTransporte(request):
+    """Esta funcion elimina una empresa de transporte por su id   print('entrando a eliminar')"""
+
+    try:
+        if request.method == 'POST':
+            
+            idEmpresa = request.POST.get('id')
+
+            if Transporte.objects.filter(id=idEmpresa, is_deleted=False).exists():  # si no existe lanza la excepcion
+                transporte = Transporte.objects.get(id=idEmpresa)
+                #transporte.delete()  # Eliminar el transporte
+                sweetify.success(request, 'Empresa Eliminada', text=f'La empresa {transporte.nombre} ha sido eliminada', timer = 3000)
+                print('eliminado')
+                return redirect('transportes')
+            else:
+                sweetify.warning(request, 'No permitido', text='La empresa no existe o ya fue eliminada')
+                print('no eliminado')
+                return redirect('transportes')
+            
+    except Transporte.DoesNotExist as excepcion:
+        sweetify.error(request, 'Error al eliminar', text='La empresa que intentas eliminar no existe o no se encuentra', persistent='Si crees que es un error, comunicate con sistemas')
+        return redirect('transportes')
+    
+    except Exception as excepcion:
+        sweetify.error(request, 'Error al eliminar', text=f'Ocurrió un error {str(excepcion)}')
+        return redirect('transportes')
+    
