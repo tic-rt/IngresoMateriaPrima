@@ -1,0 +1,79 @@
+{% extends "base/base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="container-fluid d-flex flex-column mb-5">
+    <div class="container fondo-camiones" style="height: 100px;"></div>
+
+    <!-- tabla de choferes -->
+    <div class="text-center pt-4 mb-5">
+        <div>
+            <h3>Lista de Camiones</h3>
+        </div>
+        <div class="d-flex justify-content-center">
+            <div class="col-10 col-sm-8">
+                <div class="float-end">
+                    <button class="btn btn-primary mb-2" data-bs-toggle="modal" data-bs-target="#modal" id="nuevoCamion">Agregar</button>
+                </div>
+                <table class="table table-bordered table-striped table-hover" id="tablaCamiones">
+                    <thead>
+                        <th class="text-center">Empresa</th>
+                        <th class="text-center">Nombre</th>
+                        <th class="text-center">Apellido</th>
+                        <th class="text-center">Vto. Carnet</th>
+                    </thead>
+                    <tbody>
+                        {% for camion in camiones %}
+                        <tr>
+                            <td>{{camion.transporte}}</td>
+                            <td>{{camion.marca}}</td>
+                            <td>{{camion.patente}}</td>
+                            <td>
+                                <div class=" d-flex justify-content-around">
+                                    <button class="btn btn-warning"><i class="bi bi-pencil-square"></i></button>
+                                    <button class="btn btn-danger"><i class="bi bi-trash3"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+   
+     <!-- Modal -->
+     <div class="modal fade" id="modal" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="ModalLabel">Nuevo Camión</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="contenido">
+                    <form method="post" action="{% url 'agregarCamion' %}">
+                        {% csrf_token %}
+                        {{ form_camion|crispy }}
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <!-- <button type="button" class="btn btn-primary">Guardar</button> -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% endblock content %}
+{% block js %}
+<script>
+    let tablaCamiones = new DataTable('#tablaCamiones',{
+        responsive : true
+    });
+</script>
+{% endblock js %}
