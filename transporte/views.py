@@ -2,7 +2,7 @@ from django.http import HttpResponse
 from django.shortcuts import redirect, render
 
 from transporte.forms import FormCamion, FormSemi, FormTransporte
-from transporte.models import Camion, Semi, Transporte
+from transporte.models import Camion, Conductor, Semi, Transporte
 import sweetify
 
 # Create your views here.
@@ -21,7 +21,7 @@ def transportes(request):
 def camiones(request):
     """Esta funcion devolvera todos los camiones de transportes registrados junto a los formularios correspondientes para la carga"""
     
-    camiones = Camion.objects.all()
+    camiones = Camion.objects.filter(is_deleted = False)
 
     form_camion = FormCamion()
 
@@ -33,7 +33,7 @@ def camiones(request):
 def semis(request):
     """Esta funcion devolvera todos los semis de transportes registradas junto a los formularios correspondientes para la carga"""
     
-    semis = Semi.objects.all()
+    semis = Semi.objects.filter(is_deleted = False)
 
     form_semi = FormSemi()
 
@@ -42,6 +42,10 @@ def semis(request):
                    'form_semi': form_semi
                    })
 
+def choferes(request):
+    """Esta funcion devolvera todos los conductores registrados, junto a los formularios correspondientes para la carga"""
+    choferes = Conductor.objects.filter(is_deleted = False)
+    pass
 
 def agregarTransporte(request):
     """esta funcion agrega una empresa de transporte nueva"""
