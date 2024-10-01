@@ -79,6 +79,9 @@
 <script>
     let tablaEmpresas = new DataTable('#tablaEmpresas',{
         responsive : true,
+        language:{
+            url:'/static/vendor/datatables/es-Es.json'
+        }
     });
 
     const csrf = `{{csrf_token}}`
