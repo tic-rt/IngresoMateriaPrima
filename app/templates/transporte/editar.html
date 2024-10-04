@@ -24,6 +24,8 @@
                     <h3>Editando empresa {{form_editar.nombre.value}}</h3>
                     {% elif modelo == 'Camion' %}
                     <h3>Editando Camion {{form_editar.patente.value}} empresa {{ form_editar.instance.transporte.nombre }}</h3>
+                    {% elif modelo == 'Semi' %}
+                    <h3>Editando Semi {{form_editar.patente.value}} empresa {{ form_editar.instance.transporte.nombre }}</h3>
                     {% endif %}
                 </div>
                 <form method="post" action="{% url 'actualizar' modelo %}">
