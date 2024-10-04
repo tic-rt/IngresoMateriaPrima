@@ -21,6 +21,7 @@
                         <th class="text-center">Empresa</th>
                         <th class="text-center">Marca</th>
                         <th class="text-center">Patente</th>
+                        <th class="text-center">Vencimiento</th>
                         <th class="text-center">Accion</th>
                     </thead>
                     <tbody>
@@ -29,6 +30,13 @@
                             <td>{{camion.transporte}}</td>
                             <td>{{camion.marca}}</td>
                             <td>{{camion.patente}}</td>
+                            <td>
+                                {% if camion.vencimiento_seguro >= hoy %}
+                                <span class="text-success">{{ camion.vencimiento_seguro|date:"d/m/y"}}</span>
+                                {% elif camion.vencimiento_seguro < hoy %}
+                                <span class="text-danger">{{ camion.vencimiento_seguro|date:"d/m/y"}}</span>
+                                {% endif %}
+                            </td>
                             <td>
                                 <div class=" d-flex justify-content-around">
                                     <form action="{% url 'editarCamion' %}" method="POST" class="editar-form">
