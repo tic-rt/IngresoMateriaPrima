@@ -36,7 +36,7 @@ class Camion(Base):
     
     transporte = models.ForeignKey(Transporte, on_delete=models.PROTECT, verbose_name='Transporte')
     marca = models.CharField(verbose_name='Marca',choices=marcas,max_length=30)
-    patente = models.CharField(verbose_name='Patente', max_length=10, null=False, blank=False)
+    patente = models.CharField(verbose_name='Patente', max_length=10, null=False, blank=False, unique=True)
     vencimiento_seguro = models.DateField(verbose_name='Vencimiento Seguro') #Preguntar si va o no va
     
     class Meta:
@@ -53,7 +53,7 @@ class Semi(Base):
     """Esta clase representa un semi que pertenece a una empresa de transporte"""
     
     transporte = models.ForeignKey(Transporte, on_delete=models.PROTECT, verbose_name='Transporte')
-    patente = models.CharField(verbose_name='Patente', max_length=10, null=False, blank= False)
+    patente = models.CharField(verbose_name='Patente', max_length=10, null=False, blank= False, unique=True)
     vencimiento_seguro = models.DateField(verbose_name='Vencimiento Seguro Semi') #Preguntar si va o no va 
     
     class Meta:
@@ -67,7 +67,7 @@ class Semi(Base):
     
 class Conductor(Base):
     transporte = models.ForeignKey(Transporte,on_delete=models.PROTECT,verbose_name='Transporte')
-    nombre = models.CharField(verbose_name='Nombre', null=False, blank=False, max_length=30)
+    nombre = models.CharField(verbose_name='Nombre', null=False, blank=False, max_length=30, unique=True)
     apellido = models.CharField(verbose_name='Apellido', null=False, blank= False, max_length=30)
     dni = models.CharField(verbose_name='DNI',blank=False, null= False, unique=True,  max_length=15)
     vencimiento_carnet = models.DateField(verbose_name='Vencimiento Carnet', blank=False, null=False)
