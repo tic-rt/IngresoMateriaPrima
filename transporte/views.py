@@ -1,5 +1,4 @@
-from django.forms import ModelForm
-from django.http import HttpResponse
+from django.utils import timezone
 from django.shortcuts import redirect, render
 
 from transporte.forms import FormCamion, FormSemi, FormTransporte
@@ -23,22 +22,26 @@ def camiones(request):
     """Esta funcion devolvera todos los camiones de transportes registrados junto a los formularios correspondientes para la carga"""
     
     camiones = Camion.objects.filter(is_deleted = False)
-
+    hoy = timezone.now().date()
     form_camion = FormCamion()
 
     return render(request,'transporte/camiones.html', 
                   {'camiones':camiones,
-                   'form_camion':form_camion
+                   'form_camion':form_camion,
+                   'hoy':hoy
                    })
 
 def semis(request):
     """Esta funcion devolvera todos los semis de transportes registradas junto a los formularios correspondientes para la carga"""
     
     semis = Semi.objects.filter(is_deleted = False)
+    hoy = timezone.now().date()
     form_semi = FormSemi()
+
     return render(request,'transporte/semis.html', 
                   {'semis':semis,
-                   'form_semi': form_semi
+                   'form_semi': form_semi,
+                   'hoy':hoy
                    })
 
 def choferes(request):
@@ -100,7 +103,6 @@ def agregarCamion(request):
             
 def agregarSemi(request):
     """Esta funcion agrega un nuevo semi"""
-    print('me llamaron desde afuera para guardar un semi')
 
     try:
         if request.method == 'POST':
@@ -156,7 +158,6 @@ def editarCamion(request):#porque no la haces generica?que venga que tipo es y l
     try:
         if request.method == 'POST':
             id_camion = request.POST.get('id')
-            print(id_camion)
             if Camion.objects.filter(id=id_camion, is_deleted=False).exists():
                 camion = Camion.objects.filter(id=id_camion).get()
                 form_editar = FormCamion(instance=camion)
@@ -175,6 +176,31 @@ def editarCamion(request):#porque no la haces generica?que venga que tipo es y l
         sweetify.error(request, 'Error al editar', text=f'Ocurrió un error {str(excepcion)}', persistent = 'Aceptar')
         print(id_camion)
         return redirect('camiones')
+
+def editarSemi(request):#porque no la haces generica?que venga que tipo es y lo filtras/editar/int/tipo
+    """Esta funcion edita un semi por su id"""
+    
+    try:
+        if request.method == 'POST':
+            id_semi = request.POST.get('id')
+            if Semi.objects.filter(id=id_semi, is_deleted=False).exists():
+                semi = Semi.objects.filter(id=id_semi).get()
+                form_editar = FormSemi(instance=semi)
+                modelo = 'Semi'
+                return render(request,'transporte/editar.html',{'form_editar':form_editar,'modelo':modelo})
+            
+            else:
+                sweetify.warning(request, 'No permitido', text='El semi no existe o ya fue eliminada')
+                return redirect('semis')
+            
+    except Transporte.DoesNotExist as excepcion:#lo estoy considerando en el else, ver
+            sweetify.warning(request, 'No permitido', text='El semi no existe o ya fue eliminada')
+            return redirect('semis')
+    
+    except Exception as excepcion:
+        sweetify.error(request, 'Error al editar', text=f'Ocurrió un error {str(excepcion)}', persistent = 'Aceptar')
+        print(id_semi)
+        return redirect('semis')
 
 def eliminarTransporte(request):
     """Esta funcion elimina una empresa de transporte por su id   print('entrando a eliminar')"""
@@ -223,6 +249,32 @@ def eliminarCamion(request):
     except Transporte.DoesNotExist as excepcion:
         sweetify.error(request, 'Error al eliminar', text='El camion que intentas eliminar no existe o no se encuentra', persistent='aceptar')
         return redirect('camiones')
+    
+    except Exception as excepcion:
+        sweetify.error(request, 'Error al eliminar', text=f'Ocurrió un error {str(excepcion)}', persistent = 'Aceptar')
+        return redirect('camiones')
+    
+def eliminarSemi(request):
+    """Esta funcion elimina un camion de transporte por su id """
+
+    try:
+        if request.method == 'POST':
+            
+            id_semi = request.POST.get('id')
+
+            if Semi.objects.filter(id=id_semi, is_deleted=False).exists():  # si no existe lanza la excepcion
+
+                semi = Semi.objects.get(id=id_semi)
+                #transporte.delete()  # Eliminar el transporte
+                sweetify.success(request, 'Semi Eliminado', text=f'El Semi {semi.patente} de la empresa {semi.transporte.nombre}  ha sido eliminado', timer = 3000)
+                return redirect('semis')
+            else:
+                sweetify.warning(request, 'No permitido', text='El semi no existe o ya fue eliminado')
+                return redirect('semis')
+            
+    except Transporte.DoesNotExist as excepcion:
+        sweetify.error(request, 'Error al eliminar', text='El semi que intentas eliminar no existe o no se encuentra', persistent='aceptar')
+        return redirect('semis')
     
     except Exception as excepcion:
         sweetify.error(request, 'Error al eliminar', text=f'Ocurrió un error {str(excepcion)}', persistent = 'Aceptar')
