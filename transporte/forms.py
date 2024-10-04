@@ -48,7 +48,7 @@ class FormCamion(ModelForm):
         widgets = {
             'transporte':forms.Select(attrs={'class':'form-control'}),
             'marca': forms.Select(attrs={'class':'form-control'}),
-            'patente':forms.TextInput(attrs={'type':'text','class':'form-control','placeholder':'Patente del camión','autocomplete':'off'}),
+            'patente':forms.TextInput(attrs={'type':'text','class':'form-control text-uppercase','placeholder':'Patente del camión','autocomplete':'off'}),
             'vencimiento_seguro':forms.DateInput(attrs={'type':'date','class':'form-control'}),
         }
         
