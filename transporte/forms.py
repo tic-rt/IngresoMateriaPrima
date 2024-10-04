@@ -84,7 +84,7 @@ class FormSemi(ModelForm):
             patente = patente.upper()
             return patente        
     
-class formConductor(ModelForm):
+class FormConductor(ModelForm):
     """Formulario basado en conductor"""
     class Meta:
         model = Conductor
@@ -99,7 +99,7 @@ class formConductor(ModelForm):
             'transporte': forms.Select(attrs={'class':'form-control'}),
             'nombre': forms.TextInput(attrs={'class':'form-control text-capitalize', 'autocomplete':'off', 'placeholder':'Nombre del conductor'}),
             'apellido': forms.TextInput(attrs={'class':'form-control text-capitalize', 'autocomplete':'off', 'placeholder':'Apellido del conductor'}),
-            'dni' :  forms.TextInput(attrs={'class':'form-control', 'autocomplete':'off', 'placeholder':'DNI', 'pattern':'/d*'}),
+            'dni' :  forms.TextInput(attrs={'class':'form-control', 'autocomplete':'off', 'placeholder':'DNI', 'pattern':'\d*'}),
             'vencimiento_carnet' : forms.DateInput(attrs={'class':'form-control', 'type':'date'})
         }
 
@@ -107,13 +107,13 @@ class formConductor(ModelForm):
         nombre : str = self.cleaned_data.get('nombre')
 
         if nombre:
-            nombre = nombre.upper()
+            nombre = nombre.title()
             return nombre
         
     def clean_apellido(self):
         apellido : str = self.cleaned_data.get('apellido')
 
         if apellido:
-            apellido = apellido.upper()
+            apellido = apellido.title()
             return apellido
     
