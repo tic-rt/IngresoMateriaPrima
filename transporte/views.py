@@ -1,7 +1,7 @@
 from django.utils import timezone
 from django.shortcuts import redirect, render
 
-from transporte.forms import FormCamion, FormSemi, FormTransporte
+from transporte.forms import FormCamion, FormConductor, FormSemi, FormTransporte
 from transporte.models import Camion, Conductor, Semi, Transporte
 import sweetify
 
@@ -44,10 +44,18 @@ def semis(request):
                    'hoy':hoy
                    })
 
-def choferes(request):
+def conductores(request):
     """Esta funcion devolvera todos los conductores registrados, junto a los formularios correspondientes para la carga"""
-    choferes = Conductor.objects.filter(is_deleted = False)
-    pass
+    conductores = Conductor.objects.filter(is_deleted = False)
+    hoy = timezone.now().date()
+    form_conductor = FormConductor()
+
+    return render(request,'transporte/conductores.html',
+                  {'conductores':conductores,
+                   'hoy':hoy,
+                   'form_conductor':form_conductor
+                   }
+                  )
 
 def agregarTransporte(request):
     """esta funcion agrega una empresa de transporte nueva"""
@@ -126,6 +134,32 @@ def agregarSemi(request):
     except Exception as excepcion:
         sweetify.error(request,'Error al agregar camion',persistent=f'ocurrio un error {str(excepcion)}')
         return redirect('semis')
+
+def agregarConductor(request):
+    """esta funcion agrega un conductor de transporte nuevo"""
+
+    try:
+        if request.method == 'POST':
+            conductor = FormConductor(request.POST)
+            
+            if(conductor.is_valid()):
+                 conductor.save()
+                 sweetify.toast(request,f'Conductor {conductor.clean_nombre()}  {conductor.clean_apellido()} agregado',icon='success',timer = 5000)
+                 return redirect('conductores')
+            
+            else:
+                errores = []
+                for campo, mensajes in conductor.errors.items():
+                    for mensaje in mensajes:
+                        errores.append(f'{campo}: {mensaje}')
+                
+                errores_str = '<br>'.join(errores)
+                sweetify.warning(request,'Error al agregar conductor', text = errores_str, persistent = 'Aceptar')
+                return redirect('conductores')
+            
+    except Exception as excepcion :
+        sweetify.error('Error al agregar conductor', persistent=f'ocurrio un error {str(excepcion)}')
+        return redirect('conductores')
     
 def editarTransporte(request):#porque no la haces generica?que venga que tipo es y lo filtras/editar/int/tipo
     """Esta funcion edita una empresa por su id"""
