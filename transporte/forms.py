@@ -19,7 +19,7 @@ class FormTransporte(ModelForm):
         widgets = {
             'nombre': forms.TextInput(attrs={
                 'type':'text',
-                'class':'form-control cap',
+                'class':'form-control text-capitalize',
                 'placeholder':'Nombre de empresa de transporte',
                 'autocomplete':'off'})
         }
@@ -73,7 +73,7 @@ class FormSemi(ModelForm):
         
         widgets={
             'transporte':forms.Select(attrs={'class':'form-control'}),
-            'patente': forms.TextInput(attrs={'class':'form-control','placeholder':'Patente del semi','autocomplete':'off'}),
+            'patente': forms.TextInput(attrs={'class':'form-control text-uppercase','placeholder':'Patente del semi','autocomplete':'off'}),
             'vencimiento_seguro' :forms.DateInput(attrs={'type':'date','class':'form-control'})
         }
         
@@ -97,8 +97,8 @@ class formConductor(ModelForm):
         ]
         widgets={
             'transporte': forms.Select(attrs={'class':'form-control'}),
-            'nombre': forms.TextInput(attrs={'class':'form-control', 'autocomplete':'off', 'placeholder':'Nombre del conductor'}),
-            'apellido': forms.TextInput(attrs={'class':'form-control', 'autocomplete':'off', 'placeholder':'Apellido del conductor'}),
+            'nombre': forms.TextInput(attrs={'class':'form-control text-capitalize', 'autocomplete':'off', 'placeholder':'Nombre del conductor'}),
+            'apellido': forms.TextInput(attrs={'class':'form-control text-capitalize', 'autocomplete':'off', 'placeholder':'Apellido del conductor'}),
             'dni' :  forms.TextInput(attrs={'class':'form-control', 'autocomplete':'off', 'placeholder':'DNI', 'pattern':'/d*'}),
             'vencimiento_carnet' : forms.DateInput(attrs={'class':'form-control', 'type':'date'})
         }
