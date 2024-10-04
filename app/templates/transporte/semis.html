@@ -18,9 +18,10 @@
                 </div>
                 <table class="table table-bordered table-striped table-hover" id="tablaSemis">
                     <thead>
-                        <th>Empresa</th>
-                        <th>Patente</th>
-                        <th>Accion</th>
+                        <th class="text-center">Empresa</th>
+                        <th class="text-center">Patente</th>
+                        <th class="text-center">Vencimiento</th>
+                        <th class="text-center">Accion</th>
                     </thead>
                     <tbody>
                         {% for semi in semis %}
@@ -28,9 +29,25 @@
                             <td>{{semi.transporte}}</td>
                             <td>{{semi.patente}}</td>
                             <td>
+                                {% if semi.vencimiento_seguro >= hoy %}
+                                <span class="text-success">{{ semi.vencimiento_seguro|date:"d/m/Y"}}</span>
+                                {% elif semi.vencimiento_seguro < hoy %}
+                                <span class="text-danger">{{ semi.vencimiento_seguro|date:"d/m/Y"}}</span>
+                                {% endif %}
+                            </td>
+                            <td>
                                 <div class=" d-flex justify-content-around">
-                                    <button class="btn btn-warning"><i class="bi bi-pencil-square"></i></button>
-                                    <button class="btn btn-danger"><i class="bi bi-trash3"></i></button>
+                                    <form action="{% url 'editarSemi' %}" method="POST" class="editar-form">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="id" value="{{ semi.id }}">
+                                        <button class="btn btn-warning bi bi-pencil-square editar" data-id = "{{semi.id}}" data-nombre ="{{semi.transporte}}" data-patente="{{semi.patente}}"></button>
+                                    </form>
+                                    
+                                    <form action="{% url 'eliminarSemi' %}" method="POST" class="eliminar-form">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="id" value="{{ semi.id }}">
+                                        <button class="btn btn-danger bi bi-trash3 eliminar" data-id = "{{semi.id}}" data-nombre ="{{semi.transporte}}" data-patente="{{semi.patente}}"></button>
+                                    </form>
                                 </div>
                             </td>
                         </tr>
@@ -66,15 +83,66 @@
 
 </div>
 {% endblock content %}
+
 {% block js %}
 <script>
-    document.addEventListener('DOMCOntentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function() {
         let tablaSemis = new DataTable('#tablaSemis',{
         responsive : true,
         language:{
             url:'/static/vendor/datatables/es-Es.json'
         }
     });
+    document.getElementById('tablaSemis').addEventListener('click',(evento) => {
+        const botonEliminar = evento.target.closest('.eliminar')
+        const botonEditar = evento.target.closest('.editar')
+
+        if (botonEliminar){
+            evento.preventDefault()
+            nombre = evento.target.getAttribute('data-nombre')
+            patente = evento.target.getAttribute('data-patente')
+    
+            Swal.fire({
+                title: 'Atención!',
+                text: `Vas a eliminar al semi ${patente} de ${nombre}`,
+                icon: 'warning',
+                confirmButtonText: 'Aceptar',
+                confirmButtonColor: '#DC3545',
+                showCancelButton: true,
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const form = evento.target.closest('form');
+                    if (form) {
+                        form.submit(); // Envía el formulario
+                    }
+                }
+            })
+        }
+
+        if (botonEditar){
+            evento.preventDefault()
+            nombre = evento.target.getAttribute('data-nombre')
+            patente = evento.target.getAttribute('data-patente')
+
+            Swal.fire({
+                title: 'Atención!',
+                text: `Vas a editar al semi ${patente} de ${nombre}`,
+                icon: 'warning',
+                confirmButtonText : 'Aceptar',
+                confirmButtonColor : '#DC3545',
+                showCancelButton : true,
+                cancelButtonText: 'Cancelar'
+            }).then((result) =>{
+                if (result.isConfirmed){
+                    const form = evento.target.closest('form')
+                    if (form){
+                        form.submit()
+                    }
+                }
+            })
+        }
+    })
     })
 </script>
 {% endblock js %}
