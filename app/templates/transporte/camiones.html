@@ -31,8 +31,17 @@
                             <td>{{camion.patente}}</td>
                             <td>
                                 <div class=" d-flex justify-content-around">
-                                    <button class="btn btn-warning"><i class="bi bi-pencil-square"></i></button>
-                                    <button class="btn btn-danger"><i class="bi bi-trash3"></i></button>
+                                    <form action="{% url 'editarCamion' %}" method="POST" class="editar-form">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="id" value="{{ camion.id }}">
+                                        <button class="btn btn-warning bi bi-pencil-square editar" data-id = "{{camion.id}}" data-nombre ="{{camion.transporte}}" data-patente="{{camion.patente}}"></button>
+                                    </form>
+                                    
+                                    <form action="{% url 'eliminarCamion' %}" method="POST" class="eliminar-form">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="id" value="{{ camion.id }}">
+                                        <button class="btn btn-danger bi bi-trash3 eliminar" data-id = "{{camion.id}}" data-nombre ="{{camion.transporte}}" data-patente="{{camion.patente}}"></button>
+                                    </form>
                                 </div>
                             </td>
                         </tr>
@@ -72,11 +81,64 @@
 {% endblock content %}
 {% block js %}
 <script>
-    let tablaCamiones = new DataTable('#tablaCamiones',{
+    document.addEventListener('DOMContentLoaded', function() {
+        let tablaCamiones = new DataTable('#tablaCamiones',{
         responsive : true,
         language:{
             url:'/static/vendor/datatables/es-Es.json'
         }
     });
+
+    document.getElementById('tablaCamiones').addEventListener('click',(evento) => {
+        const botonEliminar = evento.target.closest('.eliminar')
+        const botonEditar = evento.target.closest('.editar')
+
+        if (botonEliminar){
+            evento.preventDefault()
+            nombre = evento.target.getAttribute('data-nombre')
+            patente = evento.target.getAttribute('data-patente')
+    
+            Swal.fire({
+                title: 'Atención!',
+                text: `Vas a eliminar al camion ${patente} de ${nombre}`,
+                icon: 'warning',
+                confirmButtonText: 'Aceptar',
+                confirmButtonColor: '#DC3545',
+                showCancelButton: true,
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const form = evento.target.closest('form');
+                    if (form) {
+                        form.submit(); // Envía el formulario
+                    }
+                }
+            })
+        }
+
+        if (botonEditar){
+            evento.preventDefault()
+            nombre = evento.target.getAttribute('data-nombre')
+            patente = evento.target.getAttribute('data-patente')
+
+            Swal.fire({
+                title: 'Atención!',
+                text: `Vas a editar al camion ${patente} de ${nombre}`,
+                icon: 'warning',
+                confirmButtonText : 'Aceptar',
+                confirmButtonColor : '#DC3545',
+                showCancelButton : true,
+                cancelButtonText: 'Cancelar'
+            }).then((result) =>{
+                if (result.isConfirmed){
+                    const form = evento.target.closest('form')
+                    if (form){
+                        form.submit()
+                    }
+                }
+            })
+        }
+    })
+    })
 </script>
 {% endblock js %}
