@@ -1,6 +1,6 @@
 from django.urls import path
 
-from transporte.views import agregarCamion, agregarSemi, agregarTransporte, camiones, semis, transportes, eliminarTransporte
+from transporte.views import actualizar, agregarCamion, agregarSemi, agregarTransporte, camiones, editarTransporte, eliminarTransporte, semis, transportes  
 
 
 urlpatterns = [
@@ -10,5 +10,8 @@ urlpatterns = [
     path('agregarTransporte',agregarTransporte, name='agregarTransporte'),
     path('agregarCamion',agregarCamion,name='agregarCamion'),
     path('agregarSemi',agregarSemi,name='agregarSemi'),
-    path('eliminarTransporte',eliminarTransporte,name = 'eliminarTransporte')
+    path('eliminarTransporte',eliminarTransporte,name = 'eliminarTransporte'),
+    path('editarTransporte',editarTransporte,name='editarTransporte'),
+    path('actualizar/<str:modelo>',actualizar,name='actualizar')
+
 ]
