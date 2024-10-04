@@ -68,12 +68,14 @@
 {% endblock content %}
 {% block js %}
 <script>
-    let tablaSemis = new DataTable('#tablaSemis',{
+    document.addEventListener('DOMCOntentLoaded', function() {
+        let tablaSemis = new DataTable('#tablaSemis',{
         responsive : true,
         language:{
             url:'/static/vendor/datatables/es-Es.json'
         }
     });
+    })
 </script>
 {% endblock js %}
 
