@@ -1,3 +1,4 @@
+from django.forms import ModelForm
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
 
@@ -34,9 +35,7 @@ def semis(request):
     """Esta funcion devolvera todos los semis de transportes registradas junto a los formularios correspondientes para la carga"""
     
     semis = Semi.objects.filter(is_deleted = False)
-
     form_semi = FormSemi()
-
     return render(request,'transporte/semis.html', 
                   {'semis':semis,
                    'form_semi': form_semi
@@ -58,6 +57,7 @@ def agregarTransporte(request):
                  #transporte.save()
                  sweetify.toast(request,f'Empresa de transporte {transporte.clean_nombre()} agregada',icon='success',timer = 5000)
                  return redirect('transportes')
+            
             else:
                 errores = []
                 for campo, mensajes in transporte.errors.items():
@@ -83,6 +83,7 @@ def agregarCamion(request):
                 camion.save()
                 sweetify.toast(request,f'Camion patente {camion.clean_patente()} agregado', icon='success', timer=5000)
                 return redirect('camiones')
+            
             else:
                 errores = []
                 for campo, mensajes in camion.errors.items():
@@ -109,6 +110,7 @@ def agregarSemi(request):
                 semi.save()
                 sweetify.toast(request,f'Semi patente {semi.clean_patente()} agregado',icon='success', timer=5000)
                 return redirect('semis')
+            
             else:
                 errores = []
                 for campo, mensajes in semi.errors.items():
@@ -123,30 +125,106 @@ def agregarSemi(request):
         sweetify.error(request,'Error al agregar camion',persistent=f'ocurrio un error {str(excepcion)}')
         return redirect('semis')
     
+def editarTransporte(request):#porque no la haces generica?que venga que tipo es y lo filtras/editar/int/tipo
+    """Esta funcion edita una empresa por su id"""
+    
+    try:
+        if request.method == 'POST':
+            id_empresa = request.POST.get('id')
+           
+            if Transporte.objects.filter(id=id_empresa, is_deleted=False).exists():
+                transporte = Transporte.objects.filter(id=id_empresa).get()
+                form_editar = FormTransporte(instance=transporte)
+                modelo = 'Transporte'
+                return render(request,'transporte/editar.html',{'form_editar':form_editar,'modelo':modelo})
+            
+            else:
+                sweetify.warning(request, 'No permitido', text='La empresa no existe o ya fue eliminada')
+                print('no eliminado')
+                return redirect('transportes')
+            
+    except Transporte.DoesNotExist as excepcion:#lo estoy considerando en el else, ver
+            sweetify.warning(request, 'No permitido', text='La empresa no existe o ya fue eliminada')
+            return redirect('transportes')
+    
+    except Exception as excepcion:
+        sweetify.error(request, 'Error al editar', text=f'Ocurrió un error {str(excepcion)}', persistent = 'Aceptar')
+        return redirect('transportes')
+
 def eliminarTransporte(request):
     """Esta funcion elimina una empresa de transporte por su id   print('entrando a eliminar')"""
 
     try:
         if request.method == 'POST':
             
-            idEmpresa = request.POST.get('id')
+            id_empresa = request.POST.get('id')
 
-            if Transporte.objects.filter(id=idEmpresa, is_deleted=False).exists():  # si no existe lanza la excepcion
-                transporte = Transporte.objects.get(id=idEmpresa)
+            if Transporte.objects.filter(id=id_empresa, is_deleted=False).exists():  # si no existe lanza la excepcion
+
+                transporte = Transporte.objects.get(id=id_empresa)
                 #transporte.delete()  # Eliminar el transporte
                 sweetify.success(request, 'Empresa Eliminada', text=f'La empresa {transporte.nombre} ha sido eliminada', timer = 3000)
-                print('eliminado')
                 return redirect('transportes')
             else:
                 sweetify.warning(request, 'No permitido', text='La empresa no existe o ya fue eliminada')
-                print('no eliminado')
                 return redirect('transportes')
             
     except Transporte.DoesNotExist as excepcion:
-        sweetify.error(request, 'Error al eliminar', text='La empresa que intentas eliminar no existe o no se encuentra', persistent='Si crees que es un error, comunicate con sistemas')
+        sweetify.error(request, 'Error al eliminar', text='La empresa que intentas eliminar no existe o no se encuentra', persistent='aceptar')
         return redirect('transportes')
     
     except Exception as excepcion:
-        sweetify.error(request, 'Error al eliminar', text=f'Ocurrió un error {str(excepcion)}')
+        sweetify.error(request, 'Error al eliminar', text=f'Ocurrió un error {str(excepcion)}', persistent = 'Aceptar')
         return redirect('transportes')
     
+def actualizar(request,modelo):
+    """La funcion recibe un formulario, identifica el tipo y lo actualiza"""
+    try:
+        if request.method == 'POST':
+            id = request.POST.get('id')
+            formulario = None
+            instancia = None
+
+            match modelo:
+
+                case 'Transporte':
+                    instancia = Transporte.objects.get(id=id)
+                    formulario = FormTransporte(request.POST, instance=instancia)
+
+                case 'Camion':
+                    instancia = Camion.objects.get(id=id)
+                    formulario = FormCamion(request.POST, instance=instancia)
+
+                case 'Semi':
+                    instancia = Semi.objects.get(id=id)
+                    formulario = FormSemi(request.POST, instance=instancia)
+
+            if(formulario and formulario.is_valid()):
+                formulario.save()
+                sweetify.success(request,f'{modelo} actualizado',text ='Los datos han sido actualizados correctamente', timer = 3000)
+
+                match modelo:
+
+                    case 'Transporte':
+                        return redirect('transportes')
+
+                    case 'Camion':
+                        return redirect('camiones')
+
+                    case 'Semi':
+                        return redirect('semis')
+
+        else:
+            errores = []
+            for campo, mensajes in formulario.errors.items():
+                for mensaje in mensajes:
+                    errores.append(f'{campo}: {mensaje}')
+        
+                    errores_str = '<br>'.join(errores)
+                    sweetify.warning(request,'Error al editar', text = errores_str, persistent = 'Aceptar')
+            return redirect('transportes')
+    
+    except Exception as excepcion:
+        sweetify.error(request, 'Error al editar', text=f'Ocurrió un error {str(excepcion)}', persistent = 'Aceptar')
+        return redirect('transportes')
+
