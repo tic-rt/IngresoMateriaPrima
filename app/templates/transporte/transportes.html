@@ -27,7 +27,7 @@
                             <td>{{ transporte.nombre }}</td>
                             <td>
                                 <div class=" d-flex justify-content-around">
-                                    <form action="{% url 'eliminarTransporte' %}" method="POST" class="eliminar-form"></form>
+                                    <form action="{% url 'editarTransporte' %}" method="POST" class="editar-form">
                                         {% csrf_token %}
                                         <input type="hidden" name="id" value="{{ transporte.id }}">
                                         <button class="btn btn-warning bi bi-pencil-square editar" data-id = "{{transporte.id}}" data-nombre ="{{transporte.nombre}}"></button>
@@ -77,7 +77,8 @@
 
 {% block js %}
 <script>
-    let tablaEmpresas = new DataTable('#tablaEmpresas',{
+    document.addEventListener('DOMContentLoaded', function(){
+        let tablaEmpresas = new DataTable('#tablaEmpresas',{
         responsive : true,
         language:{
             url:'/static/vendor/datatables/es-Es.json'
@@ -88,6 +89,7 @@
 
     document.getElementById('tablaEmpresas').addEventListener('click',(evento) => {
         const botonEliminar = evento.target.closest('.eliminar')
+        const botonEditar = evento.target.closest('.editar')
 
         if (botonEliminar){
             evento.preventDefault()
@@ -105,13 +107,36 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     const form = evento.target.closest('form');
-                    console.log(form)
                     if (form) {
                         form.submit(); // Envía el formulario
                     }
                 }
             })
         }
+
+        if (botonEditar){
+            evento.preventDefault()
+            id = evento.target.getAttribute('data-id')
+            nombre = evento.target.getAttribute('data-nombre')
+
+            Swal.fire({
+                title: 'Atención!',
+                text: `Vas a editar la empresa ${nombre}`,
+                icon: 'warning',
+                confirmButtonText : 'Aceptar',
+                confirmButtonColor : '#DC3545',
+                showCancelButton : true,
+                cancelButtonText: 'Cancelar'
+            }).then((result) =>{
+                if (result.isConfirmed){
+                    const form = evento.target.closest('form')
+                    if (form){
+                        form.submit()
+                    }
+                }
+            })
+        }
+    })
     })
 </script>
 {% endblock js %}
