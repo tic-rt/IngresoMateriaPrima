@@ -387,6 +387,9 @@ def actualizar(request,modelo):
                 case 'Semi':
                     instancia = Semi.objects.get(id=id)
                     formulario = FormSemi(request.POST, instance=instancia)
+                case 'Conductor':
+                    instancia = Conductor.objects.get(id=id)
+                    formulario = FormConductor(request.POST, instance = instancia)
 
             if(formulario and formulario.is_valid()):
                 formulario.save()
@@ -402,6 +405,9 @@ def actualizar(request,modelo):
 
                     case 'Semi':
                         return redirect('semis')
+                    
+                    case 'Conductor':
+                        return redirect('conductores')
 
         else:
             errores = []
