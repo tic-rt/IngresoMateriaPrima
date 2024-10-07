@@ -3,7 +3,7 @@ from django.db import models
 # Create your models here.
 
 sectores = [
-    ('Porteria 2', 'porteria 2'),
+    ('Porteria 2', 'Porteria 2'),
 ]
 
 class Personal(models.Model):
