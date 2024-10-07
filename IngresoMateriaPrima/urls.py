@@ -22,4 +22,5 @@ urlpatterns = [
     path('',include('app.urls')),
     path('porteria2/',include('porteria2.urls')),
     path('transportes/',include('transporte.urls')),
+    path('personal/',include('personal.urls')),
 ]
