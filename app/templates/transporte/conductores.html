@@ -4,7 +4,7 @@
 
 {% block content %}
 <div class="container-fluid d-flex flex-column mb-5">
-    <div class="container fondo-camiones" style="height: 100px;"></div>
+    <div class="container fondo-conductores" style="height: 100px;"></div>
 
     <!-- tabla de choferes -->
     <div class="text-center pt-4 mb-5">
@@ -95,7 +95,13 @@
         responsive : true,
         language:{
             url:'/static/vendor/datatables/es-Es.json'
-        }
+        },
+        columnDefs: [
+            {
+                orderable: false,
+                targets: 4
+            },  // Habilita el orden para la columna 1
+        ],
     });
     document.getElementById('tablaConductores').addEventListener('click',(evento) => {
         const botonEliminar = evento.target.closest('.eliminar')
