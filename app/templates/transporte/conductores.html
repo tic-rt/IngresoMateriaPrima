@@ -39,8 +39,17 @@
                             </td>
                             <td>
                                 <div class=" d-flex justify-content-around">
-                                    <button class="btn btn-warning"><i class="bi bi-pencil-square"></i></button>
-                                    <button class="btn btn-danger"><i class="bi bi-trash3"></i></button>
+                                    <form action="{% url 'editarConductor' %}" method="POST" class="editar-form">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="id" value="{{conductor.id}}">
+                                        <button class="btn btn-warning bi bi-pencil-square editar" data-id = "{{conductor.id}}" data-nombre ="{{conductor.nombre}}" data-apellido="{{conductor.apellido}}"></button>
+                                    </form>
+                                    
+                                    <form action="{% url 'eliminarConductor' %}" method="POST" class="eliminar-form">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="id" value="{{ conductor.id }}">
+                                        <button class="btn btn-danger bi bi-trash3 eliminar" data-id = "{{conductor.id}}" data-nombre ="{{conductor.nombre}}" data-apellido="{{conductor.apellido}}"></button>
+                                    </form>
                                 </div>
                             </td>
                         </tr>
@@ -82,7 +91,7 @@
 {% block js %}
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        let tablaSemis = new DataTable('#tablaConductores',{
+        let tablaConductores = new DataTable('#tablaConductores',{
         responsive : true,
         language:{
             url:'/static/vendor/datatables/es-Es.json'
@@ -99,7 +108,7 @@
     
             Swal.fire({
                 title: 'Atención!',
-                text: `Vas a eliminar al Conductor ${nombre} de ${apellido}`,
+                text: `Vas a eliminar al Conductor ${nombre} ${apellido}`,
                 icon: 'warning',
                 confirmButtonText: 'Aceptar',
                 confirmButtonColor: '#DC3545',
@@ -118,11 +127,11 @@
         if (botonEditar){
             evento.preventDefault()
             nombre = evento.target.getAttribute('data-nombre')
-            patente = evento.target.getAttribute('data-apellido')
+            apellido = evento.target.getAttribute('data-apellido')
 
             Swal.fire({
                 title: 'Atención!',
-                text: `Vas a editar al semi ${patente} de ${nombre}`,
+                text: `Vas a editar al conductor ${nombre} ${apellido}`,
                 icon: 'warning',
                 confirmButtonText : 'Aceptar',
                 confirmButtonColor : '#DC3545',
