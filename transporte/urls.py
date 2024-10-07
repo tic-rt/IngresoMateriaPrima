@@ -1,6 +1,6 @@
 from django.urls import path
-from transporte.views import (actualizar, agregarCamion, agregarConductor, agregarSemi, agregarTransporte, camiones, conductores, editarCamion, 
-                              editarSemi, editarTransporte, eliminarCamion, eliminarSemi, eliminarTransporte, semis, transportes)  
+from transporte.views import (actualizar, agregarCamion, agregarConductor, agregarSemi, agregarTransporte, camiones, conductores, editarCamion, editarConductor, 
+                              editarSemi, editarTransporte, eliminarCamion, eliminarConductor, eliminarSemi, eliminarTransporte, semis, transportes)  
 
 
 urlpatterns = [
@@ -12,12 +12,13 @@ urlpatterns = [
     path('agregarCamion', agregarCamion, name='agregarCamion'),
     path('agregarSemi', agregarSemi, name='agregarSemi'),
     path('agregarConductor', agregarConductor, name='agregarConductor'),
-    path('eliminarTransporte', eliminarTransporte, name = 'eliminarTransporte'),
     path('editarTransporte', editarTransporte, name='editarTransporte'),
+    path('editarCamion', editarCamion, name='editarCamion'),
+    path('editarSemi', editarSemi, name='editarSemi'),
+    path('editarConductor', editarConductor, name = 'editarConductor'),
+    path('eliminarTransporte', eliminarTransporte, name = 'eliminarTransporte'),
     path('eliminarCamion', eliminarCamion, name='eliminarCamion'),
     path('eliminarSemi', eliminarSemi, name ='eliminarSemi'),
-    path('editarCamion', editarCamion, name='editarCamion'),
-    path('eliminarCamion', eliminarCamion, name='eliminarCamion'),
-    path('editarSemi', editarSemi, name='editarSemi'),
+    path('eliminarConductor', eliminarConductor, name='eliminarConductor'),
     path('actualizar/<str:modelo>',actualizar,name='actualizar'),
 ]
