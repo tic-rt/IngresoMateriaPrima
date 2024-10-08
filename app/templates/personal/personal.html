@@ -28,16 +28,16 @@
                         <tr>
                             <td>{{responsable.nombre}}</td>
                             <td>{{responsable.apellido}}</td>
-                            <td>{{responsable.legajo}}</td>
+                            <td class="text-center">{{responsable.legajo}}</td>
                             <td>
                                 <div class=" d-flex justify-content-around">
-                                    <form action="{% url 'editarResponsable' %}" method="POST" class="editar-form">
+                                    <form action="{% url 'editarPersonal' %}" method="POST" class="editar-form">
                                         {% csrf_token %}
                                         <input type="hidden" name="id" value="{{responsable.id}}">
                                         <button class="btn btn-warning bi bi-pencil-square editar" data-id = "{{responsable.id}}" data-nombre ="{{responsable.nombre}}" data-apellido="{{responsable.apellido}}"></button>
                                     </form>
                                     
-                                    <form action="{% url 'eliminarResponsable' %}" method="POST" class="eliminar-form">
+                                    <form action="{% url 'eliminarPersonal' %}" method="POST" class="eliminar-form">
                                         {% csrf_token %}
                                         <input type="hidden" name="id" value="{{ responsable.id }}">
                                         <button class="btn btn-danger bi bi-trash3 eliminar" data-id = "{{responsable.id}}" data-nombre ="{{responsable.nombre}}" data-apellido="{{responsable.apellido}}"></button>
@@ -61,7 +61,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body" id="contenido">
-                    <form method="post" action="{% url 'agregarConductor' %}">
+                    <form method="post" action="{% url 'agregarPersonal' %}">
                         {% csrf_token %}
                         {{ form_responsables|crispy }}
                         <button type="submit" class="btn btn-primary">Guardar</button>
@@ -79,7 +79,6 @@
 {% block js %}
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        console.log('js cargado')
         let tablaResponsables = new DataTable('#tablaResponsables',{
         responsive : true,
         language:{
@@ -103,7 +102,7 @@
     
             Swal.fire({
                 title: 'Atención!',
-                text: `Vas a eliminar al Conductor ${nombre} ${apellido}`,
+                text: `Vas a eliminar al agente ${nombre} ${apellido}`,
                 icon: 'warning',
                 confirmButtonText: 'Aceptar',
                 confirmButtonColor: '#DC3545',
@@ -126,7 +125,7 @@
 
             Swal.fire({
                 title: 'Atención!',
-                text: `Vas a editar al conductor ${nombre} ${apellido}`,
+                text: `Vas a editar al agente ${nombre} ${apellido}`,
                 icon: 'warning',
                 confirmButtonText : 'Aceptar',
                 confirmButtonColor : '#DC3545',
