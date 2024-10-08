@@ -10,21 +10,25 @@ class FormPersonal(ModelForm):
         model = Personal
 
         fields = [
+            'sector',
             'nombre',
             'apellido',
             'legajo'
         ]
 
         widgets = { #hermosear con helper de crispy y usar tag
+            'sector' : forms.Select(attrs={
+                'class':'form-control',
+            }),
             'nombre': forms.TextInput(attrs={
                 'type':'text',
-                'class':'form-control',
+                'class':'form-control text-capitalize',
                 'placeholder':'Nombre',
                 'autocomplete':'off',
                 }),
             'apellido': forms.TextInput(attrs={
                 'type':'text',
-                'class':'form-control',
+                'class':'form-control text-capitalize',
                 'placeholder':'Apellido',
                 'autocomplete':'off'
             }),
@@ -36,3 +40,17 @@ class FormPersonal(ModelForm):
                 'autocomplete':'off'
             })
         }
+
+    def clean_nombre(self):
+        nombre :str = self.cleaned_data.get('nombre')
+
+        if nombre :
+            nombre = nombre.capitalize()
+            return nombre
+    
+    def clean_apellido(self):
+        apellido :str = self.cleaned_data.get('apellido')
+
+        if apellido :
+            apellido = apellido.capitalize()
+            return apellido
