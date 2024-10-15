@@ -72,6 +72,8 @@ class Conductor(Base):
     dni = models.CharField(verbose_name='DNI',blank=False, null= False, unique=True,  max_length=15)
     vencimiento_carnet = models.DateField(verbose_name='Vencimiento Carnet', blank=False, null=False)
     #Que mas del conductor??hablar con ramos
+    #capacitacion(date) y vencimiento capacitacion
+    #telefono celular
     #Finalizar esto!!!
     
     class Meta:

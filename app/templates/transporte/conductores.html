@@ -32,9 +32,9 @@
                             <td>{{conductor.apellido}}</td>
                             <td>
                                 {% if conductor.vencimiento_carnet >= hoy %}
-                                <span class="text-success">{{ conductor.vencimiento_carnet|date:"d/m/Y"}}</span>
-                                {% elif conductor.vencimiento_seguro < hoy %}
-                                <span class="text-danger">{{ conductor.vencimiento_carnet|date:"d/m/Y"}}</span>
+                                    <span class="text-success">{{ conductor.vencimiento_carnet|date:"d/m/Y"}}</span>
+                                {% elif conductor.vencimiento_carnet < hoy %}
+                                    <span class="text-danger">{{ conductor.vencimiento_carnet|date:"d/m/Y"}}</span>
                                 {% endif %}
                             </td>
                             <td>
