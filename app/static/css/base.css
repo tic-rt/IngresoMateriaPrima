@@ -131,3 +131,7 @@ h4 {
   opacity: 1; 
   z-index: -1;
 }
+.fondo-loguin {
+background: rgb(2,10,46);
+background: linear-gradient(311deg, rgba(2,10,46,1) 0%, rgba(0,73,141,1) 25%);
+}
