@@ -22,9 +22,9 @@ class HDR(Base):
    estado=models.CharField(verbose_name='Estado',choices=estado, max_length=20)
    
    class Meta:
-    """Meta defincion para HDR"""
-    verbose_name = 'HDR'
-    verbose_name_plural = 'HDR'
+      """Meta defincion para HDR"""
+      verbose_name = 'HDR'
+      verbose_name_plural = 'HDR'
 
 
 
