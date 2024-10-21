@@ -1,12 +1,12 @@
 from django.utils import timezone
 from django.shortcuts import redirect, render
-
+from django.contrib.auth.decorators import login_required
 from transporte.forms import FormCamion, FormConductor, FormSemi, FormTransporte
 from transporte.models import Camion, Conductor, Semi, Transporte
 import sweetify
 
 # Create your views here.
-
+@login_required
 def transportes(request):
     """Esta funcion devolvera todas las empresas de transportes registradas junto a los formularios correspondientes para la carga"""
     
@@ -14,10 +14,11 @@ def transportes(request):
     form_transporte = FormTransporte()
 
     return render(request,'transporte/transportes.html', 
-                  {'transportes':transportes,
-                   'form_transporte': form_transporte
-                   })
+                {'transportes':transportes,
+                'form_transporte': form_transporte
+                })
 
+@login_required
 def camiones(request):
     """Esta funcion devolvera todos los camiones de transportes registrados junto a los formularios correspondientes para la carga"""
     
@@ -26,11 +27,11 @@ def camiones(request):
     form_camion = FormCamion()
 
     return render(request,'transporte/camiones.html', 
-                  {'camiones':camiones,
-                   'form_camion':form_camion,
-                   'hoy':hoy
-                   })
-
+                    {'camiones':camiones,
+                    'form_camion':form_camion,
+                    'hoy':hoy
+                    })
+@login_required
 def semis(request):
     """Esta funcion devolvera todos los semis de transportes registradas junto a los formularios correspondientes para la carga"""
     
@@ -39,11 +40,11 @@ def semis(request):
     form_semi = FormSemi()
 
     return render(request,'transporte/semis.html', 
-                  {'semis':semis,
-                   'form_semi': form_semi,
-                   'hoy':hoy
-                   })
-
+                    {'semis':semis,
+                    'form_semi': form_semi,
+                    'hoy':hoy
+                    })
+@login_required
 def conductores(request):
     """Esta funcion devolvera todos los conductores registrados, junto a los formularios correspondientes para la carga"""
     conductores = Conductor.objects.filter(is_deleted = False)
@@ -51,12 +52,12 @@ def conductores(request):
     form_conductor = FormConductor()
 
     return render(request,'transporte/conductores.html',
-                  {'conductores':conductores,
-                   'hoy':hoy,
-                   'form_conductor':form_conductor
-                   }
-                  )
-
+                    {'conductores':conductores,
+                    'hoy':hoy,
+                    'form_conductor':form_conductor
+                    }
+                )
+@login_required
 def agregarTransporte(request):
     """esta funcion agrega una empresa de transporte nueva"""
 
@@ -65,9 +66,9 @@ def agregarTransporte(request):
             transporte = FormTransporte(request.POST)
             
             if(transporte.is_valid()):
-                 #transporte.save()
-                 sweetify.toast(request,f'Empresa de transporte {transporte.clean_nombre()} agregada',icon='success',timer = 5000)
-                 return redirect('transportes')
+                #transporte.save()
+                sweetify.toast(request,f'Empresa de transporte {transporte.clean_nombre()} agregada',icon='success',timer = 5000)
+                return redirect('transportes')
             
             else:
                 errores = []
@@ -82,7 +83,8 @@ def agregarTransporte(request):
     except Exception as excepcion :
         sweetify.error('Error al agregar Empresa de transporte', persistent=f'ocurrio un error {str(excepcion)}')
         return redirect('transportes')
-    
+
+@login_required    
 def agregarCamion(request):
     """Esta funcion agrega un nuevo camion"""
 
@@ -108,7 +110,8 @@ def agregarCamion(request):
     except Exception as excepcion:
         sweetify.error(request,'Error al agregar camion',persistent=f'ocurrio un error {str(excepcion)}')
         return redirect('camiones')
-            
+
+@login_required            
 def agregarSemi(request):
     """Esta funcion agrega un nuevo semi"""
 
@@ -135,6 +138,7 @@ def agregarSemi(request):
         sweetify.error(request,'Error al agregar camion',persistent=f'ocurrio un error {str(excepcion)}')
         return redirect('semis')
 
+@login_required
 def agregarConductor(request):
     """esta funcion agrega un conductor de transporte nuevo"""
 
@@ -143,9 +147,9 @@ def agregarConductor(request):
             conductor = FormConductor(request.POST)
             
             if(conductor.is_valid()):
-                 conductor.save()
-                 sweetify.toast(request,f'Conductor {conductor.clean_nombre()}  {conductor.clean_apellido()} agregado',icon='success',timer = 5000)
-                 return redirect('conductores')
+                conductor.save()
+                sweetify.toast(request,f'Conductor {conductor.clean_nombre()}  {conductor.clean_apellido()} agregado',icon='success',timer = 5000)
+                return redirect('conductores')
             
             else:
                 errores = []
@@ -160,14 +164,15 @@ def agregarConductor(request):
     except Exception as excepcion :
         sweetify.error('Error al agregar conductor', persistent=f'ocurrio un error {str(excepcion)}')
         return redirect('conductores')
-        
+
+@login_required        
 def editarTransporte(request):#porque no la haces generica?que venga que tipo es y lo filtras/editar/int/tipo
     """Esta funcion edita una empresa por su id"""
     
     try:
         if request.method == 'POST':
             id_empresa = request.POST.get('id')
-           
+
             if Transporte.objects.filter(id=id_empresa, is_deleted=False).exists():
                 transporte = Transporte.objects.filter(id=id_empresa).get()
                 form_editar = FormTransporte(instance=transporte)
@@ -186,6 +191,7 @@ def editarTransporte(request):#porque no la haces generica?que venga que tipo es
         sweetify.error(request, 'Error al editar', text=f'Ocurrió un error {str(excepcion)}', persistent = 'Aceptar')
         return redirect('transportes')
 
+@login_required
 def editarCamion(request):#porque no la haces generica?que venga que tipo es y lo filtras/editar/int/tipo
     """Esta funcion edita un camion por su id"""
     
@@ -211,6 +217,7 @@ def editarCamion(request):#porque no la haces generica?que venga que tipo es y l
         print(id_camion)
         return redirect('camiones')
 
+@login_required
 def editarSemi(request):#porque no la haces generica?que venga que tipo es y lo filtras/editar/int/tipo
     """Esta funcion edita un semi por su id"""
     
@@ -236,13 +243,14 @@ def editarSemi(request):#porque no la haces generica?que venga que tipo es y lo 
         print(id_semi)
         return redirect('semis')
 
+@login_required
 def editarConductor(request):#porque no la haces generica?que venga que tipo es y lo filtras/editar/int/tipo
     """Esta funcion edita un conductor por su id"""
     
     try:
         if request.method == 'POST':
             id_empresa = request.POST.get('id')
-           
+
             if Conductor.objects.filter(id=id_empresa, is_deleted=False).exists():
                 conductor = Conductor.objects.filter(id=id_empresa).get()
                 form_editar = FormConductor(instance=conductor)
@@ -261,6 +269,7 @@ def editarConductor(request):#porque no la haces generica?que venga que tipo es 
         sweetify.error(request, 'Error al editar', text=f'Ocurrió un error {str(excepcion)}', persistent = 'Aceptar')
         return redirect('conductores')
 
+@login_required
 def eliminarTransporte(request):
     """Esta funcion elimina una empresa de transporte por su id   print('entrando a eliminar')"""
 
@@ -286,7 +295,8 @@ def eliminarTransporte(request):
     except Exception as excepcion:
         sweetify.error(request, 'Error al eliminar', text=f'Ocurrió un error {str(excepcion)}', persistent = 'Aceptar')
         return redirect('transportes')
-    
+
+@login_required
 def eliminarCamion(request):
     """Esta funcion elimina un camion de transporte por su id """
 
@@ -312,7 +322,8 @@ def eliminarCamion(request):
     except Exception as excepcion:
         sweetify.error(request, 'Error al eliminar', text=f'Ocurrió un error {str(excepcion)}', persistent = 'Aceptar')
         return redirect('camiones')
-    
+
+@login_required
 def eliminarSemi(request):
     """Esta funcion elimina un camion de transporte por su id """
 
@@ -339,7 +350,7 @@ def eliminarSemi(request):
         sweetify.error(request, 'Error al eliminar', text=f'Ocurrió un error {str(excepcion)}', persistent = 'Aceptar')
         return redirect('camiones')
 
-    
+@login_required
 def eliminarConductor(request):
     """Esta funcion elimina un conductor de transporte por su id """
 
@@ -365,7 +376,8 @@ def eliminarConductor(request):
     except Exception as excepcion:
         sweetify.error(request, 'Error al eliminar', text=f'Ocurrió un error {str(excepcion)}', persistent = 'Aceptar')
         return redirect('conductores')
-    
+
+@login_required
 def actualizar(request,modelo):
     """La funcion recibe un formulario, identifica el tipo y lo actualiza"""
     try:
