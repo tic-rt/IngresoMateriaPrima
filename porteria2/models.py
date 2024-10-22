@@ -8,11 +8,11 @@ from transporte.models import Camion, Semi, Transporte, Conductor
 
 class Ingreso(Base):
     """Esta clase representa el Ingreso de un vehiculo para descarga en la porteria es 1 de n etapas de la HDR"""
+
     horaIngreso = models.DateTimeField(verbose_name="Hora de Ingreso",auto_now_add=True)
     ingresoCalefaccion = models.BooleanField(verbose_name='Ingreso para calefaccion de cisterna')
     empresaTransporte = models.ForeignKey(Transporte,on_delete=models.PROTECT)
-    conductor = models.ForeignKey(Conductor,on_delete=models.PROTECT)
-    #DNI (relacionado a conductor)
+    conductor = models.ForeignKey(Conductor,on_delete=models.PROTECT) 
     producto = models.ForeignKey(Producto,on_delete=models.PROTECT)
     remito = models.CharField(verbose_name='Remito',blank=False, null=False, max_length=100)
     patenteChasis = models.ForeignKey(Camion,on_delete=models.PROTECT)

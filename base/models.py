@@ -21,7 +21,7 @@ class Base(models.Model):
     @_history_user.setter
     def _history_user(self, value):
         self.changed_by = value
-     
+
     #Soft delete (para choferes camiones etc, mantenerlos para mantener la integridad verificar Si funciona, creo que no)   
     def delete(self, *args, **kwargs):
         self.deleted_date = timezone.now() 

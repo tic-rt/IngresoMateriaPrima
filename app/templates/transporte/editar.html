@@ -1,0 +1,59 @@
+{% extends "base/base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="container-fluid d-flex flex-column mb-5">
+    
+    {% if modelo == 'Transporte' %}
+        <div class="container fondo-transportes" style="height: 100px;"></div>
+    {% elif modelo == 'Camion' %}
+        <div class="container fondo-camiones" style="height: 100px;"></div>
+    {% elif modelo == 'Semi' %}
+        <div class="container fondo-semis" style="height: 100px;"></div>
+    {% elif modelo == 'Conductor' %}
+        <div class="container fondo-conductores" style="height: 100px;"></div>
+    {% endif %}
+    
+
+
+    <!-- Formulario de edicion -->
+    <div class="text-center pt-4 mb-5">
+        <div class="d-flex justify-content-center">
+            <div class="col-10 col-sm-8">
+                <div class="text-center mb-4">
+                    {% if modelo == 'Transporte' %}
+                    <h3>Editando empresa {{form_editar.nombre.value}}</h3>
+                    {% elif modelo == 'Camion' %}
+                    <h3>Editando Camion {{form_editar.patente.value}} empresa {{ form_editar.instance.transporte.nombre }}</h3>
+                    {% elif modelo == 'Semi' %}
+                    <h3>Editando Semi {{form_editar.patente.value}} empresa {{ form_editar.instance.transporte.nombre }}</h3>
+                    {% elif modelo == 'Conductor' %}
+                    <h3>Editando Conductor {{form_editar.nombre.value}} {{form_editar.apellido.value}} empresa {{ form_editar.instance.transporte.nombre }}</h3>
+                    {% endif %}
+                </div>
+                <form method="post" action="{% url 'actualizar' modelo %}">
+                    <input type="hidden" name="id" value="{{ form_editar.instance.id }}">
+                    {% csrf_token %}
+                    {{ form_editar|crispy }}
+                    <button type="submit" class="btn btn-primary">Guardar</button>   
+                </form>
+                <div class="mt-4">
+                    <button class="btn btn-success" onclick="history.back()" id="volver"><i class="bi bi-arrow-left  me-4"></i>Volver</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+
+{% block js %}
+<script>
+    document.addEventListener('DomContentLoaded', function() {
+        document.getElementById('volver').addEventListener('click', function(){
+
+        })
+    })
+</script>
+{% endblock js %}

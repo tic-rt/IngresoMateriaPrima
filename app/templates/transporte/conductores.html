@@ -1,0 +1,158 @@
+{% extends "base/base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="container-fluid d-flex flex-column mb-5">
+    <div class="container fondo-conductores" style="height: 100px;"></div>
+
+    <!-- tabla de choferes -->
+    <div class="text-center pt-4 mb-5">
+        <div>
+            <h3>Lista de Conductores</h3>
+        </div>
+        <div class="d-flex justify-content-center">
+            <div class="col-10 col-sm-8">
+                <div class="float-end">
+                    <button class="btn btn-primary mb-2" data-bs-toggle="modal" data-bs-target="#modal" id="nuevoConductor">Agregar</button>
+                </div>
+                <table class="table table-bordered table-striped table-hover" id="tablaConductores">
+                    <thead>
+                        <th class="text-center">Empresa</th>
+                        <th class="text-center">Nombre</th>
+                        <th class="text-center">Apellido</th>
+                        <th class="text-center">Vto. Carnet</th>
+                        <th class="text-center">Accion</th>
+                    </thead>
+                    <tbody>
+                        {% for conductor in conductores %}
+                        <tr>
+                            <td>{{conductor.transporte}}</td>
+                            <td>{{conductor.nombre}}</td>
+                            <td>{{conductor.apellido}}</td>
+                            <td>
+                                {% if conductor.vencimiento_carnet >= hoy %}
+                                    <span class="text-success">{{ conductor.vencimiento_carnet|date:"d/m/Y"}}</span>
+                                {% elif conductor.vencimiento_carnet < hoy %}
+                                    <span class="text-danger">{{ conductor.vencimiento_carnet|date:"d/m/Y"}}</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <div class=" d-flex justify-content-around">
+                                    <form action="{% url 'editarConductor' %}" method="POST" class="editar-form">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="id" value="{{conductor.id}}">
+                                        <button class="btn btn-warning bi bi-pencil-square editar" data-id = "{{conductor.id}}" data-nombre ="{{conductor.nombre}}" data-apellido="{{conductor.apellido}}"></button>
+                                    </form>
+                                    
+                                    <form action="{% url 'eliminarConductor' %}" method="POST" class="eliminar-form">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="id" value="{{ conductor.id }}">
+                                        <button class="btn btn-danger bi bi-trash3 eliminar" data-id = "{{conductor.id}}" data-nombre ="{{conductor.nombre}}" data-apellido="{{conductor.apellido}}"></button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+   
+    <!-- Modal -->
+    <div class="modal fade" id="modal" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="ModalLabel">Nuevo Conductor</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="contenido">
+                    <form method="post" action="{% url 'agregarConductor' %}">
+                        {% csrf_token %}
+                        {{ form_conductor|crispy }}
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <!-- <button type="button" class="btn btn-primary">Guardar</button> -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% endblock content %}
+
+{% block js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        let tablaConductores = new DataTable('#tablaConductores',{
+        responsive : true,
+        language:{
+            url:'/static/vendor/datatables/es-Es.json'
+        },
+        columnDefs: [
+            {
+                orderable: false,
+                targets: 4
+            },  // Habilita el orden para la columna 1
+        ],
+    });
+    document.getElementById('tablaConductores').addEventListener('click',(evento) => {
+        const botonEliminar = evento.target.closest('.eliminar')
+        const botonEditar = evento.target.closest('.editar')
+
+        if (botonEliminar){
+            evento.preventDefault()
+            nombre = evento.target.getAttribute('data-nombre')
+            apellido = evento.target.getAttribute('data-apellido')
+    
+            Swal.fire({
+                title: 'Atención!',
+                text: `Vas a eliminar al Conductor ${nombre} ${apellido}`,
+                icon: 'warning',
+                confirmButtonText: 'Aceptar',
+                confirmButtonColor: '#DC3545',
+                showCancelButton: true,
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const form = evento.target.closest('form');
+                    if (form) {
+                        form.submit(); // Envía el formulario
+                    }
+                }
+            })
+        }
+
+        if (botonEditar){
+            evento.preventDefault()
+            nombre = evento.target.getAttribute('data-nombre')
+            apellido = evento.target.getAttribute('data-apellido')
+
+            Swal.fire({
+                title: 'Atención!',
+                text: `Vas a editar al conductor ${nombre} ${apellido}`,
+                icon: 'warning',
+                confirmButtonText : 'Aceptar',
+                confirmButtonColor : '#DC3545',
+                showCancelButton : true,
+                cancelButtonText: 'Cancelar'
+            }).then((result) =>{
+                if (result.isConfirmed){
+                    const form = evento.target.closest('form')
+                    if (form){
+                        form.submit()
+                    }
+                }
+            })
+        }
+    })
+    })
+</script>
+{% endblock js %}

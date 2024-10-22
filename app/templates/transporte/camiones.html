@@ -1,0 +1,152 @@
+{% extends "base/base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="container-fluid d-flex flex-column mb-5">
+    <div class="container fondo-camiones" style="height: 100px;"></div>
+
+    <!-- tabla de camiones -->
+    <div class="text-center pt-4 mb-5">
+        <div>
+            <h3>Lista de Camiones</h3>
+        </div>
+        <div class="d-flex justify-content-center">
+            <div class="col-10 col-sm-8">
+                <div class="float-end">
+                    <button class="btn btn-primary mb-2" data-bs-toggle="modal" data-bs-target="#modal" id="nuevoCamion">Agregar</button>
+                </div>
+                <table class="table table-bordered table-striped table-hover" id="tablaCamiones">
+                    <thead>
+                        <th class="text-center">Empresa</th>
+                        <th class="text-center">Marca</th>
+                        <th class="text-center">Patente</th>
+                        <th class="text-center">Vencimiento</th>
+                        <th class="text-center">Accion</th>
+                    </thead>
+                    <tbody>
+                        {% for camion in camiones %}
+                        <tr>
+                            <td>{{camion.transporte}}</td>
+                            <td>{{camion.marca}}</td>
+                            <td>{{camion.patente}}</td>
+                            <td>
+                                {% if camion.vencimiento_seguro >= hoy %}
+                                <span class="text-success">{{ camion.vencimiento_seguro|date:"d/m/y"}}</span>
+                                {% elif camion.vencimiento_seguro < hoy %}
+                                <span class="text-danger">{{ camion.vencimiento_seguro|date:"d/m/y"}}</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <div class=" d-flex justify-content-around">
+                                    <form action="{% url 'editarCamion' %}" method="POST" class="editar-form">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="id" value="{{ camion.id }}">
+                                        <button class="btn btn-warning bi bi-pencil-square editar" data-id = "{{camion.id}}" data-nombre ="{{camion.transporte}}" data-patente="{{camion.patente}}"></button>
+                                    </form>
+                                    
+                                    <form action="{% url 'eliminarCamion' %}" method="POST" class="eliminar-form">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="id" value="{{ camion.id }}">
+                                        <button class="btn btn-danger bi bi-trash3 eliminar" data-id = "{{camion.id}}" data-nombre ="{{camion.transporte}}" data-patente="{{camion.patente}}"></button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+   
+     <!-- Modal -->
+     <div class="modal fade" id="modal" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="ModalLabel">Nuevo Camión</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="contenido">
+                    <form method="post" action="{% url 'agregarCamion' %}">
+                        {% csrf_token %}
+                        {{ form_camion|crispy }}
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <!-- <button type="button" class="btn btn-primary">Guardar</button> -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% endblock content %}
+{% block js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        let tablaCamiones = new DataTable('#tablaCamiones',{
+        responsive : true,
+        language:{
+            url:'/static/vendor/datatables/es-Es.json'
+        }
+    });
+
+    document.getElementById('tablaCamiones').addEventListener('click',(evento) => {
+        const botonEliminar = evento.target.closest('.eliminar')
+        const botonEditar = evento.target.closest('.editar')
+
+        if (botonEliminar){
+            evento.preventDefault()
+            nombre = evento.target.getAttribute('data-nombre')
+            patente = evento.target.getAttribute('data-patente')
+    
+            Swal.fire({
+                title: 'Atención!',
+                text: `Vas a eliminar al camion ${patente} de ${nombre}`,
+                icon: 'warning',
+                confirmButtonText: 'Aceptar',
+                confirmButtonColor: '#DC3545',
+                showCancelButton: true,
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const form = evento.target.closest('form');
+                    if (form) {
+                        form.submit(); // Envía el formulario
+                    }
+                }
+            })
+        }
+
+        if (botonEditar){
+            evento.preventDefault()
+            nombre = evento.target.getAttribute('data-nombre')
+            patente = evento.target.getAttribute('data-patente')
+
+            Swal.fire({
+                title: 'Atención!',
+                text: `Vas a editar al camion ${patente} de ${nombre}`,
+                icon: 'warning',
+                confirmButtonText : 'Aceptar',
+                confirmButtonColor : '#DC3545',
+                showCancelButton : true,
+                cancelButtonText: 'Cancelar'
+            }).then((result) =>{
+                if (result.isConfirmed){
+                    const form = evento.target.closest('form')
+                    if (form){
+                        form.submit()
+                    }
+                }
+            })
+        }
+    })
+    })
+</script>
+{% endblock js %}
