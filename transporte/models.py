@@ -47,8 +47,7 @@ class Camion(Base):
     
     def __str__(self):
         return f'{self.marca} {self.patente}'
-     
-             
+    
 class Semi(Base):
     """Esta clase representa un semi que pertenece a una empresa de transporte"""
     
@@ -63,7 +62,7 @@ class Semi(Base):
         verbose_name_plural = 'Semis'
     
     def __str__(self):
-        return f'Semi {self.patente}'
+        return f'{self.patente}'
     
 class Conductor(Base):
     transporte = models.ForeignKey(Transporte,on_delete=models.PROTECT,verbose_name='Transporte')
@@ -81,3 +80,6 @@ class Conductor(Base):
     
         verbose_name = 'Conductor'
         verbose_name_plural = 'Conductores'
+        
+    def __str__(self):
+        return f'{self.nombre} {self.apellido}'
