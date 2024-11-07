@@ -30,7 +30,7 @@ ALLOWED_HOSTS = []
 #auth
 LOGIN_URL = 'auth/login/'
 LOGIN_REDIRECT_URL = '/'
-
+LOGOUT_REDIRECT_URL = 'auth/login/'
 
 
 # Application definition
@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'sweetify',
     'app',
     'porteria2',
+    'hdr',
     'personal',
     'proveedores',
     'transporte',
