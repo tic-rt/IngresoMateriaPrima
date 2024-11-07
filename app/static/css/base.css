@@ -1,12 +1,19 @@
 /* Estilos para el header */
-.header{
+git add.header {
     background-color: #00498d; 
     color: aliceblue;
+    width: 100%;
   }
   .logo{
     margin-left: 5%;
     min-width: 40px;
     min-height: auto;
+  }
+  
+  .boton-salida{
+    background-color: #00498d;
+    color: aliceblue;
+    width: 100%;
   }
   
 /* Ajustes para la navbar */
