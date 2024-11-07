@@ -1,18 +1,100 @@
 {% extends 'base/base.html' %}
 {% load static %}
+{% load crispy_forms_tags %}
 
 {% block content %}
   <div class="container-fluid d-flex flex-column mb-5">
     <div class="container fondo-transportes" style="height: 100px;"></div>
     <div class="text-center pt-4 mb-5">
       <div>
-        <h3>Lista de empresas</h3>
+        <h3>Nuevo Ingreso</h3>
       </div>
       <div class="d-flex justify-content-center">
-        <div class="col-10 col-sm-8">
-            Nuevo Ingreso
+        <div class="col-10 col-sm-8 ">
+        {% crispy formulario_ingreso %}
         </div>
       </div>
+      <button class="btn btn-danger float-end bi bi-arrow-left-circle"  onclick=history.back()> Regresar</button>
     </div>
   </div>
 {% endblock %}
+
+{% block js %}
+  <script>
+    document.addEventListener('DOMContentLoaded',function(){
+      console.log('script cargado')
+      document.getElementById('id_empresa_transporte').addEventListener('change',function(){
+        
+        const empresa_id = this.value
+        const selectConductor = document.getElementById('id_conductor')
+        const selectCamion = document.getElementById('id_patente_chasis')
+        const selectSemi = document.getElementById('id_patente_semi')
+
+        // Limpiar solo las opciones existentes
+        while (selectConductor.options.length > 0) {
+            selectConductor.remove(0);
+        }
+
+        while(selectCamion.options.length > 0) {
+            selectCamion.remove(0)
+        }
+
+        while(selectSemi.options.length >0){
+          selectSemi.remove(0)
+        }
+
+        // Agregar empty labels
+        const emptyOptionConductor = new Option('Seleccione conductor', '');
+        selectConductor.add(emptyOptionConductor);
+
+        const emptyOptionCamion = new Option('Selecione camión','');
+        selectCamion.add(emptyOptionCamion);
+
+        const emptyOptionSemi = new Option('Seleccione un Semi','');
+        selectSemi.add(emptyOptionSemi)
+
+        //obtener listado de conductores segun id transporte
+        if(empresa_id){
+          fetch(`{% url 'obtenerConductores' %}?empresa_id=${empresa_id}`)
+          .then(response => response.json())
+          .then(data =>{
+            data.forEach(conductor =>{
+              const opcion = new Option(conductor.nombre,conductor.id)
+              selectConductor.add(opcion)
+            })
+          })
+          .catch(error => console.error('Error al obtener la lista de conductores:', error))
+        }
+
+        //obtener listado de camiones segun id de transporte
+        if(empresa_id){
+          fetch(`{% url 'obtenerCamiones' %}?empresa_id=${empresa_id}`)
+          .then(response => response.json())
+          .then(data =>{
+            data.forEach(camion =>{
+              const opcion = new Option(camion.marca_patente, camion.id)
+              selectCamion.add(opcion)
+            })
+          })
+          .catch(error => console.error('Error al obtener la lista de camiones:', error))
+        }
+
+        //obtener listado de semis segun id de transporte
+        if(empresa_id){
+          fetch(`{% url 'obtenerSemis' %}?empresa_id=${empresa_id}`)
+          .then(response => response.json())
+          .then(data =>{
+            console.log(data)
+            console.log(data)
+            data.forEach(semi =>{
+              const opcion = new Option(semi.patente, semi.id)
+              selectSemi.add(opcion)
+            })
+          })
+          .catch(error => console.error('Error al obtener la lista de semis:', error))
+        }
+        
+      })
+    })
+  </script>
+{% endblock js %}
