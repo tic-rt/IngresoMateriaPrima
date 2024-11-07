@@ -1,3 +1,5 @@
+from datetime import date
+from django.http import JsonResponse
 from django.utils import timezone
 from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required
@@ -83,88 +85,7 @@ def agregarTransporte(request):
     except Exception as excepcion :
         sweetify.error('Error al agregar Empresa de transporte', persistent=f'ocurrio un error {str(excepcion)}')
         return redirect('transportes')
-
-@login_required    
-def agregarCamion(request):
-    """Esta funcion agrega un nuevo camion"""
-
-    try:
-        if request.method == 'POST':
-            camion = FormCamion(request.POST)
-
-            if(camion.is_valid()):
-                camion.save()
-                sweetify.toast(request,f'Camion patente {camion.clean_patente()} agregado', icon='success', timer=5000)
-                return redirect('camiones')
-            
-            else:
-                errores = []
-                for campo, mensajes in camion.errors.items():
-                    for mensaje in mensajes:
-                        errores.append(f'{campo}: {mensaje}')  
-
-                errores_str = '<br>'.join(errores)
-                sweetify.warning(request,'Error al agregar empresa de transporte', text = errores_str, persistent = 'Aceptar')
-                return redirect('camiones')
-            
-    except Exception as excepcion:
-        sweetify.error(request,'Error al agregar camion',persistent=f'ocurrio un error {str(excepcion)}')
-        return redirect('camiones')
-
-@login_required            
-def agregarSemi(request):
-    """Esta funcion agrega un nuevo semi"""
-
-    try:
-        if request.method == 'POST':
-            semi = FormSemi(request.POST)
-
-            if semi.is_valid():
-                semi.save()
-                sweetify.toast(request,f'Semi patente {semi.clean_patente()} agregado',icon='success', timer=5000)
-                return redirect('semis')
-            
-            else:
-                errores = []
-                for campo, mensajes in semi.errors.items():
-                    for mensaje in mensajes:
-                        errores.append(f'{campo}: {mensaje}')  
-
-                    errores_str = '<br>'.join(errores)
-                    sweetify.warning(request,'Error al agregar empresa de transporte', text = errores_str, persistent = 'Aceptar')
-                    return redirect('semis')
-                
-    except Exception as excepcion:
-        sweetify.error(request,'Error al agregar camion',persistent=f'ocurrio un error {str(excepcion)}')
-        return redirect('semis')
-
-@login_required
-def agregarConductor(request):
-    """esta funcion agrega un conductor de transporte nuevo"""
-
-    try:
-        if request.method == 'POST':
-            conductor = FormConductor(request.POST)
-            
-            if(conductor.is_valid()):
-                conductor.save()
-                sweetify.toast(request,f'Conductor {conductor.clean_nombre()}  {conductor.clean_apellido()} agregado',icon='success',timer = 5000)
-                return redirect('conductores')
-            
-            else:
-                errores = []
-                for campo, mensajes in conductor.errors.items():
-                    for mensaje in mensajes:
-                        errores.append(f'{campo}: {mensaje}')
-                
-                errores_str = '<br>'.join(errores)
-                sweetify.warning(request,'Error al agregar conductor', text = errores_str, persistent = 'Aceptar')
-                return redirect('conductores')
-            
-    except Exception as excepcion :
-        sweetify.error('Error al agregar conductor', persistent=f'ocurrio un error {str(excepcion)}')
-        return redirect('conductores')
-
+    
 @login_required        
 def editarTransporte(request):#porque no la haces generica?que venga que tipo es y lo filtras/editar/int/tipo
     """Esta funcion edita una empresa por su id"""
@@ -192,84 +113,6 @@ def editarTransporte(request):#porque no la haces generica?que venga que tipo es
         return redirect('transportes')
 
 @login_required
-def editarCamion(request):#porque no la haces generica?que venga que tipo es y lo filtras/editar/int/tipo
-    """Esta funcion edita un camion por su id"""
-    
-    try:
-        if request.method == 'POST':
-            id_camion = request.POST.get('id')
-            if Camion.objects.filter(id=id_camion, is_deleted=False).exists():
-                camion = Camion.objects.filter(id=id_camion).get()
-                form_editar = FormCamion(instance=camion)
-                modelo = 'Camion'
-                return render(request,'transporte/editar.html',{'form_editar':form_editar,'modelo':modelo})
-            
-            else:
-                sweetify.warning(request, 'No permitido', text='El camion no existe o ya fue eliminada')
-                return redirect('camiones')
-            
-    except Transporte.DoesNotExist as excepcion:#lo estoy considerando en el else, ver
-            sweetify.warning(request, 'No permitido', text='El camion no existe o ya fue eliminada')
-            return redirect('camiones')
-    
-    except Exception as excepcion:
-        sweetify.error(request, 'Error al editar', text=f'Ocurrió un error {str(excepcion)}', persistent = 'Aceptar')
-        print(id_camion)
-        return redirect('camiones')
-
-@login_required
-def editarSemi(request):#porque no la haces generica?que venga que tipo es y lo filtras/editar/int/tipo
-    """Esta funcion edita un semi por su id"""
-    
-    try:
-        if request.method == 'POST':
-            id_semi = request.POST.get('id')
-            if Semi.objects.filter(id=id_semi, is_deleted=False).exists():
-                semi = Semi.objects.filter(id=id_semi).get()
-                form_editar = FormSemi(instance=semi)
-                modelo = 'Semi'
-                return render(request,'transporte/editar.html',{'form_editar':form_editar,'modelo':modelo})
-            
-            else:
-                sweetify.warning(request, 'No permitido', text='El semi no existe o ya fue eliminada')
-                return redirect('semis')
-            
-    except Transporte.DoesNotExist as excepcion:#lo estoy considerando en el else, ver
-            sweetify.warning(request, 'No permitido', text='El semi no existe o ya fue eliminada')
-            return redirect('semis')
-    
-    except Exception as excepcion:
-        sweetify.error(request, 'Error al editar', text=f'Ocurrió un error {str(excepcion)}', persistent = 'Aceptar')
-        print(id_semi)
-        return redirect('semis')
-
-@login_required
-def editarConductor(request):#porque no la haces generica?que venga que tipo es y lo filtras/editar/int/tipo
-    """Esta funcion edita un conductor por su id"""
-    
-    try:
-        if request.method == 'POST':
-            id_empresa = request.POST.get('id')
-
-            if Conductor.objects.filter(id=id_empresa, is_deleted=False).exists():
-                conductor = Conductor.objects.filter(id=id_empresa).get()
-                form_editar = FormConductor(instance=conductor)
-                modelo = 'Conductor'
-                return render(request,'transporte/editar.html',{'form_editar':form_editar,'modelo':modelo})
-            
-            else:
-                sweetify.warning(request, 'No permitido', text='El conductor no existe o ya fue eliminado')
-                return redirect('conductores')
-            
-    except Transporte.DoesNotExist as excepcion:#lo estoy considerando en el else, ver
-            sweetify.warning(request, 'No permitido', text='El conductor no existe o ya fue eliminado')
-            return redirect('conductores')
-    
-    except Exception as excepcion:
-        sweetify.error(request, 'Error al editar', text=f'Ocurrió un error {str(excepcion)}', persistent = 'Aceptar')
-        return redirect('conductores')
-
-@login_required
 def eliminarTransporte(request):
     """Esta funcion elimina una empresa de transporte por su id   print('entrando a eliminar')"""
 
@@ -295,6 +138,59 @@ def eliminarTransporte(request):
     except Exception as excepcion:
         sweetify.error(request, 'Error al eliminar', text=f'Ocurrió un error {str(excepcion)}', persistent = 'Aceptar')
         return redirect('transportes')
+    
+@login_required    
+def agregarCamion(request):
+    """Esta funcion agrega un nuevo camion"""
+
+    try:
+        if request.method == 'POST':
+            camion = FormCamion(request.POST)
+
+            if(camion.is_valid()):
+                camion.save()
+                sweetify.toast(request,f'Camion patente {camion.clean_patente()} agregado', icon='success', timer=5000)
+                return redirect('camiones')
+            
+            else:
+                errores = []
+                for campo, mensajes in camion.errors.items():
+                    for mensaje in mensajes:
+                        errores.append(f'{campo}: {mensaje}')  
+
+                errores_str = '<br>'.join(errores)
+                sweetify.warning(request,'Error al agregar empresa de transporte', text = errores_str, persistent = 'Aceptar')
+                return redirect('camiones')
+            
+    except Exception as excepcion:
+        sweetify.error(request,'Error al agregar camion',persistent=f'ocurrio un error {str(excepcion)}')
+        return redirect('camiones')
+    
+@login_required
+def editarCamion(request):#porque no la haces generica?que venga que tipo es y lo filtras/editar/int/tipo
+    """Esta funcion edita un camion por su id"""
+    
+    try:
+        if request.method == 'POST':
+            id_camion = request.POST.get('id')
+            if Camion.objects.filter(id=id_camion, is_deleted=False).exists():
+                camion = Camion.objects.filter(id=id_camion).get()
+                form_editar = FormCamion(instance=camion)
+                modelo = 'Camion'
+                return render(request,'transporte/editar.html',{'form_editar':form_editar,'modelo':modelo})
+            
+            else:
+                sweetify.warning(request, 'No permitido', text='El camion no existe o ya fue eliminada')
+                return redirect('camiones')
+            
+    except Transporte.DoesNotExist as excepcion:#lo estoy considerando en el else, ver
+            sweetify.warning(request, 'No permitido', text='El camion no existe o ya fue eliminada')
+            return redirect('camiones')
+    
+    except Exception as excepcion:
+        sweetify.error(request, 'Error al editar', text=f'Ocurrió un error {str(excepcion)}', persistent = 'Aceptar')
+        print(id_camion)
+        return redirect('camiones')
 
 @login_required
 def eliminarCamion(request):
@@ -324,6 +220,72 @@ def eliminarCamion(request):
         return redirect('camiones')
 
 @login_required
+def obtenerCamiones(request):
+    """Devuelve una lista de camiones por id de empresa"""
+
+    try:
+        empresa_id = request.GET.get('empresa_id')
+        camiones = Camion.objects.filter(transporte=empresa_id, is_deleted = False, vencimiento_seguro__gte = date.today())
+        data = [{'id':camion.transporte.id, 'marca_patente':str(camion)} for camion in camiones]
+        return JsonResponse(data, safe=False)
+    
+    except Exception as excepcion:
+        sweetify.error(request, 'Error', text=f'Ocurrio un error al cargar lista de camiones {str(excepcion)}', persistent = 'Aceptar')
+        return redirect ('nuevoIngreso')
+
+@login_required            
+def agregarSemi(request):
+    """Esta funcion agrega un nuevo semi"""
+
+    try:
+        if request.method == 'POST':
+            semi = FormSemi(request.POST)
+
+            if semi.is_valid():
+                semi.save()
+                sweetify.toast(request,f'Semi patente {semi.clean_patente()} agregado',icon='success', timer=5000)
+                return redirect('semis')
+            
+            else:
+                errores = []
+                for campo, mensajes in semi.errors.items():
+                    for mensaje in mensajes:
+                        errores.append(f'{campo}: {mensaje}')  
+
+                    errores_str = '<br>'.join(errores)
+                    sweetify.warning(request,'Error al agregar empresa de transporte', text = errores_str, persistent = 'Aceptar')
+                    return redirect('semis')
+                
+    except Exception as excepcion:
+        sweetify.error(request,'Error al agregar camion',persistent=f'ocurrio un error {str(excepcion)}')
+        return redirect('semis')
+    
+@login_required
+def editarSemi(request):#porque no la haces generica?que venga que tipo es y lo filtras/editar/int/tipo
+    """Esta funcion edita un semi por su id"""
+    
+    try:
+        if request.method == 'POST':
+            id_semi = request.POST.get('id')
+            if Semi.objects.filter(id=id_semi, is_deleted=False).exists():
+                semi = Semi.objects.filter(id=id_semi).get()
+                form_editar = FormSemi(instance=semi)
+                modelo = 'Semi'
+                return render(request,'transporte/editar.html',{'form_editar':form_editar,'modelo':modelo})
+            
+            else:
+                sweetify.warning(request, 'No permitido', text='El semi no existe o ya fue eliminada')
+                return redirect('semis')
+            
+    except Transporte.DoesNotExist as excepcion:#lo estoy considerando en el else, ver
+            sweetify.warning(request, 'No permitido', text='El semi no existe o ya fue eliminada')
+            return redirect('semis')
+    
+    except Exception as excepcion:
+        sweetify.error(request, 'Error al editar', text=f'Ocurrió un error {str(excepcion)}', persistent = 'Aceptar')
+        return redirect('semis')
+
+@login_required
 def eliminarSemi(request):
     """Esta funcion elimina un camion de transporte por su id """
 
@@ -349,6 +311,76 @@ def eliminarSemi(request):
     except Exception as excepcion:
         sweetify.error(request, 'Error al eliminar', text=f'Ocurrió un error {str(excepcion)}', persistent = 'Aceptar')
         return redirect('camiones')
+    
+@login_required
+def obtenerSemis(request):
+    """Devuelve una lista de semis por id de empresa"""
+    print('entrando a obtener semis')
+    try:
+        empresa_id = request.GET.get('empresa_id')
+        print(f'id de transporte {empresa_id}')
+        semis = Semi.objects.filter(transporte=empresa_id, is_deleted = False, vencimiento_seguro__gte = date.today())
+        print(f'resultado de la query {semis}')
+        data = [{'id':semi.transporte.id, 'patente':str(semi)} for semi in semis]
+        print(data)
+        return JsonResponse(data, safe=False)
+    
+    except Exception as excepcion:
+        sweetify.error(request, 'Error', text=f'Ocurrio un error al cargar lista de semis {str(excepcion)}', persistent = 'Aceptar')
+        return redirect ('nuevoIngreso')
+
+@login_required
+def agregarConductor(request):
+    """esta funcion agrega un conductor de transporte nuevo"""
+
+    try:
+        if request.method == 'POST':
+            conductor = FormConductor(request.POST)
+            
+            if(conductor.is_valid()):
+                conductor.save()
+                sweetify.toast(request,f'Conductor {conductor.clean_nombre()}  {conductor.clean_apellido()} agregado',icon='success',timer = 5000)
+                return redirect('conductores')
+            
+            else:
+                errores = []
+                for campo, mensajes in conductor.errors.items():
+                    for mensaje in mensajes:
+                        errores.append(f'{campo}: {mensaje}')
+                
+                errores_str = '<br>'.join(errores)
+                sweetify.warning(request,'Error al agregar conductor', text = errores_str, persistent = 'Aceptar')
+                return redirect('conductores')
+            
+    except Exception as excepcion :
+        sweetify.error('Error al agregar conductor', persistent=f'ocurrio un error {str(excepcion)}')
+        return redirect('conductores')
+
+@login_required
+def editarConductor(request):#porque no la haces generica?que venga que tipo es y lo filtras/editar/int/tipo
+    """Esta funcion edita un conductor por su id"""
+    
+    try:
+        if request.method == 'POST':
+            id_empresa = request.POST.get('id')
+
+            if Conductor.objects.filter(id=id_empresa, is_deleted=False).exists():
+                conductor = Conductor.objects.filter(id=id_empresa).get()
+                form_editar = FormConductor(instance=conductor)
+                modelo = 'Conductor'
+                return render(request,'transporte/editar.html',{'form_editar':form_editar,'modelo':modelo})
+            
+            else:
+                sweetify.warning(request, 'No permitido', text='El conductor no existe o ya fue eliminado')
+                return redirect('conductores')
+            
+    except Transporte.DoesNotExist as excepcion:#lo estoy considerando en el else, ver
+            sweetify.warning(request, 'No permitido', text='El conductor no existe o ya fue eliminado')
+            return redirect('conductores')
+    
+    except Exception as excepcion:
+        sweetify.error(request, 'Error al editar', text=f'Ocurrió un error {str(excepcion)}', persistent = 'Aceptar')
+        return redirect('conductores')
 
 @login_required
 def eliminarConductor(request):
@@ -376,6 +408,20 @@ def eliminarConductor(request):
     except Exception as excepcion:
         sweetify.error(request, 'Error al eliminar', text=f'Ocurrió un error {str(excepcion)}', persistent = 'Aceptar')
         return redirect('conductores')
+    
+@login_required
+def obtenerConductores(request):
+    """Devuelve una lista de conductores por id de empresa"""
+
+    try:
+        empresa_id = request.GET.get('empresa_id')
+        conductores = Conductor.objects.filter(transporte=empresa_id, is_deleted = False, vencimiento_carnet__gte = date.today())
+        data = [{'id':conductor.transporte.id, 'nombre':str(conductor)} for conductor in conductores]
+        return JsonResponse(data, safe=False)
+    
+    except Exception as excepcion:
+        sweetify.error(request, 'Error', text=f'Ocurrio un error al cargar lista de conductores {str(excepcion)}', persistent = 'Aceptar')
+        return redirect ('nuevoIngreso')
 
 @login_required
 def actualizar(request,modelo):
