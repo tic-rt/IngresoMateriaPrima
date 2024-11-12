@@ -17,84 +17,52 @@
       <button class="btn btn-danger float-end bi bi-arrow-left-circle"  onclick=history.back()> Regresar</button>
     </div>
   </div>
+  <div>
+    {{user.username}}
+  </div>
 {% endblock %}
 
 {% block js %}
-  <script>
-    document.addEventListener('DOMContentLoaded',function(){
-      console.log('script cargado')
-      document.getElementById('id_empresa_transporte').addEventListener('change',function(){
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+      // Cuando la empresa de transporte cambie, actualizamos los demás selectores
+      const empresaTransporteSelect = document.querySelector('[name="empresa_transporte"]');
+      
+      empresaTransporteSelect.addEventListener('change', function() {
+        const empresaId = this.value;
+        console.log('empresa ID:',{empresaId})
         
-        const empresa_id = this.value
-        const selectConductor = document.getElementById('id_conductor')
-        const selectCamion = document.getElementById('id_patente_chasis')
-        const selectSemi = document.getElementById('id_patente_semi')
+        if (empresaId) {
+          // Hacer la solicitud 
+          fetch(`{% url 'obtenerDatos' %}?empresa_id=${empresaId}`)
+            .then(response => response.json())
+            .then(data => {
+              // Actualizar el campo de camiones
+              const camionSelect = document.querySelector('[name="patente_chasis"]');
+              camionSelect.innerHTML = '<option value="">Seleccione un camión</option>';
+              data.camiones.forEach(camion => {
+                camionSelect.innerHTML += `<option value="${camion.id}">${camion.nombre}</option>`;
+              });
 
-        // Limpiar solo las opciones existentes
-        while (selectConductor.options.length > 0) {
-            selectConductor.remove(0);
-        }
+              // Actualizar el campo de semis
+              const semiSelect = document.querySelector('[name="patente_semi"]');
+              semiSelect.innerHTML = '<option value="">Seleccione un semi</option>';
+              data.semis.forEach(semi => {
+                semiSelect.innerHTML += `<option value="${semi.id}">${semi.nombre}</option>`;
+              });
 
-        while(selectCamion.options.length > 0) {
-            selectCamion.remove(0)
-        }
-
-        while(selectSemi.options.length >0){
-          selectSemi.remove(0)
-        }
-
-        // Agregar empty labels
-        const emptyOptionConductor = new Option('Seleccione conductor', '');
-        selectConductor.add(emptyOptionConductor);
-
-        const emptyOptionCamion = new Option('Selecione camión','');
-        selectCamion.add(emptyOptionCamion);
-
-        const emptyOptionSemi = new Option('Seleccione un Semi','');
-        selectSemi.add(emptyOptionSemi)
-
-        //obtener listado de conductores segun id transporte
-        if(empresa_id){
-          fetch(`{% url 'obtenerConductores' %}?empresa_id=${empresa_id}`)
-          .then(response => response.json())
-          .then(data =>{
-            data.forEach(conductor =>{
-              const opcion = new Option(conductor.nombre,conductor.id)
-              selectConductor.add(opcion)
+              // Actualizar el campo de conductores
+              const conductorSelect = document.querySelector('[name="conductor"]');
+              conductorSelect.innerHTML = '<option value="">Seleccione un conductor</option>';
+              data.conductores.forEach(conductor => {
+                conductorSelect.innerHTML += `<option value="${conductor.id}">${conductor.nombre}</option>`;
+              });
             })
-          })
-          .catch(error => console.error('Error al obtener la lista de conductores:', error))
+            .catch(error => {
+              console.error('Error:', error);
+            });
         }
-
-        //obtener listado de camiones segun id de transporte
-        if(empresa_id){
-          fetch(`{% url 'obtenerCamiones' %}?empresa_id=${empresa_id}`)
-          .then(response => response.json())
-          .then(data =>{
-            data.forEach(camion =>{
-              const opcion = new Option(camion.marca_patente, camion.id)
-              selectCamion.add(opcion)
-            })
-          })
-          .catch(error => console.error('Error al obtener la lista de camiones:', error))
-        }
-
-        //obtener listado de semis segun id de transporte
-        if(empresa_id){
-          fetch(`{% url 'obtenerSemis' %}?empresa_id=${empresa_id}`)
-          .then(response => response.json())
-          .then(data =>{
-            console.log(data)
-            console.log(data)
-            data.forEach(semi =>{
-              const opcion = new Option(semi.patente, semi.id)
-              selectSemi.add(opcion)
-            })
-          })
-          .catch(error => console.error('Error al obtener la lista de semis:', error))
-        }
-        
-      })
-    })
-  </script>
+      });
+    });
+</script>
 {% endblock js %}

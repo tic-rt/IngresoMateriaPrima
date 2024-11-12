@@ -219,20 +219,6 @@ def eliminarCamion(request):
         sweetify.error(request, 'Error al eliminar', text=f'Ocurrió un error {str(excepcion)}', persistent = 'Aceptar')
         return redirect('camiones')
 
-@login_required
-def obtenerCamiones(request):
-    """Devuelve una lista de camiones por id de empresa"""
-
-    try:
-        empresa_id = request.GET.get('empresa_id')
-        camiones = Camion.objects.filter(transporte=empresa_id, is_deleted = False, vencimiento_seguro__gte = date.today())
-        data = [{'id':camion.transporte.id, 'marca_patente':str(camion)} for camion in camiones]
-        return JsonResponse(data, safe=False)
-    
-    except Exception as excepcion:
-        sweetify.error(request, 'Error', text=f'Ocurrio un error al cargar lista de camiones {str(excepcion)}', persistent = 'Aceptar')
-        return redirect ('nuevoIngreso')
-
 @login_required            
 def agregarSemi(request):
     """Esta funcion agrega un nuevo semi"""
@@ -312,22 +298,6 @@ def eliminarSemi(request):
         sweetify.error(request, 'Error al eliminar', text=f'Ocurrió un error {str(excepcion)}', persistent = 'Aceptar')
         return redirect('camiones')
     
-@login_required
-def obtenerSemis(request):
-    """Devuelve una lista de semis por id de empresa"""
-    print('entrando a obtener semis')
-    try:
-        empresa_id = request.GET.get('empresa_id')
-        print(f'id de transporte {empresa_id}')
-        semis = Semi.objects.filter(transporte=empresa_id, is_deleted = False, vencimiento_seguro__gte = date.today())
-        print(f'resultado de la query {semis}')
-        data = [{'id':semi.transporte.id, 'patente':str(semi)} for semi in semis]
-        print(data)
-        return JsonResponse(data, safe=False)
-    
-    except Exception as excepcion:
-        sweetify.error(request, 'Error', text=f'Ocurrio un error al cargar lista de semis {str(excepcion)}', persistent = 'Aceptar')
-        return redirect ('nuevoIngreso')
 
 @login_required
 def agregarConductor(request):
@@ -410,18 +380,23 @@ def eliminarConductor(request):
         return redirect('conductores')
     
 @login_required
-def obtenerConductores(request):
-    """Devuelve una lista de conductores por id de empresa"""
-
-    try:
+def obtenerDatos(request):
+        """Esta funcion devuelve los datos para mantener la plantilla de nuevo ingreso de forma dinamica"""
+        hoy= date.today()
         empresa_id = request.GET.get('empresa_id')
-        conductores = Conductor.objects.filter(transporte=empresa_id, is_deleted = False, vencimiento_carnet__gte = date.today())
-        data = [{'id':conductor.transporte.id, 'nombre':str(conductor)} for conductor in conductores]
-        return JsonResponse(data, safe=False)
-    
-    except Exception as excepcion:
-        sweetify.error(request, 'Error', text=f'Ocurrio un error al cargar lista de conductores {str(excepcion)}', persistent = 'Aceptar')
-        return redirect ('nuevoIngreso')
+        conductores = Conductor.objects.filter(transporte_id = empresa_id, is_deleted = False, vencimiento_carnet__gte=hoy)
+        camiones = Camion.objects.filter(transporte_id = empresa_id, is_deleted = False, vencimiento_seguro__gte = hoy)
+        semis= Semi.objects.filter(transporte_id = empresa_id, is_deleted = False, vencimiento_seguro__gte = hoy)
+
+        conductores_data = [{'id':conductor.id,'nombre':str(conductor)} for conductor in conductores]
+        camiones_data = [{'id':camion.id, 'nombre':str(camion)} for camion in camiones]
+        semis_data = [{'id':semi.id,'nombre':str(semi)}for semi in semis]
+
+        return JsonResponse({
+            'conductores':conductores_data,
+            'camiones':camiones_data,
+            'semis':semis_data
+        })
 
 @login_required
 def actualizar(request,modelo):

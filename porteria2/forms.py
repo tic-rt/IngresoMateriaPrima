@@ -54,11 +54,11 @@ class  FormIngreso(forms.ModelForm):
         self.fields['empresa_transporte'].empty_label = 'Seleccione Empresa'
         hoy = date.today()
         self.fields['conductor'].queryset = Conductor.objects.none()
-        self.fields['conductor'].empty_label='Seleccione conductor'
+        self.fields['conductor'].empty_label='Seleccione un conductor'
         self.fields['patente_chasis'].queryset = Camion.objects.none()
         self.fields['patente_chasis'].empty_label = 'Seleccione un camión'
         self.fields['patente_semi'].queryset = Semi.objects.none()
-        self.fields['patente_semi'].empy_label = 'Seleccione un semi'
+        self.fields['patente_semi'].empty_label = 'Seleccione un semi'
         self.fields['responsable'].queryset = Personal.objects.filter( is_deleted = False)
         self.helper.form_action = reverse('guardarNuevoIngreso')
         self.helper.layout = Layout(
