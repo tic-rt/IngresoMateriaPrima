@@ -20,7 +20,7 @@ class Ingreso(Base):
     patente_semi  = models.ForeignKey(Semi, on_delete=models.PROTECT)
     responsable = models.ForeignKey(Personal, on_delete=models.PROTECT)
     ingresado = models.BooleanField(verbose_name='Ingresado',null=False, default=False)
-    id_hdr = models.ForeignKey(HDR, on_delete=models.PROTECT)
+    hdr = models.ForeignKey(HDR, on_delete=models.PROTECT)
     
     class Meta:
         """Meta definicion para la clase Ingreso"""
