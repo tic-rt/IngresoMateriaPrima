@@ -34,11 +34,12 @@ def guardarNuevoIngreso(request):
             formulario = FormIngreso(request.POST)
                 
             if formulario.is_valid():
-                hdr = HDR()
-                #hdr.save()
-                id_hdr = hdr.id
+                hdr = HDR() #creando la hdr
+                hdr.save(commit = False)
                 ingreso : Ingreso = formulario.save(commit=False)#falta guardar
-                ingreso.id_hdr = id_hdr
+                ingreso.hdr = hdr
+                ingreso.save()
+                hdr.save()
                 sweetify.success(request,title="Ingreso Guardado",text="Ingreso de vehiculo registrado", timer=3000)
                 return redirect('nuevoIngreso')
             else:

@@ -30,8 +30,16 @@
       
       empresaTransporteSelect.addEventListener('change', function() {
         const empresaId = this.value;
-        console.log('empresa ID:',{empresaId})
+
+        //limpiando los select 
+        const camionSelect = document.querySelector('[name="patente_chasis"]');
+        const semiSelect = document.querySelector('[name="patente_semi"]');
+        const conductorSelect = document.querySelector('[name="conductor"]');
         
+        camionSelect.innerHTML = '<option value="">Seleccione un camión</option>';
+        semiSelect.innerHTML = '<option value="">Seleccione un semi</option>';
+        conductorSelect.innerHTML = '<option value="">Seleccione un conductor</option>';
+
         if (empresaId) {
           // Hacer la solicitud 
           fetch(`{% url 'obtenerDatos' %}?empresa_id=${empresaId}`)
