@@ -26,3 +26,21 @@ class Ingreso(Base):
         """Meta definicion para la clase Ingreso"""
         verbose_name = 'Ingreso'
         verbose_name_plural = 'Ingresos'
+
+class EPP(models.Model):
+    """Esta clase registra los elementos de proteccion personal de un conductor"""
+
+    casco = models.BooleanField(verbose_name='casco',default=False)
+    mascara = models.BooleanField(verbose_name='mascara', default=False)
+    antiparras = models.BooleanField(verbose_name='antiparras PVC', default = False)
+    botines = models.BooleanField(verbose_name='botines', default=False)
+    pantalon_camisa = models.BooleanField(verbose_name='pantalon/camisa/mameluco anti-ácido', default=False)
+    matafuego = models.BooleanField(verbose_name='matafuego', default=False)
+    arrestallamas = models.BooleanField(verbose_name='arrestallamas')
+    carteleria = models.BooleanField(verbose_name='carteleria', default=False)
+    responsable = models.ForeignKey(Personal, on_delete=models.PROTECT)
+
+    class Meta:
+        """Meta definicion para la clase EPP"""
+        verbose_name = 'EPP'
+        verbose_name_plural ='EPP'
