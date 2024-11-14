@@ -66,3 +66,7 @@ def guardarNuevoIngreso(request):
         sweetify.error(request, 'excepcion al registrar Ingreso', text=f'Ocurrio un error {
                        str(excepcion)}', persistent='Aceptar')
         return render(request, 'porteria2/nuevoIngreso.html', {'formulario_ingreso': formulario})
+
+""" @login_required
+def controlEpp(request):
+     """
