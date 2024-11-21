@@ -68,7 +68,7 @@ def agregarTransporte(request):
             transporte = FormTransporte(request.POST)
             
             if(transporte.is_valid()):
-                #transporte.save()
+                transporte.save()
                 sweetify.toast(request,f'Empresa de transporte {transporte.clean_nombre()} agregada',icon='success',timer = 5000)
                 return redirect('transportes')
             
