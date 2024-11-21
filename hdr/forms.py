@@ -4,10 +4,11 @@ from hdr.models import HDR
 
 
 class FormHDR(forms.ModelForm):
-    model = HDR
-    fields =['observacion']
+    class Meta:
+        model = HDR
+        fields =['observacion']
 
-    widgets={'observacion': forms.Textarea(attrs={'class':'form-control',
+        widgets={'observacion': forms.Textarea(attrs={'class':'form-control',
                                                   'row':10,
                                                   'cols':50,
                                                   'placeholder':'Observacion',
