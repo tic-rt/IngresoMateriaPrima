@@ -4,6 +4,7 @@ from django.db import models
 
 sectores = [
     ('Porteria 2', 'Porteria 2'),
+    ('Inspeccion Quimica','Inspeccion Quimica'),
 ]
 
 class Personal(models.Model):
