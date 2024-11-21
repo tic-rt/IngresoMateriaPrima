@@ -11,7 +11,7 @@ productos = [ # No deberia estar hardcodeado ,por ahora puede salir asi,esta es 
 
 class Producto(Base):
     """Productos que se van a recibir """
-    producto = models.CharField(choices=productos,max_length=30)
+    producto = models.CharField(choices=productos,max_length=100)
     
     class Meta:
         """Meta para definicion de Producto"""
