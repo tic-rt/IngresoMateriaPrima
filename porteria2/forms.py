@@ -6,6 +6,7 @@ from crispy_forms.layout import Submit, Layout, Row, Column, Div, HTML
 from django.urls import reverse
 from personal.models import Personal
 from porteria2.models import EPP, Ingreso
+from proveedores.models import Producto
 from transporte.models import Camion, Conductor, Semi, Transporte
 
 
@@ -96,7 +97,7 @@ class FormIngreso(forms.ModelForm):
                     HTML('<h5>Calefación</h5>'),
                     Row(
                         Column('ingreso_calefaccion',
-                               css_class='col-4 col-sm-12')
+                                css_class='col-4 col-sm-12')
                     ),
                     css_class='border p-3 mb-3 shadow'
                 ),
@@ -129,13 +130,47 @@ class FormEPP(forms.ModelForm):
         ]
 
         widgets = {
-            'casco': forms.CheckboxInput(attrs={'class': 'form-control'}),
-            'mascara': forms.CheckboxInput(attrs={'class': 'form-control'}),
-            'antiparras': forms.CheckboxInput(attrs={'class': 'form-control'}),
-            'botines': forms.CheckboxInput(attrs={'class': 'form-control'}),
-            'pantalon_camisa': forms.CheckboxInput(attrs={'class': 'form-control'}),
-            'matafuegos': forms.CheckboxInput(attrs={'class': 'form-control'}),
-            'arrestallamas': forms.CheckboxInput(attrs={'class': 'form-control'}),
-            'carteleria': forms.CheckboxInput(attrs={'class': 'form-control'}),
-            'responsable': forms.Select(attrs={'class': 'form-control'})
+            'casco': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            'mascara': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            'antiparras': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            'botines': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            'pantalon_camisa': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            'matafuego': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            'arrestallamas': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            'carteleria': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            'responsable': forms.Select(attrs={'class': 'form-control required'})
         }
+    def __init__(self, *args, **kwargs):
+        super(FormEPP, self).__init__(*args, **kwargs)
+        self.helper = FormHelper(self)
+        self.helper.add_input(Submit('submit','Guardar Control'))
+        #self.helper.form_action = reverse('guardarControlEpp','?id_hdr={{id_hdr}}&id_ingreso={{id_ingreso}}')
+        self.helper.layout = Layout(
+            Div(
+                HTML("<h5 class='mt-5 mb-5'>Elementos</h5>"),
+                Row(
+                Column('casco', css_class='col-4'),
+                Column('mascara', css_class='col-4'),
+                Column('antiparras', css_class='col-4'),
+                css_class='mb-3'  # Espaciado inferior entre esta fila y la siguiente
+                ),
+                
+                Row(
+                    Column('botines',css_class='col-4'),
+                    Column('pantalon_camisa'),
+                    css_class='mb-3'
+                    ),
+                
+                Row(
+                    Column('matafuego',css_class='col-4'),
+                    Column('arrestallamas',css_class='col-4'),
+                    Column('carteleria',css_class='col-4'),
+                    css_class='mb-4'
+                    ),
+                
+                Row(
+                    Column('responsable',css_class='col-6')),
+                    css_class='mb-4',
+                
+                )
+            )
