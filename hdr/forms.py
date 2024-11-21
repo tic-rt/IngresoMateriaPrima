@@ -13,4 +13,4 @@ class FormHDR(forms.ModelForm):
                                                   'cols':50,
                                                   'placeholder':'Observacion',
                                                   'maxlength':200,
-                                                  'autofocus':'autofocus'})}
+                                                  })}
