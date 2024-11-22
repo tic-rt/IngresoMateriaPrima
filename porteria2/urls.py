@@ -1,7 +1,7 @@
 
 from django.urls import path
 
-from porteria2.views import controlEpp, guardarControlEpp, guardarNuevoIngreso, index, mostrarControlEpp, nuevoIngreso
+from porteria2.views import controlEpp, guardarControlEpp, guardarNuevoIngreso, guardarRechazo, index, mostrarControlEpp, nuevoIngreso
 
 
 urlpatterns = [
@@ -10,5 +10,6 @@ urlpatterns = [
     path('guardarNuevoIngreso', guardarNuevoIngreso, name='guardarNuevoIngreso'),
     path('controlEpp/', controlEpp, name='controlEpp'),
     path('controlEppPendientes', mostrarControlEpp, name='controlEppPendientes'),
-    path('guardarControlEpp', guardarControlEpp, name='guardarControlEpp'),
+    path('guardarControlEpp/', guardarControlEpp, name='guardarControlEpp'),
+    path('guardarRechazo/', guardarRechazo, name='guardarRechazo')
 ]

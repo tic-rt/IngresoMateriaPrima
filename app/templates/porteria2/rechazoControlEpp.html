@@ -31,16 +31,22 @@
                         <input class="form-control" type="text" disabled value="{{patente_semi}}" id="patente_semi">
                     </div>
                 </div>
-                <div class="bg-warning-subtle mt-5 border border-1 border-warning d-flex align-items-center justify-content-center d-block"
+                <div class="bg-danger-subtle mt-5 border border-1 border-danger d-flex align-items-center justify-content-center d-block"
                     style="height: 90px;" id="noValidado">
-                    <p><strong>Si uno o varios elementos no son marcados el ingreso sera guardado como rechazado</strong></p>
+                    <p><strong>El siguiente ingreso sera rechazado por no cumplir con los EPP solicitados</strong></p>
                 </div>
                 
                 <div class="row">
-                    <form action="{% url 'guardarControlEpp' %}?id_hdr={{id_hdr}}&id_ingreso={{id_ingreso}}" method="POST" readonly>
-                        <div class="row">
-                            {% csrf_token %}
-                            {% crispy form_epp %}
+                    <!-- {% csrf_token %} -->
+                    {% crispy form_epp %}
+                </div>
+                <div class="row">
+                    el ide de ingreso es {{id_ingreso}}
+                    <form action="{% url 'guardarRechazo' %}?id_ingreso={{id_ingreso}}" method="POST">
+                        {% csrf_token %}
+                        {{  form_hdr|crispy }}
+                        <div class="justify-content-center">
+                            <button type="submit" class="btn btn-success ">Guardar</button>
                         </div>
                     </form>
                 </div>
@@ -52,10 +58,27 @@
         </div>
     </div>
 </div>
+esta es mi pagina
 {% endblock %}
 
 {% block js %}
 <script>
+    document.addEventListener('DOMContentLoaded', function(){
+        console.log('que chingados')
+        const botonGuardar = document.getElementById('submit-id-submit')
+        botonGuardar.classList.add('d-none')
+        const nodoCheckbox = document.querySelectorAll('.checkboxinput')
+        const nodolabel = document.querySelectorAll('.form-check-label')
+        const select = document.querySelector('.select')
 
+        select.setAttribute('disabled', 'disabled')
+        nodoCheckbox.forEach(checkbox => {
+            checkbox.setAttribute('disabled','disabled')
+            checkbox.setAttribute('style','opacity:1')
+        })
+        nodolabel.forEach(label =>{
+            label.setAttribute('style','opacity:1')
+        })
+    })
 </script>
 {% endblock js %}
