@@ -1,0 +1,84 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="container fondo-epp mt-5" style="height: 100px;"></div>
+    <div class="container text-center">
+        <div>
+            <h3>Rechazo Control EPP</h3>
+        </div>
+        <div class="d-flex justify-content-center mb-5">
+            <div class="col-10 col-sm-8 ">
+                <div class="row">
+                    <div class="col-6">
+                        <label class="form-label" for="empresa">Empresa</label>
+                        <input class="form-control" type="text" disabled value="{{empresa_transporte}}" id="empresa">
+                    </div>
+                    <div class="col-6">
+                        <label class="form-label" for="producto">Producto</label>
+                        <input class="form-control" type="text" disabled value="{{producto}}" id="producto">
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-6">
+                        <label class="form-label" for="patente_chasis">Camión</label>
+                        <input class="form-control" type="text" disabled value="{{patente_chasis}}" id="patente_chasis">
+                    </div>
+                    <div class="col-6">
+                        <label class="form-label" for="patente_semi">Semi</label>
+                        <input class="form-control" type="text" disabled value="{{patente_semi}}" id="patente_semi">
+                    </div>
+                </div>
+                <div class="bg-danger-subtle mt-5 border border-1 border-danger d-flex align-items-center justify-content-center d-block"
+                    style="height: 90px;" id="noValidado">
+                    <p><strong>El siguiente ingreso sera rechazado por no cumplir con los EPP solicitados</strong></p>
+                </div>
+                
+                <div class="row">
+                    <!-- {% csrf_token %} -->
+                    {% crispy form_epp %}
+                </div>
+                <div class="row">
+                    el ide de ingreso es {{id_ingreso}}
+                    <form action="{% url 'guardarRechazo' %}?id_ingreso={{id_ingreso}}" method="POST">
+                        {% csrf_token %}
+                        {{  form_hdr|crispy }}
+                        <div class="justify-content-center">
+                            <button type="submit" class="btn btn-success ">Guardar</button>
+                        </div>
+                    </form>
+                </div>
+                <div>
+                    <button class="btn btn-danger float-end bi-arrow-left-circle"
+                        onclick="window.location.replace('{% url 'nuevoIngreso' %}');"> Regresar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+esta es mi pagina
+{% endblock %}
+
+{% block js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function(){
+        console.log('que chingados')
+        const botonGuardar = document.getElementById('submit-id-submit')
+        botonGuardar.classList.add('d-none')
+        const nodoCheckbox = document.querySelectorAll('.checkboxinput')
+        const nodolabel = document.querySelectorAll('.form-check-label')
+        const select = document.querySelector('.select')
+
+        select.setAttribute('disabled', 'disabled')
+        nodoCheckbox.forEach(checkbox => {
+            checkbox.setAttribute('disabled','disabled')
+            checkbox.setAttribute('style','opacity:1')
+        })
+        nodolabel.forEach(label =>{
+            label.setAttribute('style','opacity:1')
+        })
+    })
+</script>
+{% endblock js %}

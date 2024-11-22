@@ -1,10 +1,216 @@
-from django.shortcuts import render
+from datetime import date
+from django.shortcuts import redirect, render
+import sweetify
+
+from hdr.forms import FormHDR
+from hdr.models import HDR
+from porteria2.forms import FormEPP, FormIngreso
+from porteria2.models import Ingreso
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
+@login_required
 def index(request):
-    """esta vista sirve ...que servia?"""
-    return render(request,'porteria2/porteria2.html')
+    """chart de vehiculos ingresados e informacion relevante para porteria"""
+    return render(request, 'porteria2/porteria2.html')
 
+@login_required
 def nuevoIngreso(request):
-     pass
+    """Esta funcion devuelve un formulario de nuevo inrgeso de materia prima"""
+    formulario_ingreso = FormIngreso()
+    try:
+        return render(request, 'porteria2/nuevoIngreso.html', {
+            'formulario_ingreso': formulario_ingreso,
+            # 'conductores':conductores
+        })
+
+    except Exception as excepcion:
+        sweetify.error(request, title='Error', text=f'Ocurrio un error {str(excepcion)}', persistent='Aceptar')
+        return render(request, 'porteria2/porteria2.html')
+
+@login_required
+def guardarNuevoIngreso(request):
+    """Esta funcion registra un nuevo ingreso de vehiculo a realizar descarga de materia prima y crea la hoja de ruta hdr"""
+    # formulario_ingreso = FormIngreso()
+    try:
+        if request.method == 'POST':
+            formulario = FormIngreso(request.POST)
+
+            if formulario.is_valid():
+                hdr = HDR()  # creando la hdr
+                hdr.save()
+                ingreso: Ingreso = formulario.save(commit=False)  # falta guardar
+                ingreso.hdr = hdr
+                ingreso.save()
+                sweetify.success(request, title="Ingreso Guardado",text="Ingreso de vehiculo registrado", timer=3000)
+                return redirect(f'controlEpp/?id_hdr={hdr.id}&id_ingreso={ingreso.id}')
+            else:
+                print(formulario.errors)
+                errores = []
+                for campo, mensajes in formulario.errors.items():
+                    for mensaje in mensajes:
+                        errores.append(f'{campo}: {mensaje}')
+
+                errores_str = '<br>'.join(errores)
+                sweetify.warning(request, title='Error al registrar Ingreso',text=errores_str, persistent='Aceptar')
+                return render(request, 'porteria2/nuevoIngreso.html',
+                                {'formulario_ingreso': formulario})
+
+    except Exception as excepcion:
+        sweetify.error(request, title='excepcion al registrar Ingreso', text=f'Ocurrio un error {str(excepcion)}', persistent='Aceptar')
+        return render(request, 'porteria2/nuevoIngreso.html', {'formulario_ingreso': formulario})
+
+@login_required
+def controlEpp(request):
+    """esta funcion muestra el ultimo ingreso y se procede al control de epp"""
+    
+    try:
+        if request.method =='GET':
+            id_hdr = request.GET.get('id_hdr')
+            id_ingreso = request.GET.get('id_ingreso')
+            
+            existe_id = HDR.objects.filter(id =id_hdr,is_deleted = False, estado ='Activo', sector='Porteria 2').exists()#controla si existe la hdr
+            existe_ingreso = Ingreso.objects.filter(id=id_ingreso, is_deleted = False, ingresado=False).exists()#controla si existe el ingreso
+        
+            if(existe_id and existe_ingreso):
+                #hdr = formHDR
+                ingreso = Ingreso.objects.get(id = id_ingreso, is_deleted = False, ingresado = False)
+                empresa_transporte = ingreso.empresa_transporte
+                producto = ingreso.producto
+                patente_chasis = ingreso.patente_chasis
+                patente_semi = ingreso.patente_semi
+                control_epp = FormEPP()
+                return render(request,'porteria2/controlEpp.html',
+                                {'id_hdr':id_hdr,#esto debo recibir
+                                'id_ingreso':id_ingreso,
+                                'empresa_transporte':empresa_transporte,
+                                'producto':producto,
+                                'patente_chasis':patente_chasis,
+                                'patente_semi':patente_semi,
+                                'form_epp':control_epp})#el post debe recibir 
+            else:
+                sweetify.error(request, title='Error con Ingreso o HDR', text='Ocurrio un error, no se encuentra la hoja de ruta o el ingreso referenciado', persistent = 'Aceptar')
+                return redirect('nuevoIngreso')
+        else:
+            sweetify.error(request, title='Error con Ingreso o HDR', text='No se encuentra la hoja de ruta o el ingreso referenciado', persistent='Aceptar')
+            return redirect('nuevoingreso')
+
+    except Exception as excepcion:
+        sweetify.error(request, title='Ocurrio un error', text =f'Ocurrio un error {str(excepcion)} al intentar cargar los datos', persistent = 'Aceptar')
+        return redirect('nuevoIngreso')
+
+@login_required
+def mostrarControlEpp(request):
+    """Esta funcion devuelve una lista con todos los ingresos pendientes de control"""
+
+    try:
+        ingresos = Ingreso.objects.filter( ingresado = False, is_deleted = False, hdr__estado='Activo')
+        if ingresos:
+            sweetify.toast(request, 'Controles Pendientes de EPP', icon='warning', timer=3000, timerProgressBar = False)
+        else:
+            sweetify.toast(request, 'Sin controles de EPP pendientes', icon='info', timer=3000, timerProgressBar=False )
+        return render(request,'porteria2/pendientes.html',
+                        {'ingresos':ingresos})
+    except Exception as excepcion:
+        sweetify.error(request, title='Ocurrio un error', text = f'Ocurrio un error {str(excepcion)} al intentar cargar los datos', persistent = 'Aceptar')
+        return redirect('nuevoIngreso')
+
+@login_required
+def guardarControlEpp(request):
+    """ esta funcion guarda un control de EPP validado, si es rechazado redirecciona  """
+    try:
+        if request.method == 'POST':
+            form_control = FormEPP(request.POST)
+            id_hdr = request.GET.get('id_hdr')
+            id_ingreso = request.GET.get('id_ingreso')
+            existe_id_hdr = HDR.objects.filter(id = id_hdr, is_deleted = False, estado = 'Activo',sector = 'Porteria 2').exists()
+            existe_id_ingreso = Ingreso.objects.filter(id = id_ingreso, is_deleted = False, ingresado = False).exists()
+
+            if(existe_id_hdr and existe_id_ingreso):
+                hdr = HDR.objects.filter(id = id_hdr, is_deleted = False, estado  = 'Activo', sector = 'Porteria 2')
+                ingreso = Ingreso.objects.get(id = id_ingreso, is_deleted = False, ingresado= False)
+                form_hdr = FormHDR()
+                empresa_transporte = ingreso.empresa_transporte
+                producto = ingreso.producto
+                patente_chasis = ingreso.patente_chasis
+                patente_semi = ingreso.patente_semi
+                control_epp = form_control
+
+                if form_control.is_valid():
+                    casco = form_control.cleaned_data['casco']
+                    mascara = form_control.cleaned_data['mascara']
+                    antiparras = form_control.cleaned_data['antiparras']
+                    botines = form_control.cleaned_data['botines']
+                    pantalon_camisa = form_control.cleaned_data['pantalon_camisa']
+                    matafuego = form_control.cleaned_data['matafuego']
+                    arrestallamas = form_control.cleaned_data['arrestallamas']
+                    carteleria = form_control.cleaned_data['carteleria']
+                    todos = all([casco, mascara, antiparras, botines, pantalon_camisa, matafuego, arrestallamas, carteleria])
+
+                    if todos :
+                        hdr.sector = 'Almacen PQ'
+                        ingreso.ingresado = True
+                        ingreso.save()
+                        hdr.save()
+                        form_control.save()
+                        sweetify.success(request, 'Control EPP', text='Se ha guardado el control de EPP', timer=3000)
+                        return redirect('nuevoIngreso')
+                    else:#se redirige para guardar el rechazo con el motivo 
+                        sweetify.warning(request,'Control EPP', text='No se cumplen uno o mas requisitos de EPP', timer=3000)
+                        #redirigir para guardar rechazo en hdr
+                        return render(request,'porteria2/rechazoControlEpp.html',
+                                {'empresa_transporte':empresa_transporte,
+                                 'producto':producto,
+                                 'patente_chasis':patente_chasis,
+                                 'patente_semi':patente_semi,
+                                 'id_ingreso':id_ingreso,
+                                 'form_epp':control_epp,
+                                 'form_hdr':form_hdr
+                                 }) 
+                    
+                else:
+                    return render(request,'porteria2/controlEpp.html',
+                                {'id_hdr':id_hdr,#esto debo recibir
+                                 'id_ingreso':id_ingreso,
+                                 'empresa_transporte':empresa_transporte,
+                                 'producto':producto,
+                                 'patente_chasis':patente_chasis,
+                                 'patente_semi':patente_semi,
+                                 'form_epp':control_epp
+                                 }) 
+                    
+    except Exception as excepcion:
+        sweetify.error(request,'Excepcion', text=f'Hubo un problema al guardar el control {str(excepcion)}', persistent = 'Aceptar')
+        return redirect ('nuevoIngreso')    
+
+@login_required
+def guardarRechazo(request):
+    id_ingreso = request.GET.get('id_ingreso')
+    existe_id = Ingreso.objects.filter(id = id_ingreso)
+
+    try:
+        if existe_id:
+            ingreso = Ingreso.objects.filter(id = id_ingreso, is_deleted = False,ingresado = False).get()
+            hdr = ingreso.hdr
+
+            if request.method == 'POST':
+                form_hdr = FormHDR(request.POST, instance=hdr)
+                
+                if form_hdr.is_valid():
+                    hdr.estado = 'Rechazado'
+                    hdr.save()
+                    form_hdr.save()
+                    sweetify.success(request,'Rechazo de Ingreso', text =' Se ha rechazado el ingreso, la Hoja de ruta se guardo como rechazada', timer=3000)
+                    return redirect('nuevoIngreso')
+                else:
+                    sweetify.error(request,'Error', text='Hubo un error al cargar el ingreso o HDR referenciado', persistent = 'Aceptar')
+                    return redirect('nuevoIngreso')
+
+        else:
+            sweetify.error(request,'Error', text='Hubo un error al cargar el ingreso referenciado no existe', persistent = 'Aceptar')
+            return redirect('nuevoIngreso')
+        
+    except Exception as excepcion:
+        sweetify.error(request, 'Excepcion', text = f'Ocurrio un error {str(excepcion)}', persistent = 'Aceptar')
+        return redirect('nuevoIngreso')

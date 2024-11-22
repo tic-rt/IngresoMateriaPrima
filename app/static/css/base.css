@@ -1,12 +1,19 @@
 /* Estilos para el header */
-.header{
+.header {
     background-color: #00498d; 
     color: aliceblue;
+    width: 100%;
   }
   .logo{
     margin-left: 5%;
     min-width: 40px;
     min-height: auto;
+  }
+  
+  .boton-salida{
+    background-color: #00498d;
+    color: aliceblue;
+    width: 100%;
   }
   
 /* Ajustes para la navbar */
@@ -129,6 +136,26 @@ h4 {
   background-position: center;
   background-repeat: no-repeat;
   opacity: 1; 
+  z-index: -1;
+}
+/*fondo para epp.html*/
+.fondo-epp{
+  position:relative;
+  overflow: hidden;
+}
+
+.fondo-epp::before{
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('../img/epp.jpg');
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 1;
   z-index: -1;
 }
 .fondo-loguin {

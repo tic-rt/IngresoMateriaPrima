@@ -1,6 +1,6 @@
 from django.urls import path
 from transporte.views import (actualizar, agregarCamion, agregarConductor, agregarSemi, agregarTransporte, camiones, conductores, editarCamion, editarConductor, 
-                              editarSemi, editarTransporte, eliminarCamion, eliminarConductor, eliminarSemi, eliminarTransporte, semis, transportes)  
+                              editarSemi, editarTransporte, eliminarCamion, eliminarConductor, eliminarSemi, eliminarTransporte, obtenerDatos, semis, transportes)  
 
 
 urlpatterns = [
@@ -9,16 +9,17 @@ urlpatterns = [
     path('semis', semis, name='semis'),
     path('conductores', conductores, name='conductores'),
     path('agregarTransporte', agregarTransporte, name='agregarTransporte'),
-    path('agregarCamion', agregarCamion, name='agregarCamion'),
-    path('agregarSemi', agregarSemi, name='agregarSemi'),
-    path('agregarConductor', agregarConductor, name='agregarConductor'),
-    path('editarTransporte', editarTransporte, name='editarTransporte'),
-    path('editarCamion', editarCamion, name='editarCamion'),
-    path('editarSemi', editarSemi, name='editarSemi'),
-    path('editarConductor', editarConductor, name = 'editarConductor'),
+    path('editarTransporte', editarTransporte, name='editarTransporte'), 
     path('eliminarTransporte', eliminarTransporte, name = 'eliminarTransporte'),
+    path('agregarCamion', agregarCamion, name='agregarCamion'),
+    path('editarCamion', editarCamion, name='editarCamion'),
     path('eliminarCamion', eliminarCamion, name='eliminarCamion'),
+    path('agregarSemi', agregarSemi, name='agregarSemi'),
+    path('editarSemi', editarSemi, name='editarSemi'),
     path('eliminarSemi', eliminarSemi, name ='eliminarSemi'),
+    path('agregarConductor', agregarConductor, name='agregarConductor'),
+    path('editarConductor', editarConductor, name = 'editarConductor'),
     path('eliminarConductor', eliminarConductor, name='eliminarConductor'),
+    path('obtenerDatos', obtenerDatos, name='obtenerDatos'),
     path('actualizar/<str:modelo>',actualizar,name='actualizar'),
 ]
