@@ -6,16 +6,18 @@ from hdr.forms import FormHDR
 from hdr.models import HDR
 from porteria2.forms import FormEPP, FormIngreso
 from porteria2.models import Ingreso
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 
 # Create your views here.
 
 @login_required
+@permission_required('porteria2.view_ingreso', login_url='index')
 def index(request):
     """chart de vehiculos ingresados e informacion relevante para porteria"""
     return render(request, 'porteria2/porteria2.html')
 
 @login_required
+@permission_required('porteria2.view_ingreso', login_url='index')
 def nuevoIngreso(request):
     """Esta funcion devuelve un formulario de nuevo inrgeso de materia prima"""
     formulario_ingreso = FormIngreso()
@@ -30,6 +32,7 @@ def nuevoIngreso(request):
         return render(request, 'porteria2/porteria2.html')
 
 @login_required
+@permission_required('porteria2.add_ingreso',login_url='index')
 def guardarNuevoIngreso(request):
     """Esta funcion registra un nuevo ingreso de vehiculo a realizar descarga de materia prima y crea la hoja de ruta hdr"""
     # formulario_ingreso = FormIngreso()
@@ -62,6 +65,7 @@ def guardarNuevoIngreso(request):
         return render(request, 'porteria2/nuevoIngreso.html', {'formulario_ingreso': formulario})
 
 @login_required
+@permission_required('porteria2.view_epp')
 def controlEpp(request):
     """esta funcion muestra el ultimo ingreso y se procede al control de epp"""
     
@@ -101,15 +105,16 @@ def controlEpp(request):
         return redirect('nuevoIngreso')
 
 @login_required
+@permission_required('porteria2.view_epp', login_url='index')
 def mostrarControlEpp(request):
     """Esta funcion devuelve una lista con todos los ingresos pendientes de control"""
 
     try:
         ingresos = Ingreso.objects.filter( ingresado = False, is_deleted = False, hdr__estado='Activo')
         if ingresos:
-            sweetify.toast(request, 'Controles Pendientes de EPP', icon='warning', timer=3000, timerProgressBar = False)
+            sweetify.toast(request,  'Controles Pendientes de EPP', icon='warning', timer=3000,allowOutsideClick=False, timerProgressBar = False)
         else:
-            sweetify.toast(request, 'Sin controles de EPP pendientes', icon='info', timer=3000, timerProgressBar=False )
+            sweetify.toast(request, 'Sin controles de EPP pendientes', icon='info', timer=3000, allowOutsideClick=False, timerProgressBar=False )
         return render(request,'porteria2/pendientes.html',
                         {'ingresos':ingresos})
     except Exception as excepcion:
@@ -117,6 +122,7 @@ def mostrarControlEpp(request):
         return redirect('nuevoIngreso')
 
 @login_required
+@permission_required('porteria2.add_epp')
 def guardarControlEpp(request):
     """ esta funcion guarda un control de EPP validado, si es rechazado redirecciona  """
     try:
@@ -185,6 +191,7 @@ def guardarControlEpp(request):
         return redirect ('nuevoIngreso')    
 
 @login_required
+@permission_required('hdr.change_hdr', login_url='index')
 def guardarRechazo(request):
     id_ingreso = request.GET.get('id_ingreso')
     existe_id = Ingreso.objects.filter(id = id_ingreso)

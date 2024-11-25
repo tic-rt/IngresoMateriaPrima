@@ -11,7 +11,7 @@
         </div>
         <div class="d-flex justify-content-center mb-5">
             <div class="col-10 col-sm-8 ">
-                <table class="table table-striped table-bordered table-hover icon-link-hover">
+                <table class="table table-striped table-bordered table-hover icon-link-hover" id="tabla-pendientes">
                     <thead>
                         <th class="text-center">Empresa</th>
                         <th class="text-center">Camión</th>
@@ -20,7 +20,7 @@
                     </thead>
                     <tbody>
                         {% for ingreso in ingresos%}
-                        <tr>
+                        <tr data-id="{{ingreso.id}}" data-hdr="{{ingreso.hdr_id}}">
                             <td>
                                 {{ingreso.empresa_transporte}}
                             </td>
@@ -70,6 +70,18 @@
 {% block js %}
 <script>
     document.addEventListener('DOMContentLoaded', function () {
+        console.log('cargado')
+        let tabla = document.getElementById('tabla-pendientes')
+        
+        tabla.addEventListener('click',function(event){
+            let fila = event.target.closest('tr')
+            
+            if(fila){
+                id_ingreso = fila.getAttribute('data-id')
+                id_hdr = fila.getAttribute('data-hdr')
+                window.location.href = `{% url 'controlEpp'%}?id_hdr=${id_hdr}&id_ingreso=${id_ingreso}`;
+            }
+        })
 
     });
 </script>

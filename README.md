@@ -3,4 +3,7 @@ usuario:Administrador
 password:Tic2024$
 
 porteria2
-Pa$$word1
+Pa$$w0rd2
+
+Shyma
+Shyma2024$

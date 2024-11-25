@@ -2,13 +2,14 @@ from datetime import date
 from django.http import JsonResponse
 from django.utils import timezone
 from django.shortcuts import redirect, render
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from transporte.forms import FormCamion, FormConductor, FormSemi, FormTransporte
 from transporte.models import Camion, Conductor, Semi, Transporte
 import sweetify
 
 # Create your views here.
 @login_required
+@permission_required('transporte.view_transporte', login_url='index')
 def transportes(request):
     """Esta funcion devolvera todas las empresas de transportes registradas junto a los formularios correspondientes para la carga"""
     
@@ -21,6 +22,7 @@ def transportes(request):
                 })
 
 @login_required
+@permission_required('transporte.view_camion', login_url='index')
 def camiones(request):
     """Esta funcion devolvera todos los camiones de transportes registrados junto a los formularios correspondientes para la carga"""
     
@@ -34,6 +36,7 @@ def camiones(request):
                     'hoy':hoy
                     })
 @login_required
+@permission_required('transporte.view_semis', login_url='index')
 def semis(request):
     """Esta funcion devolvera todos los semis de transportes registradas junto a los formularios correspondientes para la carga"""
     
@@ -47,6 +50,7 @@ def semis(request):
                     'hoy':hoy
                     })
 @login_required
+@permission_required('transporte.view_conductor', login_url='index')
 def conductores(request):
     """Esta funcion devolvera todos los conductores registrados, junto a los formularios correspondientes para la carga"""
     conductores = Conductor.objects.filter(is_deleted = False)
@@ -60,6 +64,7 @@ def conductores(request):
                     }
                 )
 @login_required
+
 def agregarTransporte(request):
     """esta funcion agrega una empresa de transporte nueva"""
 
