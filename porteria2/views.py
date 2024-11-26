@@ -134,7 +134,7 @@ def guardarControlEpp(request):
             existe_id_ingreso = Ingreso.objects.filter(id = id_ingreso, is_deleted = False, ingresado = False).exists()
 
             if(existe_id_hdr and existe_id_ingreso):
-                hdr = HDR.objects.filter(id = id_hdr, is_deleted = False, estado  = 'Activo', sector = 'Porteria 2')
+                hdr = HDR.objects.get(id = id_hdr, is_deleted = False, estado  = 'Activo', sector = 'Porteria 2')
                 ingreso = Ingreso.objects.get(id = id_ingreso, is_deleted = False, ingresado= False)
                 form_hdr = FormHDR()
                 empresa_transporte = ingreso.empresa_transporte
