@@ -18,7 +18,7 @@ class Producto(Base):
 
         verbose_name = 'Producto'
         verbose_name_plural = 'Productos'
-        ordering = ['producto']
+        ordering = ['nombre']
     
     def __str__(self):
         return self.nombre
