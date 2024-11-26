@@ -11,7 +11,7 @@ productos = [ # No deberia estar hardcodeado ,por ahora puede salir asi,esta es 
 
 class Producto(Base):
     """Productos que se van a recibir """
-    producto = models.CharField(choices=productos,max_length=100)
+    nombre = models.CharField(choices=productos,max_length=100)
     
     class Meta:
         """Meta para definicion de Producto"""
@@ -21,14 +21,13 @@ class Producto(Base):
         ordering = ['producto']
     
     def __str__(self):
-        return self.producto
+        return self.nombre
     
         
             
-class Proveedores(Base):
+class Proveedor(Base):
     """Los proveedores que entregaran Producto"""
     nombre = models.CharField(verbose_name='Proveedor',max_length=50)
-    producto = models.ForeignKey(Producto,on_delete=models.PROTECT,verbose_name='Producto', null=False)
     
     class Meta:
         """Meta para la definicion de Proveedores"""
@@ -39,5 +38,19 @@ class Proveedores(Base):
 
     def __str__(self):
         return self.nombre
+
+class ProveedorProducto(Base):
+    """ modelo Proveedor has Producto """
+    proveedor = models.ForeignKey(Proveedor, on_delete=models.PROTECT, verbose_name='Proveedor')
+    producto = models.ForeignKey(Producto, on_delete=models.PROTECT, verbose_name='Producto')
+
+    class Meta:
+        """Meta pata la definicion de provvedorProducto"""
+
+        verbose_name = 'Proveedor Producto'
+        verbose_name_plural = 'Proveedores Productos'
+
+    def __str__(self):
+        return f'{self.proveedor.nombre} {self.producto.producto}'
     
     
