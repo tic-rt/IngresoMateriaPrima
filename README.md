@@ -7,3 +7,6 @@ Pa$$w0rd2
 
 Shyma
 Shyma2024$
+
+Balanza
+B4l4nz4$2024
