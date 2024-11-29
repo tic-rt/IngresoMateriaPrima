@@ -17,6 +17,12 @@ class Balanza(Base):
     responsable = models.ForeignKey(Personal,on_delete=models.PROTECT, verbose_name='Responsable')
     observaciones = models.TextField(max_length=100,default='DOD según el IN 11-IQ-07', blank=False, null=False)
     hdr = models.ForeignKey(HDR, on_delete=models.PROTECT, verbose_name='HDR')
+    hora_salida = models.DateField(verbose_name='Hora de salida')
+    peso_fmrt = models.IntegerField(verbose_name='Peso en FMRT',blank=False, null=False, default=0)
+    peso_vacio = models.IntegerField(verbose_name='peso vacio',blank=False, null=False, default=0)
+    peso_taquilla = models.IntegerField(verbose_name='Peso taquilla',blank=False, null=False, default=0)
+    peso_bolsa_tarima = models.IntegerField(verbose_name='peso bolsa/tarima', blank=False, null=False, default=0)
+    peso_neto = models.IntegerField(verbose_name='Peso neto', blank=False,null=False, default=0)
 
     class Meta:
         """Meta definicion para el modelo Balanza"""
