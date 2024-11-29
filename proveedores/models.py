@@ -3,15 +3,15 @@ from django.db import models
 from base.models import Base
 
 # Create your models here.
-productos = [ # No deberia estar hardcodeado ,por ahora puede salir asi,esta es la lista completa?  
+""" productos = [ # No deberia estar hardcodeado ,por ahora puede salir asi,esta es la lista completa?  
     ('Azufre','Azufre Liquido'),
     ('Azufre solido','Azufre solido a granel'),
     ('Amoniaco','Amoniaco'),
-]
+] """
 
 class Producto(Base):
     """Productos que se van a recibir """
-    nombre = models.CharField(choices=productos,max_length=100)
+    nombre = models.TextField(max_length=100, verbose_name='Producto',blank=False, null=False, default='')
     
     class Meta:
         """Meta para definicion de Producto"""
@@ -22,12 +22,10 @@ class Producto(Base):
     
     def __str__(self):
         return self.nombre
-    
-        
-            
+
 class Proveedor(Base):
     """Los proveedores que entregaran Producto"""
-    nombre = models.CharField(verbose_name='Proveedor',max_length=50)
+    nombre = models.TextField(verbose_name='Proveedor',max_length=50)
     
     class Meta:
         """Meta para la definicion de Proveedores"""
@@ -51,6 +49,6 @@ class ProveedorProducto(Base):
         verbose_name_plural = 'Proveedores Productos'
 
     def __str__(self):
-        return f'{self.proveedor.nombre} {self.producto.producto}'
+        return f'{self.proveedor.nombre} {self.producto}'
     
     

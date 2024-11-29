@@ -1,0 +1,60 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="container-fluid d-flex flex-column">
+    <div class="container fondo-balanza mt-5" style="height: 120px;"></div>
+    <div class="text-center pt-4 mb-5">
+        <div>
+            <h3>Pesaje</h3>
+        </div>
+        <div class="d-flex justify-content-center mb-5">
+            <div class="col-10 col-sm-8 ">
+                <div>
+                    <div class="row">
+                        <div class="col-6">
+                            <label class="form-label" for="empresa">Empresa</label>
+                            <input class="form-control" type="text" disabled value="{{ingreso.empresa_transporte}}" id="empresa">
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label" for="producto">Producto</label>
+                            <input class="form-control" type="text" disabled value="{{ingreso.producto}}" id="producto">
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-6">
+                            <label class="form-label" for="patente_chasis">Camión</label>
+                            <input class="form-control" type="text" disabled value="{{ingreso.patente_chasis}}" id="patente_chasis">
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label" for="patente_semi">Semi</label>
+                            <input class="form-control" type="text" disabled value="{{ingreso.patente_semi}}" id="patente_semi">
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <form action="" method="post">
+                        {% csrf_token %}
+                        {% crispy formulario_peso %}
+                    </form>
+                </div>
+            </div>
+        </div>
+        <button class="btn btn-danger float-end bi bi-arrow-left-circle" onclick=history.back()> Regresar</button>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {  
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl)
+        })
+
+    });
+</script>
+{% endblock js %}

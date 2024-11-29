@@ -1,6 +1,7 @@
 /* Estilos para el header */
 .header {
-    background-color: #00498d; 
+    background: rgb(2, 10, 46);
+    background: linear-gradient(311deg, rgba(2, 10, 46, 1) 0%, rgba(0, 73, 141, 1) 25%);
     color: aliceblue;
     width: 100%;
   }
@@ -25,7 +26,8 @@
 /* Ajustes para la barra lateral */
 .lateral {
   padding-top: 2%;
-  background-color: #00498d; 
+  background: rgb(2, 10, 46);
+  background: linear-gradient(311deg, rgba(2, 10, 46, 1) 0%, rgba(0, 73, 141, 1) 25%);
   min-height: 87vh;
 } 
 
@@ -40,11 +42,10 @@
 .link-side {
   color:  rgb(193, 195, 197);
   transition: 200ms; /* Suaviza la transición del cambio de tamaño */
-  ;
 }
-.link-side:hover {
-  font-size: 1.1rem;
-  color: aliceblue;
+.lateral .link-side:hover {
+  font-size: 1.2rem;
+  color: rgb(245, 245, 245);
 }
 
 /*Capitalizar la primer letra de cada palabra*/
@@ -152,6 +153,26 @@
   width: 100%;
   height: 100%;
   background-image: url('../img/epp.jpg');
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 1;
+  z-index: -1;
+}
+/*fondo para balanza.html*/
+.fondo-balanza {
+  position: relative;
+  overflow: hidden;
+}
+
+.fondo-balanza::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('../img/fondo-balanza.webp');
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;

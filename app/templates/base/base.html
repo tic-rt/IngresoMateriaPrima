@@ -92,8 +92,8 @@
 <div class="container-fluid">
   <div class="row">
     <!-- barra lateral -->
-    <aside class="lateral col-4 col-sm-2 d-flex justify-content-center">
-      {% if user.groups.all.0.name == 'Porteria 2' or  user.groups.all.0.name == 'Shyma' or user.is_superuser %}
+    <aside class="lateral col-4 col-sm-2 d-flex justify-content-start flex-column">
+     <!--  {% if user.groups.all.0.name == 'Porteria 2' or  user.groups.all.0.name == 'Shyma' or user.is_superuser %} -->
         <div class="pt-4">
           <div class="pb-4 container-fluid">
             <h2 class="sub-titulo2">Porteria 2</h2>
@@ -104,6 +104,41 @@
             </li>
             <li class="nav-item">
               <a class="nav-link link-side" href="#">Finalizar Ingreso</a>
+            </li>
+            <li>
+              <a class="nav-link link-side" href="{% url 'controlEppPendientes'%}">Controles Pendientes</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link link-side" href="{% url 'personal' %}">Responsables</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle link-side" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Transportes
+              </a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="{% url 'transportes' %}">Empresas</a></li>
+                <li><a class="dropdown-item" href="{% url 'camiones' %}">Camiones</a></li>
+                <li><a class="dropdown-item" href="{% url 'semis' %}">Semis</a></li>
+                <li><a class="dropdown-item" href="{% url 'conductores' %}">Conductores</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Balanza -->
+        <div class="pt-4">
+          <div class="pb-4 container-fluid">
+            <h2 class="sub-titulo2">Balanza</h2>
+          </div>
+          <ul class="navbar-nav flex-column ">
+            <li class="nav-item">
+              <a href="{% url 'pendientesBalanza' %}" class="nav-link link-side">Pendientes</a>
+            </li>
+            <li class="nav-item">
+              <a href="{% url 'mostrar' %}" class="nav-link link-side">Datos de carga</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link link-side" href="#">Egresos</a>
             </li>
             <li>
               <a class="nav-link link-side" href="{% url 'controlEppPendientes'%}">Controles Pendientes</a>
@@ -124,7 +159,7 @@
             </li>
           </ul>
         </div>
-      {% endif %}
+      <!-- {% endif %} -->
     </aside>
     <!-- contenido -->
     <div class="col-8 col-sm-10 justify-content-center align-content-center">

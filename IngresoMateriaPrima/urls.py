@@ -23,5 +23,7 @@ urlpatterns = [
     path('porteria2/',include('porteria2.urls')),
     path('transportes/',include('transporte.urls')),
     path('personal/',include('personal.urls')),
+    path('balanza/', include('balanza.urls')),
+    path('proveedor-producto/',include('proveedores.urls')),
     path('auth/',include('auth.urls')),
 ]
