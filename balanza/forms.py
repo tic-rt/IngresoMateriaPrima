@@ -23,7 +23,7 @@ class FormBalanza(forms.ModelForm):
             ]
 
         widgets = {
-            'proveedor':forms.Select(),
+            'proveedor':forms.Select(attrs={'class':'form-control'}),
             'remito':forms.TextInput(attrs={
                 'class':'form-control',
                 'data-bs-toggle':'tooltip',
@@ -36,7 +36,7 @@ class FormBalanza(forms.ModelForm):
                 'data-bs-placement':'bottom',
                 'min':"0",
                 }),
-            'responsable':forms.Select(),
+            'responsable':forms.Select(attrs={'class':'form-control'}),
             'observaciones':forms.Textarea(attrs={
                 'class':'form-control',
                 'placeholder':'DOD según el IN 11-IQ-07'
@@ -49,7 +49,7 @@ class FormBalanza(forms.ModelForm):
         self.helper.layout = Layout(
             Div(
                 Row(
-                    Column('Proveedor',css_class='col-4'),
+                    Column('proveedor',css_class='col-4'),
                     Column('remito',css_class='col-4'),
                     Column('peso_origen',css_class='col-4'),
                     css_class='mb-3'),

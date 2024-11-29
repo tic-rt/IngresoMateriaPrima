@@ -34,9 +34,38 @@
                     </div>
                 </div>
                 <div>
-                    <form action="" method="post">
+                    <form class="mt-3" method="post">
                         {% csrf_token %}
-                        {% crispy formulario_peso %}
+                    <div class="row mb-3">
+                        <div class="col-4">
+                            <label class="form-label" for="id_remito">Remito</label>
+                            <div class="input-group">
+                                <span class="input-group-text">Nº</span>
+                                {{formulario_peso.remito}}
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <label class="form-label" for="id_proveedor">Proveedor</label>
+                            {{formulario_peso.proveedor}}
+                        </div>
+                        <div class="col-4">
+                            <label class="form-label" for="id_peso_origen">Peso</label>
+                            <div class="input-group">
+                                <span class="input-group-text">Kg</span>
+                                {{ formulario_peso.peso_origen }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label class="form-label" for="id_observaciones">Observaciones</label>
+                        {{formulario_peso.observaciones}}
+                    </div>
+                    <div class="row mb-3 d-flex justify-content-center">
+                        <div class="col-6">
+                            <label class="'form-label" for="id_responsable">Responsable</label>
+                            {{formulario_peso.responsable}}
+                        </div>
+                    </div>
                     </form>
                 </div>
             </div>
