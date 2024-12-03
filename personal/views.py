@@ -1,4 +1,4 @@
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render # type: ignore
 from personal.forms import FormPersonal
 from personal.models import Personal
 import sweetify

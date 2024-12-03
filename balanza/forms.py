@@ -5,6 +5,8 @@ from balanza.models import Balanza
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit,Layout,Div,Row,Column
 
+from personal.models import Personal
+
 
 class FormBalanza(forms.ModelForm):
     """Formulario para el peso de un vehiculo"""
@@ -39,13 +41,15 @@ class FormBalanza(forms.ModelForm):
             'responsable':forms.Select(attrs={'class':'form-control'}),
             'observaciones':forms.Textarea(attrs={
                 'class':'form-control',
-                'placeholder':'DOD según el IN 11-IQ-07'
+                'placeholder':'DOD según el IN 11-IQ-07',
+                'rows':3,
                 }),
             }
     def __init__(self, *args, **kwargs):
         super(FormBalanza, self).__init__(*args, **kwargs)
         self.helper = FormHelper(self)
         self.helper.add_input(Submit('Submit', 'Guardar pesaje'))
+        self.fields['responsable'].queryset = Personal.objects.filter(is_deleted = False, sector = 'Almacen PQ')
         self.helper.layout = Layout(
             Div(
                 Row(

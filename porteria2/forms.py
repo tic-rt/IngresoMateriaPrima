@@ -65,7 +65,7 @@ class FormIngreso(forms.ModelForm):
             is_deleted=False, vencimiento_seguro__gte=hoy)
         self.fields['patente_semi'].empty_label = 'Seleccione un semi'
         self.fields['responsable'].queryset = Personal.objects.filter(
-            is_deleted=False)
+            is_deleted=False, sector = 'Porteria 2')
         self.helper.form_action = reverse('guardarNuevoIngreso')
         self.helper.layout = Layout(
             Div(
