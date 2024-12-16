@@ -140,22 +140,8 @@
             <li class="nav-item">
               <a class="nav-link link-side" href="#">Egresos</a>
             </li>
-            <li>
-              <a class="nav-link link-side" href="{% url 'controlEppPendientes'%}">Controles Pendientes</a>
-            </li>
             <li class="nav-item">
               <a class="nav-link link-side" href="{% url 'personal' %}">Responsables</a>
-            </li>
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                Transportes
-              </a>
-              <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="{% url 'transportes' %}">Empresas</a></li>
-                <li><a class="dropdown-item" href="{% url 'camiones' %}">Camiones</a></li>
-                <li><a class="dropdown-item" href="{% url 'semis' %}">Semis</a></li>
-                <li><a class="dropdown-item" href="{% url 'conductores' %}">Conductores</a></li>
-              </ul>
             </li>
           </ul>
         </div>
@@ -167,30 +153,13 @@
           </div>
           <ul class="navbar-nav flex-column ">
             <li class="nav-item">
-              <a href="{% url 'pendientesBalanza' %}" class="nav-link link-side">Pendientes</a>
-            </li>
-            <li class="nav-item">
-              <a href="{% url 'mostrar' %}" class="nav-link link-side">Datos de carga</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link link-side" href="#">Egresos</a>
+              <a href="{% url 'pendientesInspeccion' %}" class="nav-link link-side">Pendientes</a>
             </li>
             <li>
               <a class="nav-link link-side" href="{% url 'controlEppPendientes'%}">Controles Pendientes</a>
             </li>
             <li class="nav-item">
               <a class="nav-link link-side" href="{% url 'personal' %}">Responsables</a>
-            </li>
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                Transportes
-              </a>
-              <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="{% url 'transportes' %}">Empresas</a></li>
-                <li><a class="dropdown-item" href="{% url 'camiones' %}">Camiones</a></li>
-                <li><a class="dropdown-item" href="{% url 'semis' %}">Semis</a></li>
-                <li><a class="dropdown-item" href="{% url 'conductores' %}">Conductores</a></li>
-              </ul>
             </li>
           </ul>
         </div>

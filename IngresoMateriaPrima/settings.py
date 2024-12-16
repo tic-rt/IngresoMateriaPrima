@@ -52,7 +52,8 @@ INSTALLED_APPS = [
     'personal',
     'proveedores',
     'transporte',
-    'balanza'
+    'balanza',
+    'laboratorio',
 ]
 
 MIDDLEWARE = [

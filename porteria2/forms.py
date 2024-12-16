@@ -17,7 +17,8 @@ class FormIngreso(forms.ModelForm):
         """Clase Meta para el formulario de ingreso"""
 
         model = Ingreso
-
+        laboral_opciones = [(True, 'Sí'),
+                            (False, 'No')]
         fields = [
             'ingreso_calefaccion',
             'empresa_transporte',
@@ -26,6 +27,7 @@ class FormIngreso(forms.ModelForm):
             'patente_chasis',
             'patente_semi',
             'remito',
+            'laboral',
             'responsable'
         ]
 
@@ -42,6 +44,7 @@ class FormIngreso(forms.ModelForm):
             }),
             'patente_chasis': forms.Select(),
             'patente_semi': forms.Select(),
+            'laboral': forms.Select(choices=laboral_opciones,attrs={'class': 'form-control'}),
             'responsable': forms.Select(attrs={
                 'class': 'form-control'
             }),
@@ -67,6 +70,14 @@ class FormIngreso(forms.ModelForm):
         self.fields['responsable'].queryset = Personal.objects.filter(
             is_deleted=False, sector = 'Porteria 2')
         self.helper.form_action = reverse('guardarNuevoIngreso')
+        
+        if self._dia_semana(): 
+            self.fields['laboral'].initial = True  # Valor por defecto si es un día laborable
+        else:
+            self.fields['laboral'].initial = False  # Valor por defecto si es fin de semana
+            self.fields['laboral'].widget.attrs['hidden'] = 'true'
+            self.helper.layout = self.helper.layout[0].remove('laboral')
+        
         self.helper.layout = Layout(
             Div(
                 Div(
@@ -102,6 +113,15 @@ class FormIngreso(forms.ModelForm):
                     css_class='border p-3 mb-3 shadow'
                 ),
                 Div(
+                    HTML('<h5>Inspeccion Quimica Presente</h5>'),
+                    Row(
+                        Column('laboral',
+                                css_class='col-4'),
+                        Column(HTML('<div class= "bg-danger-subtle mt-4 border border-warning"><p>Indicar si personal de Inspección Química se encuentra presente,seleccione "No" si se trata de feriado o a sueto</div>'),css_class='col-8')
+                    ),
+                    css_class='border p-3 mb-3 shadow'
+                ),
+                Div(
                     HTML('<h5> Responsable </h5>'),
                     Row(
                         Column('responsable', css_class='col-6'),
@@ -110,7 +130,13 @@ class FormIngreso(forms.ModelForm):
                 )
             ),
         )
-
+    def _dia_semana(self):
+        hoy = date.today().weekday()
+        if hoy == 5 or hoy == 6 :
+            return False #si es sabado o domingo 
+        else:
+            return True #de lunes a viernes y debo preguntar si es feriado
+        
 class FormEPP(forms.ModelForm):
     """Formulario para control de EPP"""
 
