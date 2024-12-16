@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     'balanza',
     'laboratorio',
     'pamo',
+    'psul',
 ]
 
 MIDDLEWARE = [
