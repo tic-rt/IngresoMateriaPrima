@@ -51,8 +51,14 @@ def guardarInspeccion(request):
                 
                 if formulario_control.is_valid():
                     #Si es amoniaco o azufre liquido debo guardar y  enviarlo a control de PAMPO\PSUL
-                    if ingreso.producto.nombre == 'Azufre Liquido' or ingreso.producto.nombre == 'Amoníaco':
-                        hdr.sector = 'PAMO/PSUL'
+                    if ingreso.producto.nombre == 'Azufre Liquido':
+                        hdr.sector = 'PSUL'
+                        hdr.save()
+                        formulario_control.save()
+                        sweetify.success(request, 'Guardado', text=f'Control de Inspección de {ingreso.producto} guardado', timer=3000)
+                        return redirect('pendientesInspeccion')
+                    elif ingreso.producto.nombre == 'Amoníaco':
+                        hdr.sector = 'PAMO'
                         hdr.save()
                         formulario_control.save()
                         sweetify.success(request, 'Guardado', text=f'Control de Inspección de {ingreso.producto} guardado', timer=3000)
