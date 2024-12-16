@@ -47,12 +47,30 @@ def guardarInspeccion(request):
             
             if __controlIds(id_ingreso, id_hdr):
                 ingreso = Ingreso.objects.get(id = id_ingreso, is_deleted = False, hdr_id = id_hdr)
+                hdr = ingreso.hdr
                 
                 if formulario_control.is_valid():
-                    pass
+                    #Si es amoniaco o azufre liquido debo guardar y  enviarlo a control de PAMPO\PSUL
+                    if ingreso.producto.nombre == 'Azufre Liquido' or ingreso.producto.nombre == 'Amoníaco':
+                        hdr.sector = 'PAMO/PSUL'
+                        hdr.save()
+                        formulario_control.save()
+                        sweetify.success(request, 'Guardado', text=f'Control de Inspección de {ingreso.producto} guardado', timer=3000)
+                        return redirect('pendientesInspeccion')
+                    else:
+                        hdr.sector = 'Almacen PQ E'
+                        hdr.save()
+                        formulario_control.save()
+                        sweetify.success(request, 'Guardado', text=f'Control de Inspección de {ingreso.producto} guardado', timer=3000)
+                        return redirect('pendientesInspeccion')
+                        
                 else:
                     return render(request, 'laboratorio/control.html',{'ingreso':ingreso,'formulario_inspeccion':formulario_control})
-
+                
+            else:
+                sweetify.error(request, 'Error', text = 'El id de Ingreso o de HDR referenciados no existen o fueron borrados', persistent = 'Aceptar')
+                return redirect('pendientesInspeccion')
+            
     except Exception as excepcion:
         pass
 
