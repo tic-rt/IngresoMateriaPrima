@@ -6,6 +6,8 @@ from hdr.models import HDR
 # Create your models here.
 
 class PamoPsul(Base):
+    """Modelo para pamo y psul"""
+    
     hora_ingreso = models.TimeField(verbose_name='Hora de Ingreso')
     presion = models.FloatField(verbose_name='Presion')
     temperatura = models.FloatField(verbose_name='Temperatura')
