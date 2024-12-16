@@ -10,7 +10,8 @@ sector = [
    ('Almacen PQ','Almacen PQ'),
    ('Almacen PQ E','Almacen PQ E'),
    ('Inspeccion PQ','Inspeccion PQ'),
-   ('PAMO/PSUL','PAMO/PSUL'),
+   ('PAMO','PAMO'),
+   ('PSUL','PSUL')
 ]
 estado=[
    ('Activo','Activo'),
