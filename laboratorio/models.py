@@ -9,7 +9,6 @@ from personal.models import Personal
 class Inspeccion(Base):
     """clase que define el modelo de inspeccion quimica"""
 
-    hora_extraccion = models.DateTimeField(verbose_name='Hora Extracción')
     certificado = models.BooleanField(verbose_name='Ingresa con certificado')
     requisitos = models.BooleanField(verbose_name='Cumple requisitos')
     responsable = models.ForeignKey(Personal, on_delete=models.PROTECT)
