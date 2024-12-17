@@ -27,5 +27,6 @@ urlpatterns = [
     path('proveedor-producto/',include('proveedores.urls')),
     path('inspeccionPQ/', include('laboratorio.urls')),
     path('PAMO/', include('pamo.urls')),
+    path('PSUL/', include('psul.urls')),
     path('auth/',include('auth.urls')),
 ]
