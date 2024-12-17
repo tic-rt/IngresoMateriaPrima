@@ -88,6 +88,7 @@
       </div>
     </div>
   </nav>
+
 <!-- contengo en un row la barra lateral y el contenido -->
 <div class="container-fluid">
   <div class="row">
@@ -168,10 +169,7 @@
           </div>
           <ul class="navbar-nav flex-column ">
             <li class="nav-item">
-              <a href="{% url 'pendientesInspeccion' %}" class="nav-link link-side">Pendientes</a>
-            </li>
-            <li>
-              <a class="nav-link link-side" href="{% url 'controlEppPendientes'%}">Controles Pendientes</a>
+              <a href="{% url 'pendientesPAMO' %}" class="nav-link link-side">Pendientes</a>
             </li>
             <li class="nav-item">
               <a class="nav-link link-side" href="{% url 'personal' %}">Responsables</a>
@@ -186,10 +184,7 @@
           </div>
           <ul class="navbar-nav flex-column ">
             <li class="nav-item">
-              <a href="{% url 'pendientesInspeccion' %}" class="nav-link link-side">Pendientes</a>
-            </li>
-            <li>
-              <a class="nav-link link-side" href="{% url 'controlEppPendientes'%}">Controles Pendientes</a>
+              <a href="{% url 'pendientesPSUL' %}" class="nav-link link-side">Pendientes</a>
             </li>
             <li class="nav-item">
               <a class="nav-link link-side" href="{% url 'personal' %}">Responsables</a>
@@ -198,8 +193,9 @@
         </div>
       <!-- {% endif %} -->
     </aside>
+    
     <!-- contenido -->
-    <div class="col-8 col-sm-10 justify-content-center align-content-center">
+    <div class="col-8 col-sm-10 justify-content-center pt-5">
       {% block content %}
       
       {% endblock content %}
