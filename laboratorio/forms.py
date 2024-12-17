@@ -1,7 +1,7 @@
 
 from django import forms
 from crispy_forms.helper import FormHelper,Layout
-from crispy_forms.layout import Row, Column
+from crispy_forms.layout import Row, Column, Submit
 
 from laboratorio.models import Inspeccion
 from personal.models import Personal
@@ -48,6 +48,7 @@ class FormLaboratorio(forms.ModelForm):
         self.fields['responsable'].queryset = Personal.objects.filter(is_deleted = False, sector = 'Inspeccion Quimica')
         self.fields['certificado'].empty_label = 'Seleccione una opción'
         self.fields['requisitos'].empty_label = 'Seleccione una opción'
+        self.helper.add_input(Submit('Submit','Guardar'))
         self.helper.layout = Layout(
             Row(
                 Column('certificado', css_class='col-6'),
