@@ -34,12 +34,11 @@
                     </div>
                 </div>
                 <div>
-                    <form class="mt-3" method="post">
+                    <form class="mt-3" method="POST" action="{% url 'guardarInspeccion' %}">
                         {% csrf_token %}
+                        <input type="hidden" name="id_ingreso" value="{{ ingreso.id }}">
+                        <input type="hidden" name="id_hdr" value="{{ ingreso.hdr.id }}">
                         {% crispy formulario_inspeccion %}
-                        <div>
-                            <button class="btn btn-primary" type="submit">guardar</button>
-                        </div>
                     </form>
                 </div>
             </div>
