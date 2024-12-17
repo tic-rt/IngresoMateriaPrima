@@ -4,7 +4,7 @@ from base.models import Base
 
 # Create your models here.
 """ productos = [ # No deberia estar hardcodeado ,por ahora puede salir asi,esta es la lista completa?  
-    ('Azufre','Azufre Líquido'),
+    ('Azufre Líquido','Azufre Líquido'),
     ('Azufre sólido','Azufre sólido o a granel'),
     ('Amoníaco','Amoníaco'),
 ] """
