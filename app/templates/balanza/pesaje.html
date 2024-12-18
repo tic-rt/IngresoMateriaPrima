@@ -15,7 +15,8 @@
                     <div class="row">
                         <div class="col-6">
                             <label class="form-label" for="empresa">Empresa</label>
-                            <input class="form-control" type="text" disabled value="{{ingreso.empresa_transporte}}" id="empresa">
+                            <input class="form-control" type="text" disabled value="{{ingreso.empresa_transporte}}"
+                                id="empresa">
                         </div>
                         <div class="col-6">
                             <label class="form-label" for="producto">Producto</label>
@@ -25,52 +26,58 @@
                     <div class="row mt-2">
                         <div class="col-6">
                             <label class="form-label" for="patente_chasis">Camión</label>
-                            <input class="form-control" type="text" disabled value="{{ingreso.patente_chasis}}" id="patente_chasis">
+                            <input class="form-control" type="text" disabled value="{{ingreso.patente_chasis}}"
+                                id="patente_chasis">
                         </div>
                         <div class="col-6">
                             <label class="form-label" for="patente_semi">Semi</label>
-                            <input class="form-control" type="text" disabled value="{{ingreso.patente_semi}}" id="patente_semi">
+                            <input class="form-control" type="text" disabled value="{{ingreso.patente_semi}}"
+                                id="patente_semi">
                         </div>
                     </div>
                 </div>
-                <div>
+                <div class="mt-3    ">
                     <form class="mt-3" method="POST" action="{% url 'guardarPesaje' %}?id_ingreso={{ingreso.id}}">
-                        {% csrf_token %}
-                    <div class="row mb-3">
-                        <div class="col-4">
-                            <label class="form-label" for="id_remito">Remito</label>
-                            <div class="input-group">
-                                <span class="input-group-text">Nº</span>
-                                {{formulario_peso.remito}}
+                        <div class="border shadow container">
+                            {% csrf_token %}
+                            <div class="row mb-3">
+                                <div class="col-4">
+                                    <label class="form-label" for="id_remito">Remito</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">Nº</span>
+                                        {{formulario_peso.remito}}
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <label class="form-label" for="id_proveedor">Proveedor</label>
+                                    {{formulario_peso.proveedor}}
+                                </div>
+                                <div class="col-4">
+                                    <label class="form-label" for="id_peso_origen">Peso</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">Kg</span>
+                                        {{ formulario_peso.peso_origen }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div>
+                                    <label class="form-label" for="id_observaciones">Observaciones</label>
+                                    {{formulario_peso.observaciones}}
+                                </div>
+                            </div>
+                            <div class="row mb-3 d-flex justify-content-center">
+                                <div class="col-6">
+                                    <label class="'form-label" for="id_responsable">Responsable</label>
+                                    {{formulario_peso.responsable}}
+                                </div>
                             </div>
                         </div>
-                        <div class="col-4">
-                            <label class="form-label" for="id_proveedor">Proveedor</label>
-                            {{formulario_peso.proveedor}}
-                        </div>
-                        <div class="col-4">
-                            <label class="form-label" for="id_peso_origen">Peso</label>
-                            <div class="input-group">
-                                <span class="input-group-text">Kg</span>
-                                {{ formulario_peso.peso_origen }}
+                        <div class="row d-flex justify-content-end">
+                            <div class="mt-3">
+                                <button class="btn btn-primary" type="submit">guardar</button>
                             </div>
                         </div>
-                    </div>
-                    <div class="row mb-3">
-                        <label class="form-label" for="id_observaciones">Observaciones</label>
-                        {{formulario_peso.observaciones}}
-                    </div>
-                    <div class="row mb-3 d-flex justify-content-center">
-                        <div class="col-6">
-                            <label class="'form-label" for="id_responsable">Responsable</label>
-                            {{formulario_peso.responsable}}
-                        </div>
-                    </div>
-                    <div class="row d-flex justify-content-end">
-                        <div>
-                            <button class="btn btn-primary" type="submit">guardar</button>
-                        </div>
-                    </div>
                     </form>
                 </div>
             </div>
@@ -83,7 +90,7 @@
 
 {% block js %}
 <script>
-    document.addEventListener('DOMContentLoaded', function () {  
+    document.addEventListener('DOMContentLoaded', function () {
         var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
         var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
             return new bootstrap.Tooltip(tooltipTriggerEl)
