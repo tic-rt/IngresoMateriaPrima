@@ -42,29 +42,6 @@
         <button class="btn btn-danger float-end bi bi-arrow-left-circle" onclick=history.back()> Regresar</button>
     </div>
 </div>
-
-<!-- Modal -->
-<div class="modal fade" id="modal" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="ModalLabel">Observacion/Rechazo</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body" id="contenido">
-                <form method="post" action="{% url 'agregarPersonal' %}">
-                    {% csrf_token %}
-                    {{ form_responsables|crispy }}
-                    <button type="submit" class="btn btn-primary">Guardar</button>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                <!-- <button type="button" class="btn btn-primary">Guardar</button> -->
-            </div>
-        </div>
-    </div>
-</div>
 {% endblock %}
 
 {% block js %}
@@ -73,15 +50,17 @@
         console.log('cargado')
         let tabla = document.getElementById('tabla-pendientes')
         
-        tabla.addEventListener('click',function(event){
-            let fila = event.target.closest('tr')
-            
-            if(fila){
-                id_ingreso = fila.getAttribute('data-id')
-                id_hdr = fila.getAttribute('data-hdr')
-                window.location.href = `{% url 'inspeccion'%}?id_ingreso=${id_ingreso}&id_hdr=${id_hdr}`;
-            }
-        })
+        if (tabla && tabla.rows.length >1){
+            tabla.addEventListener('click', function (event) {
+                let fila = event.target.closest('tr')
+
+                if (fila) {
+                    id_ingreso = fila.getAttribute('data-id')
+                    id_hdr = fila.getAttribute('data-hdr')
+                    window.location.href = `{% url 'controlPAMO'%}?id_ingreso=${id_ingreso}`;
+                }
+            })
+        }
 
     });
 </script>

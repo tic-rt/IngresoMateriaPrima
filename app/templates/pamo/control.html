@@ -15,7 +15,8 @@
                     <div class="row">
                         <div class="col-6">
                             <label class="form-label" for="empresa">Empresa</label>
-                            <input class="form-control" type="text" disabled value="{{ingreso.empresa_transporte}}" id="empresa">
+                            <input class="form-control" type="text" disabled value="{{ingreso.empresa_transporte}}"
+                                id="empresa">
                         </div>
                         <div class="col-6">
                             <label class="form-label" for="producto">Producto</label>
@@ -25,20 +26,78 @@
                     <div class="row mt-2">
                         <div class="col-6">
                             <label class="form-label" for="patente_chasis">Camión</label>
-                            <input class="form-control" type="text" disabled value="{{ingreso.patente_chasis}}" id="patente_chasis">
+                            <input class="form-control" type="text" disabled value="{{ingreso.patente_chasis}}"
+                                id="patente_chasis">
                         </div>
                         <div class="col-6">
                             <label class="form-label" for="patente_semi">Semi</label>
-                            <input class="form-control" type="text" disabled value="{{ingreso.patente_semi}}" id="patente_semi">
+                            <input class="form-control" type="text" disabled value="{{ingreso.patente_semi}}"
+                                id="patente_semi">
                         </div>
                     </div>
                 </div>
-                <div>
-                    <form class="mt-3" method="post">
+                <div class="mt-3">
+                    <form class="mt-3 container formPAMO" method="POST" action="{% url 'guardarPAMO' %}">
                         {% csrf_token %}
-                        {% crispy formulario_inspeccion %}
+                        <div class="border shadow">
+                            <div class="container mt-2">
+                                <table class="table table-responsive">
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th>Hora</th>
+                                            <th>Presión</th>
+                                            <th>Temperatura</th>
+                                        </tr>
+                                    </thead>
+                                        <tr>
+                                            <td class="fw-bold flex align-content-center bg-success-subtle">ENTRADA</td>
+                                            <td class=" bg-success-subtle">{{formPAMO.hora_ingreso}}</td>
+                                            <td class=" bg-success-subtle">
+                                                <div class="input-group">
+                                                    <span class="input-group-text">Kg/cm<sup>2</sup></span>
+                                                    {{formPAMO.presion_ingreso}}
+                                                </div>
+                                            </td>
+                                            <td class=" bg-success-subtle">
+                                                <div class="input-group">
+                                                    <span class="input-group-text">Cº</span>
+                                                    {{formPAMO.temperatura_ingreso}}
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-bold flex align-content-center bg-danger-subtle">SALIDA</td>
+                                            <td class="bg-danger-subtle time">{{formPAMO.hora_salida}}</td>
+                                            <td class="bg-danger-subtle">
+                                                <div class="input-group">
+                                                    <span class="input-group-text ">Kg/cm<sup>2</sup></span>
+                                                    {{formPAMO.presion_salida}}
+                                                </div>
+                                            </td>
+                                            <td class="bg-danger-subtle">
+                                                <div class="input-group">
+                                                    <span class="input-group-text">Cº</span>
+                                                    {{formPAMO.temperatura_salida}}
+                                                </div>
+                                            </td>
+                                        </tr>
+                                </table>
+                            </div>
+                            <div class="container">
+                                <div class="row pb-3">
+                                    <div class="col-6">
+                                        <label for="id_responsable">Responsable</label>
+                                        {{formPAMO.responsable}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <div>
-                            <button class="btn btn-primary" type="submit">guardar</button>
+                            <input type="hidden" name="id_ingreso" value="{{ingreso.id}}">
+                        </div>
+                        <div class="mt-3">
+                            <button class="btn btn-primary guardar" type="submit">Guardar</button>
                         </div>
                     </form>
                 </div>
@@ -52,12 +111,29 @@
 
 {% block js %}
 <script>
-    document.addEventListener('DOMContentLoaded', function () {  
+    document.addEventListener('DOMContentLoaded', function () {
         var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
         var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
             return new bootstrap.Tooltip(tooltipTriggerEl)
         })
 
+        boton_guardar = document.querySelector('.guardar')
+        boton_guardar.addEventListener('click', function (e) {
+            e.preventDefault()
+            Swal.fire({
+                title: "Verifique los datos ",
+                text: "Los datos no podran ser cambiados despues de guardar!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Guardar"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.querySelector('.formPAMO').submit()
+                }
+            });
+        })
     });
 </script>
 {% endblock js %}
