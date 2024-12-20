@@ -12,7 +12,7 @@ def pendientes(request):
     """Funcion que devuelve todos los ingresos autorizados y que siguen a balanza"""
 
     try:
-        ingresos = Ingreso.objects.filter(is_deleted = False, ingresado = True, hdr__sector='Porteria 2' )
+        ingresos = Ingreso.objects.filter(is_deleted = False, ingresado = True, hdr__sector='Almacen PQ' )
         return render(request,'balanza/pendientes.html',{'ingresos':ingresos})
     except Exception as excepcion:
         sweetify.error(request,'Error', text=f'Ocurrio un error {str(excepcion)}', persistent = 'Aceptar')
