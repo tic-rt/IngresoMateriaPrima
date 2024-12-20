@@ -117,7 +117,7 @@ class FormIngreso(forms.ModelForm):
                     Row(
                         Column('laboral',
                                 css_class='col-4'),
-                        Column(HTML('<div class= "bg-danger-subtle mt-4 border border-warning"><p>Indicar si personal de Inspección Química se encuentra presente,seleccione "No" si se trata de feriado o a sueto</div>'),css_class='col-8')
+                        Column(HTML('<div class= "bg-danger-subtle mt-4 border border-warning fs-6 fw-semibold"><p>Indicar si personal de Inspección Química se encuentra presente,seleccione "No" si se trata de feriado o asueto</div>'),css_class='col-8')
                     ),
                     css_class='border p-3 mb-3 shadow'
                 ),
