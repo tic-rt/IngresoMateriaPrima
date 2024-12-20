@@ -7,6 +7,7 @@ from pamo.forms import formPamo
 from porteria2.models import Ingreso
 
 # Create your views here.
+@login_required
 def pendientes(request):
     """muestra los camiones pendientes de control que provienen de IQ"""
     try:
@@ -16,7 +17,8 @@ def pendientes(request):
     except Exception as excepcion:
         sweetify.error(request, 'Error', text=f'Ocurrio un error {str(excepcion)}', persistent = 'Aceptar')
         return redirect ('index')
-
+    
+@login_required
 def controlPamo(request):
     """control de presion y temperatura para pamo"""
     try:

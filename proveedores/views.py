@@ -1,10 +1,12 @@
 from django.shortcuts import redirect, render
+from django.contrib.auth.decorators import login_required
 import sweetify
 
 from proveedores.models import Producto, Proveedor
 
 # Create your views here.
 
+@login_required
 def mostrar(request):
     """devuelve una lista de proveedores y productos"""
 
@@ -21,7 +23,8 @@ def mostrar(request):
     except Exception as exepcion:
         sweetify.error(request, 'Error', text=f'Ocurrio un error{str(exepcion)}', persistent = 'Aceptar')
         return redirect('index')
-
+    
+@login_required
 def agregarProveedor(request):
     """Agrega un nuevo Proveedor"""
     try:
@@ -36,7 +39,8 @@ def agregarProveedor(request):
     except Exception as excepcion:
         sweetify.error(request, 'Error', text =f'Ocurrio un error {str(excepcion)}', persistent = 'Aceptar')
         return redirect('mostrar')
-
+    
+@login_required
 def agregarProducto(request):
     """Agrega un nuevo Producto"""
     try:

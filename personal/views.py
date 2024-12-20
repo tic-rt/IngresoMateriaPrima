@@ -1,10 +1,12 @@
-from django.shortcuts import redirect, render # type: ignore
+from django.shortcuts import redirect, render 
+from django.contrib.auth.decorators import login_required
 from personal.forms import FormPersonal
 from personal.models import Personal
 import sweetify
 
 # Create your views here.
 
+@login_required
 def personal(request):
     """Esta funcion devuelve todos los responsables de sector"""
 
@@ -14,7 +16,8 @@ def personal(request):
     return render(request,'personal/personal.html',
                 {'responsables':responsables,
                 'form_responsables':form_responsable})
-
+    
+@login_required
 def agregarPersonal(request):
     """Esta funcion agrega un nuevo responsable a un area o sector"""
     try:
@@ -39,6 +42,7 @@ def agregarPersonal(request):
         sweetify.error('Error al agregar Empresa de transporte', persistent=f'ocurrio un error {str(excepcion)}')
         return redirect('personal')
 
+@login_required
 def editarPersonal(request):
     """esta funcion edita un responsable"""
     try:
@@ -60,6 +64,7 @@ def editarPersonal(request):
         sweetify.error(request,'Error al editar', text=f'ocurrio un error {str(excepcion)}', persistent = 'Aceptar')
         return redirect('personal')
 
+@login_required
 def eliminarPersonal(request):
     """Esta funcion elimina a un responsable a traves de su id"""
     try:
@@ -80,7 +85,8 @@ def eliminarPersonal(request):
     except Exception as excepcion:
         sweetify.error(request, 'Ocurrio un error', text=f'Ocurrio un error {str(excepcion)}', persistent = 'Aceptar')
         return redirect('personal')
-
+    
+@login_required
 def actualizar(request):
     """Esta funcion actualiza Los datos de un agente"""
     try:
