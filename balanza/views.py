@@ -1,8 +1,10 @@
+from datetime import datetime
 from django.utils import timezone
 from django.shortcuts import redirect, render
 import sweetify
 
-from balanza.forms import FormBalanza
+from balanza.forms import FormBalanza, FormBalanzaSalida
+from balanza.models import Balanza
 from hdr.models import HDR
 from porteria2.models import Ingreso
 
@@ -68,3 +70,76 @@ def guardarPesaje(request):
     except Exception as excepcion:
         sweetify.error(request,'Error', text=f'Ocurrio un error {str(excepcion)}', persistent = 'Aceptar')
         return redirect('pendientesBalanza')
+
+def egresos(request):
+    """Funcion que devuelve todos los egresos pendientes de PAMO y PSUL"""
+
+    try:
+        ingresos = Ingreso.objects.filter(is_deleted = False, ingresado = True, hdr__sector='Almacen PQ E' )
+        return render(request,'balanza/egresos.html',{'ingresos':ingresos})
+    except Exception as excepcion:
+        sweetify.error(request,'Error', text=f'Ocurrio un error {str(excepcion)}', persistent = 'Aceptar')
+        return redirect('index')
+
+def pesajeSalida(request):
+    """funcion para cargar datos de la balanza"""
+
+    try:
+        if request.method == 'GET':
+            id_ingreso = request.GET.get('id_ingreso')
+            existe_id = Ingreso.objects.filter(id = id_ingreso,is_deleted = False).exists()
+            print('comprobando ingreso .....')
+            if existe_id:
+                print('habilitado....')
+                ingreso = Ingreso.objects.get(id = id_ingreso)
+                balanza = Balanza.objects.get(hdr = ingreso.hdr.id)
+                formulario_peso = FormBalanzaSalida(instance = balanza)
+                return render(request,'balanza/pesaje2.html',
+                              {'ingreso':ingreso,
+                               'balanza':balanza,
+                               'formulario_peso':formulario_peso
+                               })
+            else:
+                sweetify.error(request, 'Error', text='EL inreso referenciado no existe o ya fue guardado', persistent='Aceptar')
+                return redirect('index')
+        else:
+            return redirect('index')
+    except Exception as excepcion:
+        sweetify.error(request, 'Error', text=f'Ocurrio un error {str(excepcion)}', persistent='Aceptar')
+        return redirect('index')
+
+def guardarPesaje2(request):
+    try:
+        if request.method == 'POST':
+            id_ingreso = request.GET.get('id_ingreso')
+            existe_id_ingreso = Ingreso.objects.filter(id = id_ingreso).exists()
+            
+            if existe_id_ingreso:
+                ingreso = Ingreso.objects.get(id=id_ingreso)
+                hdr = Ingreso.objects.get(id = id_ingreso).hdr
+                balanza = Balanza.objects.get(id = hdr.id)
+                hoy = datetime.now()
+                formulario_pesaje = FormBalanzaSalida(request.POST, instance = balanza)
+                print(formulario_pesaje)
+                formulario_pesaje.instance.fecha_salida = hoy
+                print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
+                print(formulario_pesaje)
+                
+                if formulario_pesaje.is_valid():
+                    formulario_pesaje.save()
+                    hdr.sector = 'Porteria 2 E'
+                    hdr.save()
+                    sweetify.success(request,'Guardado', text = f'Se ha guardado el pesaje para {ingreso.empresa_transporte} {ingreso.patente_chasis}', timer=3000)#faltaaa
+                    return redirect('egresos')
+                else:
+                    ingreso = Ingreso.objects.get(id=id_ingreso)
+                    sweetify.error(request, 'Error', text='El formulario contiene errores', persistent='Aceptar')
+                    return render(request, 'balanza/pesaje2.html', {'formulario_peso': formulario_pesaje, 'ingreso': ingreso})
+            else:
+                sweetify.error(request, 'Error', text='El id de ingreso no existe o fue eliminado', persistent='Aceptar')
+                return redirect('egresos')
+        else:
+            return redirect('egresos')
+    except Exception as excepcion:
+        sweetify.error(request,'Error', text=f'Ocurrio un error {str(excepcion)}', persistent = 'Aceptar')
+        return redirect('egresos')
