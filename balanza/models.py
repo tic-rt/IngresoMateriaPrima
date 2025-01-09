@@ -14,16 +14,16 @@ class Balanza(Base):
     remito =  models.CharField(verbose_name='Remito',blank=False, null=False, max_length=100, default='')
     peso_origen = models.IntegerField(verbose_name='Peso de Origen',blank=False,null=False,default=0)
     #destino = models.TextField(max_length=100,default='Fabrica Militar Rio Tercero', blank=False, null=False )
-    responsable = models.ForeignKey(Personal,on_delete=models.PROTECT, verbose_name='Responsable')
+    responsable_entrada = models.ForeignKey(Personal,on_delete=models.PROTECT, verbose_name='Responsable Entrada', related_name='responsable_entrada')
     observaciones = models.TextField(max_length=100,default='DOD según el IN 11-IQ-07', blank=False, null=False)
     hdr = models.ForeignKey(HDR, on_delete=models.PROTECT, verbose_name='HDR')
-    hora_salida = models.DateTimeField(verbose_name='Hora de salida',null=True)
-    peso_fmrt = models.IntegerField(verbose_name='Peso en FMRT',blank=False, null=True)
-    peso_vacio = models.IntegerField(verbose_name='peso vacio',blank=False, null=True)
-    peso_taquilla = models.IntegerField(verbose_name='Peso taquilla',blank=False, null=True)
-    peso_bolsa_tarima = models.IntegerField(verbose_name='peso bolsa/tarima', blank=False, null=False, default=0)
-    peso_neto = models.IntegerField(verbose_name='Peso neto', blank=False,null=True)
-
+    fecha_salida = models.DateTimeField(verbose_name='Fecha de Salida', null=True)
+    peso_fmrt = models.IntegerField(verbose_name='Peso en FMRT',blank=False, null=True, default=0)
+    peso_vacio = models.IntegerField(verbose_name='Peso vacio',blank=False, null=True, default=0)
+    peso_taquilla = models.IntegerField(verbose_name='Peso taquilla',blank=False, null=False, default=0)
+    peso_bolsa_tarima = models.IntegerField(verbose_name='Peso bolsa/tarima', blank=False, null=False, default=0)
+    peso_neto = models.IntegerField(verbose_name='Peso neto', blank=False,null=True, default=0)
+    responsable_salida = models.ForeignKey(Personal,on_delete=models.PROTECT,verbose_name='Responsable Salida',related_name='responsable_salida', null=True)
     class Meta:
         """Meta definicion para el modelo Balanza"""
         verbose_name = 'Balanza'
