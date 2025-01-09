@@ -33,13 +33,15 @@
                         </div>
                     </div>
                 </div>
-                <div>
-                    <form class="mt-3" method="POST" action="{% url 'guardarInspeccion' %}">
-                        {% csrf_token %}
-                        <input type="hidden" name="id_ingreso" value="{{ ingreso.id }}">
-                        <input type="hidden" name="id_hdr" value="{{ ingreso.hdr.id }}">
-                        {% crispy formulario_inspeccion %}
-                    </form>
+                <div class="container shadow">
+                    <div class="container-fluid pb-2">
+                        <form class="mt-3" method="POST" action="{% url 'guardarInspeccion' %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="id_ingreso" value="{{ ingreso.id }}">
+                            <input type="hidden" name="id_hdr" value="{{ ingreso.hdr.id }}">
+                            {% crispy formulario_inspeccion %}
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
