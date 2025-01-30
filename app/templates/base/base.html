@@ -12,7 +12,7 @@
 
   <!-- Iconos -->
   <link rel="stylesheet" href="{% static 'vendor/bootstrap-icons-1.11.3/font/bootstrap-icons.css' %}">
-  
+
 
   <!-- CSS-->
   <link rel="stylesheet" href="{% static 'css/base.css' %}">
@@ -24,11 +24,11 @@
   <!-- Datatable -->
   <link rel="stylesheet" href="{% static 'vendor/datatables/datatables.css' %}">
   <script src="{% static 'vendor/datatables/datatables.js' %}"></script>
-  
+
   <!-- chart -->
   <script src="{% static 'vendor/chart.js/chart.min.js' %}"></script>
 
-  
+
 </head>
 
 <body style="height: fit-content;">
@@ -39,8 +39,8 @@
     <div class="container-fluid text-center align-content-center col-10">
       <h1 class="titulo">
         Ingreso de Materia Prima
-      </h1>   
-      <p>{{user}}</p> 
+      </h1>
+      <p>{{user}}</p>
     </div>
   </header>
   <!-- Barra de Navegacion -->
@@ -84,17 +84,18 @@
         <form method="post" action="{% url 'logout' %}">
           {% csrf_token %}
           <button type="submit" class="btn btn-danger bi bi-door-open">Salir</button>
-      </form>
+        </form>
       </div>
     </div>
   </nav>
 
-<!-- contengo en un row la barra lateral y el contenido -->
-<div class="container-fluid">
-  <div class="row">
-    <!-- barra lateral -->
-    <aside class="lateral col-4 col-sm-2 d-flex justify-content-start flex-column">
-     <!--  {% if user.groups.all.0.name == 'Porteria 2' or  user.groups.all.0.name == 'Shyma' or user.is_superuser %} -->
+  <!-- contengo en un row la barra lateral y el contenido -->
+  <div class="container-fluid">
+    <div class="row">
+      <!-- barra lateral -->
+      <aside class="lateral col-4 col-sm-2 d-flex justify-content-start flex-column">
+        <!-- Porteria 2 -->
+        <!--  {% if user.groups.all.0.name == 'Porteria 2' or  user.groups.all.0.name == 'Shyma' or user.is_superuser %} -->
         <div class="pt-4 pb-4">
           <div class="pb-4 container-fluid">
             <h2 class="sub-titulo2">Porteria 2</h2>
@@ -104,7 +105,7 @@
               <a href="{% url 'nuevoIngreso' %}" class="nav-link link-side">Nuevo Ingreso</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link link-side" href="#">Finalizar Ingreso</a>
+              <a class="nav-link link-side" href="{% url 'egresosPendientes' %}">Egresos Pendientes</a>
             </li>
             <li>
               <a class="nav-link link-side" href="{% url 'controlEppPendientes'%}">Controles Pendientes</a>
@@ -113,7 +114,8 @@
               <a class="nav-link link-side" href="{% url 'personal' %}">Responsables</a>
             </li>
             <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle link-side" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <a class="nav-link dropdown-toggle link-side" href="#" role="button" data-bs-toggle="dropdown"
+                aria-expanded="false">
                 Transportes
               </a>
               <ul class="dropdown-menu">
@@ -191,17 +193,17 @@
             </li>
           </ul>
         </div>
-      <!-- {% endif %} -->
-    </aside>
-    
-    <!-- contenido -->
-    <div class="col-8 col-sm-10 justify-content-center pt-5">
-      {% block content %}
-      
-      {% endblock content %}
+        <!-- {% endif %} -->
+      </aside>
+
+      <!-- contenido -->
+      <div class="col-8 col-sm-10 justify-content-center pt-5">
+        {% block content %}
+
+        {% endblock content %}
+      </div>
     </div>
   </div>
-</div>
 
   {% load sweetify %}
   {% sweetify %}
