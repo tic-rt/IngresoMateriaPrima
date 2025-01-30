@@ -1,0 +1,66 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container-fluid d-flex flex-column">
+    <div class="container fondo-epp" style="height: 120px;"></div>
+    <div class="text-center pt-4 mb-5">
+        <div>
+            <h3>Egresos Pendientes</h3>
+        </div>
+        <div class="d-flex justify-content-center mb-5">
+            <div class="col-10 col-sm-8 ">
+                <table class="table table-striped table-bordered table-hover icon-link-hover" id="tabla-pendientes">
+                    <thead>
+                        <th class="text-center">Empresa</th>
+                        <th class="text-center">Camión</th>
+                        <th class="text-center">Semi</th>
+                        <th class="text-center">Producto</th>
+                    </thead>
+                    <tbody>
+                        {% for egreso in egresos%}
+                        <tr class="disparador" data-id="{{egreso.id}}" data-hdr="{{egreso.hdr_id}}">
+                            <td>
+                                {{egreso.empresa_transporte}}
+                            </td>
+                            <td>
+                                {{egreso.patente_chasis}}
+                            </td>
+                            <td>
+                                {{egreso.patente_semi}}
+                            </td>
+                            <td>
+                                {{egreso.producto}}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <button class="btn btn-danger float-end bi bi-arrow-left-circle" onclick=history.back()> Regresar</button>
+    </div>
+</div>
+    
+{% endblock content %}
+
+{% block js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        let tabla = document.getElementById('tabla-pendientes')
+
+        if (tabla && tabla.rows.length > 1) {
+            tabla.addEventListener('click', function (event) {
+                let fila = event.target.closest('tr')
+
+                if (fila.classList.contains('disparador')) {
+                    id_ingreso = fila.getAttribute('data-id')
+                    id_hdr = fila.getAttribute('data-hdr')
+                    window.location.href = `{% url 'egreso'%}?id_ingreso=${id_ingreso}`;
+                }
+            })
+        }
+
+    });
+</script>
+{% endblock js %}
