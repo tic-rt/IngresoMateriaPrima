@@ -40,14 +40,13 @@
             <h3>Salida</h3>
           </div>
           <div class="container">
-            el id de ingreso es {{ingreso.id}}
             <form action="{% url 'guardarEgreso'%}?id_ingreso={{ingreso.id}}" method="POST" class="mb-3 pb-3">
               {% csrf_token %}
               <div class="row">
                 <div class="col-2">
                   <label class="form-label" for="fecha_salida2">Fecha</label>
                   <input class="form-control" type="text" id="fecha_salida2" readonly value="" >
-                  <input type="datetime" name = 'fecha_salida' id="fecha_salida" >
+                  <input type="datetime" name = 'fecha_salida' id="fecha_salida" hidden>
                 </div>
                 <div class="col-8"></div>
                 <div class="col-2">
