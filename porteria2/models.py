@@ -28,6 +28,14 @@ class Ingreso(Base):
         verbose_name = 'Ingreso'
         verbose_name_plural = 'Ingresos'
 
+class Egreso(Base):
+    """Esta clase registra la salida de los vehiculos una vez completado el circuito"""
+    fecha_salida = models.DateTimeField(verbose_name='Fecha de Salida')
+    verificacion = models.BooleanField(verbose_name='verificacion de vehiculo/carga', default=False)
+    salida_autorizada = models.BooleanField(verbose_name='Salida Autorizada', default=False)
+    responsable = models.ForeignKey(Personal,on_delete=models.PROTECT)
+    hdr = models.ForeignKey(HDR,on_delete=models.PROTECT)
+
 class EPP(models.Model):
     """Esta clase registra los elementos de proteccion personal de un conductor"""
 

@@ -1,11 +1,12 @@
 
-from datetime import date
+from datetime import date, datetime
+from django.utils import timezone
 from django import forms
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit, Layout, Row, Column, Div, HTML
 from django.urls import reverse
 from personal.models import Personal
-from porteria2.models import EPP, Ingreso
+from porteria2.models import EPP, Egreso, Ingreso
 from proveedores.models import Producto
 from transporte.models import Camion, Conductor, Semi, Transporte
 
@@ -136,7 +137,47 @@ class FormIngreso(forms.ModelForm):
             return False #si es sabado o domingo 
         else:
             return True #de lunes a viernes y debo preguntar si es feriado
+
+class FormEgreso(forms.ModelForm):
+    """Formulario para egreso de vehiculo"""
+
+    class Meta:
+        model = Egreso
+
+        opciones = [(None, 'Seleccione una opción'),
+                    (True, 'Sí'),
+                    (False, 'No')]
+
+        fields = [
+            'fecha_salida',
+            'verificacion',
+            'salida_autorizada',
+            'responsable']
+
+        widgets = {
+            'fecha_salida':forms.DateTimeInput(attrs={'type':'datetime'}),
+            'verificacion': forms.Select(choices=opciones, attrs={'class': 'form-control'}),
+            'salida_autorizada': forms.Select(choices=opciones, attrs={'class':'form-control'}),
+            'responsable': forms.Select(attrs={'class': 'form-control'})
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(FormEgreso, self).__init__(*args, **kwargs)
+        self.fields['responsable'].queryset = Personal.objects.filter(is_deleted=False , sector='Porteria 2')    
+        self.fields['fecha_salida'].initial = timezone.now()
         
+    def clean_verificacion(self):
+        verificacion = self.cleaned_data.get('verificacion')
+        if verificacion is None:
+            raise forms.ValidationError("Debes seleccionar una opción válida para la verificación.")
+        return verificacion
+
+    def clean_salida_autorizada(self):
+        salida_autorizada = self.cleaned_data.get('salida_autorizada')
+        if salida_autorizada is None:
+            raise forms.ValidationError('Debes seleccionar una opción válida')
+        return salida_autorizada
+
 class FormEPP(forms.ModelForm):
     """Formulario para control de EPP"""
 

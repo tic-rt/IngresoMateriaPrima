@@ -43,7 +43,7 @@
     </div>
 </div>
 
-<!-- Modal -->
+<!-- Modal  REVISAR-->
 <div class="modal fade" id="modal" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -72,16 +72,18 @@
     document.addEventListener('DOMContentLoaded', function () {
         console.log('cargado')
         let tabla = document.getElementById('tabla-pendientes')
-        
-        tabla.addEventListener('click',function(event){
-            let fila = event.target.closest('tr')
-            
-            if(fila){
-                id_ingreso = fila.getAttribute('data-id')
-                id_hdr = fila.getAttribute('data-hdr')
-                window.location.href = `{% url 'controlEpp'%}?id_hdr=${id_hdr}&id_ingreso=${id_ingreso}`;
-            }
-        })
+
+        if (tabla && tabla.rows.length > 1) {
+            tabla.addEventListener('click', function (event) {
+                let fila = event.target.closest('tr')
+
+                if (fila.classList.contains('disparador')) {
+                    id_ingreso = fila.getAttribute('data-id')
+                    id_hdr = fila.getAttribute('data-hdr')
+                    window.location.href = `{% url 'pesaje'%}?id_ingreso=${id_ingreso}`;
+                }
+            })
+        }
 
     });
 </script>

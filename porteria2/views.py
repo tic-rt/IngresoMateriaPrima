@@ -1,10 +1,11 @@
-from datetime import date
+from datetime import datetime
+from django.utils import timezone
 from django.shortcuts import redirect, render
 import sweetify
 
 from hdr.forms import FormHDR
 from hdr.models import HDR
-from porteria2.forms import FormEPP, FormIngreso
+from porteria2.forms import FormEPP, FormEgreso, FormIngreso
 from porteria2.models import Ingreso
 from django.contrib.auth.decorators import login_required, permission_required
 
@@ -221,3 +222,83 @@ def guardarRechazo(request):
     except Exception as excepcion:
         sweetify.error(request, 'Excepcion', text = f'Ocurrio un error {str(excepcion)}', persistent = 'Aceptar')
         return redirect('nuevoIngreso')
+
+def egresosPendientes(request):
+    """Esta funcion devuelve a todos los egresos pendientes"""
+    
+    try:
+        egresos = Ingreso.objects.filter(is_deleted=False, ingresado=True, hdr__sector ='Porteria 2 E')
+        if egresos:
+            sweetify.toast(request, 'Egresos Pendientes', text='No hay egresos pendientes', icon='info', timer=3000, allowOutsideClick=False, timerProgressBar=False)
+            return render(request,'porteria2/egresosPendientes.html',{'egresos':egresos})
+        else:
+            sweetify.toast(request, 'Egresos Pendientes', text='No hay egresos pendientes', icon='info', timer=3000, allowOutsideClick=False, timerProgressBar=False)
+            return render(request,'porteria2/egresosPendientes.html',{'egresos':egresos})
+    except Exception as excepcion:
+        sweetify.error(request, 'Excepcion', text = f'Ocurrio un error {str(excepcion)}', persistent ='Aceptar')
+        return redirect('nuevoIngreso')
+
+def egreso(request):
+    """Esta funcion devuelve un egreso pendiente """
+    print(timezone.now())
+    try:
+        if request.method == 'GET':
+            id_ingreso = request.GET.get('id_ingreso')
+
+            if Ingreso.objects.filter(id=id_ingreso, is_deleted = False, ingresado=True, hdr__estado= 'Activo', hdr__sector = 'Porteria 2 E').exists():
+                ingreso = Ingreso.objects.get(id=id_ingreso)
+                formulario_egreso = FormEgreso(initial={'verificacion':None,'salida_autorizada':None,})
+                return render(request, 'porteria2/egreso.html',{
+                    'ingreso':ingreso,
+                    'formulario_egreso':formulario_egreso
+                    })
+
+            else:
+                sweetify.error(request,'Error', text='Hubo un error al cargar el ingreso referenciado no existe', persistent = 'Aceptar')
+                return redirect('egresosPendientes')
+        else:
+            sweetify.error(request,'Error', text='Hubo un error al cargar el ingreso referenciado no existe', persistent = 'Aceptar')
+            return redirect('egresosPendientes')
+            
+    except Exception as excepcion:
+        sweetify.error(request,'Error', text=f'Ocurrio un error {str(excepcion)}', persistent = 'Aceptar')
+        return redirect('egresosPendientes')
+
+def guardarEgreso(request):
+    """Esta funcion guarda un egreso de vehiculo"""
+    try:
+        if request.method == 'POST':
+            formulario_egreso = FormEgreso(request.POST)
+            print(formulario_egreso)
+            formulario_egreso.instance.fecha_salida = datetime.now()
+            id_ingreso = request.GET.get('id_ingreso')
+            print(f'el id de ingreso es {id_ingreso}')
+            existe_id = Ingreso.objects.filter(id = id_ingreso, is_deleted = False, ingresado = True, hdr__estado = 'Activo' ).exists()
+            print(existe_id)
+            
+            if existe_id:
+                ingreso = Ingreso.objects.get(id = id_ingreso)
+                hdr = ingreso.hdr
+                
+                if formulario_egreso.is_valid():
+                    #formulario_egreso.save()
+                    hdr.sector = 'Finalizado'
+                    #hdr.save()
+                    sweetify.success(request,'Egreso Guardado', text=f'El egreso del vehiculo {ingreso.patente_chasis} {ingreso.patente_semi} se ha guardado', timer=3000)
+                    return redirect('egresosPendientes')
+                else:
+                    sweetify.error(request, 'Formulario Inválido', text='Hubo un problema con el formulario, por favor revisa los campos.', persistent='Aceptar')
+                    ingreso = Ingreso.objects.get(id=id_ingreso)
+                    print(formulario_egreso.errors)
+                    return render(request, 'porteria2/egreso.html', {'formulario_egreso': formulario_egreso,
+                                                                     'ingreso': ingreso})
+            else:
+                sweetify.error(request, 'Error', text='El id referenciado no existe',persistent='Aceptar' )
+                return redirect('egresosPendientes')
+            
+        else:
+            return redirect('egresosPendientes')    
+    except Exception as excepcion:
+        print(excepcion)
+        sweetify.error(request, 'Error', text=f'Ocurrio un error {str(excepcion)} ', persistent = 'Aceptar')
+        return redirect('egresosPendientes')
