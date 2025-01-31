@@ -2,11 +2,22 @@ superusuario
 usuario:Administrador
 password:Tic2024$
 
-porteria2
-Pa$$w0rd2
+Porteria2
+Password2024
 
 Shyma
 Shyma2024$
 
 Balanza
 B4l4nz4$2024
+
+Laboratorio
+L4b0r4t0r10$
+
+
+Pamo
+Pamo#2025
+Pamo#2025
+
+Psul
+2025%Psul
