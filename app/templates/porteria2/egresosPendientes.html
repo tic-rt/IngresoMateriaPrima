@@ -16,6 +16,7 @@
                         <th class="text-center">Camión</th>
                         <th class="text-center">Semi</th>
                         <th class="text-center">Producto</th>
+                        <th class="text-center">Fecha de ingreso</th>
                     </thead>
                     <tbody>
                         {% for egreso in egresos%}
@@ -31,6 +32,9 @@
                             </td>
                             <td>
                                 {{egreso.producto}}
+                            </td>
+                            <td>
+                                {{egreso.hora_ingreso|date:"d/m/Y H:i"}}
                             </td>
                         </tr>
                         {% endfor %}
