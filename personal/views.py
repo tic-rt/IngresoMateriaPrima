@@ -18,6 +18,7 @@ def personal(request):
     sectores_disponibles = { 'Porteria 2': 'Porteria 2',
                             'Inspeccion Quimica': 'Inspeccion Quimica',
                             'Almacen PQ': 'Almacen PQ',
+                            'SHYMA': 'SHYMA',
                             'PAMO': 'PAMO',
                             'PSUL': 'PSUL'
                             }
@@ -30,7 +31,7 @@ def personal(request):
         responsables = Personal.objects.filter(is_deleted = False, sector ='Porteria 2')
         sector = 'Porteria 2'
         
-    elif usuario_conectado.username == 'shyma':
+    elif usuario_conectado.username == 'Shyma':
         sector = 'SHYMA'
         responsables = Personal.objects.filter(is_deleted = False, sector ='SHYMA')
         
@@ -39,7 +40,7 @@ def personal(request):
         responsables = Personal.objects.filter(is_deleted = False, sector ='Almacen PQ')
         
     elif usuario_conectado.username == 'Laboratorio':
-        sector = 'Laboratorio'
+        sector = 'Inspeccion Quimica'
         responsables = Personal.objects.filter(is_deleted = False, sector ='Inspeccion Quimica')
         
     elif usuario_conectado.username == 'Pamo':
