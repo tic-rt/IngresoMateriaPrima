@@ -94,8 +94,9 @@
     <div class="row">
       <!-- barra lateral -->
       <aside class="lateral col-4 col-sm-2 d-flex justify-content-start flex-column">
+
         <!-- Porteria 2 -->
-        <!--  {% if user.groups.all.0.name == 'Porteria 2' or  user.groups.all.0.name == 'Shyma' or user.is_superuser %} -->
+        {% if user.username == 'Porteria2' or  user.username == 'Shyma' or user.is_superuser %}
         <div class="pt-4 pb-4">
           <div class="pb-4 container-fluid">
             <h2 class="sub-titulo2">Porteria 2</h2>
@@ -127,8 +128,10 @@
             </li>
           </ul>
         </div>
-
+        {% endif %}
+        
         <!-- Balanza -->
+        {% if user.username == 'Balanza' or user.is_superuser  %}
         <div class="pt-4 pb-4">
           <div class="pb-4 container-fluid">
             <h2 class="sub-titulo2">Balanza</h2>
@@ -148,8 +151,10 @@
             </li>
           </ul>
         </div>
+        {% endif %}
 
         <!-- Inspeccion Quimica -->
+        {% if user.username == 'Inspqui' or user.is_superuser  %}
         <div class="pt-4 pb-4">
           <div class="pb-4 container-fluid">
             <h2 class="sub-titulo2">Inspección Quimica</h2>
@@ -163,23 +168,27 @@
             </li>
           </ul>
         </div>
+        {% endif %}
 
         <!--PAMO -->
-        <div class="pt-4 pb-4">
-          <div class="pb-4 container-fluid">
-            <h2 class="sub-titulo2">PAMO</h2>
-          </div>
-          <ul class="navbar-nav flex-column ">
-            <li class="nav-item">
-              <a href="{% url 'pendientesPAMO' %}" class="nav-link link-side">Pendientes</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link link-side" href="{% url 'personal' %}">Responsables</a>
-            </li>
-          </ul>
+      {% if user.username == 'Pamo' or user.is_superuser %}
+      <div class="pt-4 pb-4">
+        <div class="pb-4 container-fluid">
+          <h2 class="sub-titulo2">PAMO</h2>
         </div>
+        <ul class="navbar-nav flex-column ">
+          <li class="nav-item">
+            <a href="{% url 'pendientesPAMO' %}" class="nav-link link-side">Pendientes</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link link-side" href="{% url 'personal' %}">Responsables</a>
+          </li>
+        </ul>
+      </div>
+      {% endif %}
 
         <!--PSUL -->
+        {% if user.username == 'Psul' %}
         <div class="pt-4 pb-4">
           <div class="pb-4 container-fluid">
             <h2 class="sub-titulo2">PSUL</h2>
@@ -192,8 +201,9 @@
               <a class="nav-link link-side" href="{% url 'personal' %}">Responsables</a>
             </li>
           </ul>
-        </div>
-        <!-- {% endif %} -->
+        </div>     
+        {% endif %}
+        
       </aside>
 
       <!-- contenido -->
