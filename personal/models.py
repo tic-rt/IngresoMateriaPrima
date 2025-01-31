@@ -6,6 +6,7 @@ sectores = [
     ('Porteria 2', 'Porteria 2'),
     ('Inspeccion Quimica','Inspeccion Quimica'),
     ('Almacen PQ','Almacen PQ'),
+    ('SHYMA','SHYMA'),
     ('PAMO','PAMO'),
     ('PSUL', 'PSUL')
 ]
