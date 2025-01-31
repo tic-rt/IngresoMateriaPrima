@@ -9,10 +9,51 @@ import sweetify
 @login_required
 def personal(request):
     """Esta funcion devuelve todos los responsables de sector"""
-
-    responsables = Personal.objects.all()
-    form_responsable = FormPersonal()
-
+    
+    usuario_conectado = request.user
+    form_responsable = None
+    responsables = None
+    sector = None 
+    
+    sectores_disponibles = { 'Porteria 2': 'Porteria 2',
+                            'Inspeccion Quimica': 'Inspeccion Quimica',
+                            'Almacen PQ': 'Almacen PQ',
+                            'PAMO': 'PAMO',
+                            'PSUL': 'PSUL'
+                            }
+    
+    if usuario_conectado.is_superuser:
+        responsables = Personal.objects.all()
+        form_responsable = FormPersonal(initial={'sector': None})  # No pasamos usuario_conectado aquí
+        
+    elif usuario_conectado.username == 'Porteria2':
+        responsables = Personal.objects.filter(is_deleted = False, sector ='Porteria 2')
+        sector = 'Porteria 2'
+        
+    elif usuario_conectado.username == 'shyma':
+        sector = 'SHYMA'
+        responsables = Personal.objects.filter(is_deleted = False, sector ='SHYMA')
+        
+    elif usuario_conectado.username == 'Balanza':
+        sector = 'Balanza'
+        responsables = Personal.objects.filter(is_deleted = False, sector ='Almacen PQ')
+        
+    elif usuario_conectado.username == 'Laboratorio':
+        sector = 'Laboratorio'
+        responsables = Personal.objects.filter(is_deleted = False, sector ='Inspeccion Quimica')
+        
+    elif usuario_conectado.username == 'Pamo':
+        sector = 'PAMO'
+        responsables = Personal.objects.filter(is_deleted = False, sector ='PAMO')
+    
+    elif usuario_conectado.username == 'Psul':
+        sector = 'PSUL'
+        responsables = Personal.objects.filter(is_deleted = False, sector ='PSUL')
+        
+    form_responsable = FormPersonal(initial={'sector': sector, 'sectores_disponibles': sectores_disponibles})
+    
+    print(form_responsable)
+    
     return render(request,'personal/personal.html',
                 {'responsables':responsables,
                 'form_responsables':form_responsable})
