@@ -30,7 +30,7 @@ class Ingreso(Base):
 
 class Egreso(Base):
     """Esta clase registra la salida de los vehiculos una vez completado el circuito"""
-    fecha_salida = models.DateTimeField(verbose_name='Fecha de Salida')
+    fecha_salida = models.DateTimeField(verbose_name='Fecha de Salida',auto_now_add=True)
     verificacion = models.BooleanField(verbose_name='verificacion de vehiculo/carga', default=False)
     salida_autorizada = models.BooleanField(verbose_name='Salida Autorizada', default=False)
     responsable = models.ForeignKey(Personal,on_delete=models.PROTECT)
