@@ -5,6 +5,7 @@
 __pycache__/
 db.sqlite3
 *.log
+*.sqlite3
 
 # Entorno virtual
 venv/
