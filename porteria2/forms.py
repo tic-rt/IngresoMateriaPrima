@@ -149,13 +149,11 @@ class FormEgreso(forms.ModelForm):
                     (False, 'No')]
 
         fields = [
-            'fecha_salida',
             'verificacion',
             'salida_autorizada',
             'responsable']
 
         widgets = {
-            'fecha_salida':forms.DateTimeInput(attrs={'type':'datetime'}),
             'verificacion': forms.Select(choices=opciones, attrs={'class': 'form-control'}),
             'salida_autorizada': forms.Select(choices=opciones, attrs={'class':'form-control'}),
             'responsable': forms.Select(attrs={'class': 'form-control'})
@@ -163,8 +161,7 @@ class FormEgreso(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(FormEgreso, self).__init__(*args, **kwargs)
-        self.fields['responsable'].queryset = Personal.objects.filter(is_deleted=False , sector='Porteria 2')    
-        self.fields['fecha_salida'].initial = timezone.now()
+        self.fields['responsable'].queryset = Personal.objects.filter(is_deleted=False , sector='Porteria 2')
         
     def clean_verificacion(self):
         verificacion = self.cleaned_data.get('verificacion')
@@ -211,6 +208,7 @@ class FormEPP(forms.ModelForm):
         super(FormEPP, self).__init__(*args, **kwargs)
         self.helper = FormHelper(self)
         self.helper.add_input(Submit('submit','Guardar Control'))
+        self.fields['responsable'].queryset = Personal.objects.filter(is_deleted=False , sector='Porteria 2')
         #self.helper.form_action = reverse('guardarControlEpp','?id_hdr={{id_hdr}}&id_ingreso={{id_ingreso}}')
         self.helper.layout = Layout(
             Div(
