@@ -1,23 +1,37 @@
 from django.shortcuts import redirect, render 
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from personal.forms import FormPersonal
 from personal.models import Personal
+from django.contrib.auth.models import User
 import sweetify
 
 # Create your views here.
 
 @login_required
+@permission_required('personal.view_personal', login_url='index')
 def personal(request):
     """Esta funcion devuelve todos los responsables de sector"""
-
-    responsables = Personal.objects.all()
+    usuario:User = request.user
+    personal = Personal.objects.filter(is_deleted=False).order_by('apellido','nombre')
     form_responsable = FormPersonal()
+    
+    if usuario.is_superuser :
+        grupo = 'Balanza'
+        responsables = personal
+    else:
+        grupo = usuario.groups.first()
+        if grupo :
+            responsables = personal.filter(sector=grupo.name)
+        else:
+            sweetify.error(request,'No tiene permisos', text='No pertenece a ningun sector, contacte con el administrador',persistent='Aceptar')
+            return redirect('index')
 
     return render(request,'personal/personal.html',
                 {'responsables':responsables,
                 'form_responsables':form_responsable})
     
 @login_required
+@permission_required('personal.add_personal', login_url='index')
 def agregarPersonal(request):
     """Esta funcion agrega un nuevo responsable a un area o sector"""
     try:
@@ -43,6 +57,7 @@ def agregarPersonal(request):
         return redirect('personal')
 
 @login_required
+@permission_required('administracion.change_personal', login_url='personal')
 def editarPersonal(request):
     """esta funcion edita un responsable"""
     try:
@@ -65,6 +80,7 @@ def editarPersonal(request):
         return redirect('personal')
 
 @login_required
+@permission_required('personal.delete_personal', login_url='personal')
 def eliminarPersonal(request):
     """Esta funcion elimina a un responsable a traves de su id"""
     try:
