@@ -15,7 +15,7 @@ class Ingreso(Base):
     empresa_transporte = models.ForeignKey(Transporte, on_delete=models.PROTECT)
     conductor = models.ForeignKey(Conductor, on_delete=models.PROTECT)
     producto = models.ForeignKey(Producto, on_delete=models.PROTECT)
-    remito = models.CharField(verbose_name='Remito',blank=False, null=False, max_length=100)
+    remito = models.CharField(verbose_name='Remito',blank=False, null=False, max_length=100,unique=True)
     patente_chasis = models.ForeignKey(Camion, on_delete=models.PROTECT)
     patente_semi = models.ForeignKey(Semi, on_delete=models.PROTECT)
     responsable = models.ForeignKey(Personal, on_delete=models.PROTECT)
