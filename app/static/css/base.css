@@ -1,14 +1,8 @@
 /* Estilos para el header */
 .header {
-    background: rgb(2, 10, 46);
     background: linear-gradient(311deg, rgba(2, 10, 46, 1) 0%, rgba(0, 73, 141, 1) 25%);
     color: aliceblue;
-    width: 100%;
-  }
-  .logo{
-    margin-left: 5%;
-    min-width: 40px;
-    min-height: auto;
+    width:100%;
   }
   
   .boton-salida{
@@ -18,11 +12,16 @@
   }
   
 /* Ajustes para la navbar */
-.navbar {
-  background-color: rgb(193, 195, 197);
-  z-index: 1000; /* Asegura que la navbar esté sobre la barra lateral */
-  /* min-height: 70px; */
+.navbar .nav-item .nav-link{
+  color:rgb(199, 204, 209) !important;
+  font-size: 1.3rem;
+
 }
+.navbar .nav-item .nav-link:hover{
+  color: rgb(242, 242, 250)!important;
+  font-weight: 600;
+}
+
 /* Ajustes para la barra lateral */
 .lateral {
   padding-top: 2%;
@@ -33,6 +32,15 @@
 
 .lateral .nav-item .nav-link {
   color: rgb(199, 204, 209);
+  font-size: 1.2rem;
+}
+.lateral .nav-item .nav-link:hover {
+  color: rgb(242, 242, 250)!important;
+  transition: 300ms;
+  font-weight: 600;
+  font-size: 1.3rem;
+  
+  
 }
 
 .sub-titulo2, .titulo {
