@@ -31,55 +31,48 @@
 
 </head>
 
-<body style="height: fit-content;">
-  <header class="header d-flex">
-    <div class="col-2 text-center align-content-center">
-      <img src="{% static '/img/fm.jpg' %}" alt="FMRT" srcset="" class="logo img-fluid" style="height: 80%;">
-    </div>
-    <div class="container-fluid text-center align-content-center col-10">
-      <h1 class="titulo">
-        Ingreso de Materia Prima
-      </h1>
-      <p>{{user}}</p>
-    </div>
-  </header>
-  <!-- Barra de Navegacion -->
-  <nav class="navbar navbar-expand-sm body-tertiary menu">
-    <div class="col-2 container"></div>
-    <div class="container-fluid justify-content-end col-10">
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
-        aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse justify-content-center" id="navbarNavDropdown">
-        <ul class="navbar-nav">
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="{% url 'index'%}">Inicio</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'porteria2' %}">Porteria</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Shyma</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Balanza</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Inspeccion Quimica</a>
-          </li>
-          <!-- <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              Dropdown link
-            </a>
-            <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="#">Balanza</a></li>
-              <li><a class="dropdown-item" href="#">Another action</a></li>
-              <li><a class="dropdown-item" href="#">Something else here</a></li>
-            </ul>
-          </li> -->
-        </ul>
+<body>
+  <header class="header position-sticky top-0">
+      <div class="align-items-center d-flex" style="height: 40px;">
+        <div class="col-2 d-flex justify-content-center">
+          <img src="{% static 'img/fm.jpg' %}" alt="FMRT" srcset="" class="mt-5 pt-5 asd" style="border-radius: 50%;">
+        </div>
+        <div class="text-center col-10">
+          <h1>
+            Ingreso de Materia Prima - FMRT
+          </h2>
+        </div>
       </div>
+      <div>
+      <nav class="navbar nav-link navbar-expand-lg ">
+        <div class="col-2 container"></div>
+        <div class="container-fluid justify-content-end col-10">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
+            aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+        <div class="collapse navbar-collapse justify-content-center" id="navbarNavDropdown">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="{% url 'index'%}">Inicio</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'porteria2' %}">Porteria</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{#}">Shyma</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'balanzaIndex' %}">Balanza</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Inspeccion Quimica</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Calidad</a>
+            </li>
+          </ul>
+        </div>
       <div>
         <form method="post" action="{% url 'logout' %}">
           {% csrf_token %}
@@ -88,14 +81,18 @@
       </div>
     </div>
   </nav>
+      </div>
+  </header>
+  <!-- Barra de Navegacion -->
+    
 
   <!-- contengo en un row la barra lateral y el contenido -->
   <div class="container-fluid">
     <div class="row">
       <!-- barra lateral -->
-      <aside class="lateral col-4 col-sm-2 d-flex justify-content-start flex-column">
+      <aside class="lateral col-4 col-sm-2 d-flex justify-content-start flex-column  border-end border-1 border-black shadow">
         <!-- Porteria 2 -->
-        <!--  {% if user.groups.all.0.name == 'Porteria 2' or  user.groups.all.0.name == 'Shyma' or user.is_superuser %} -->
+        {% if 'Porteria 2' in grupos_usuario or user.is_superuser %}
         <div class="pt-4 pb-4">
           <div class="pb-4 container-fluid">
             <h2 class="sub-titulo2">Porteria 2</h2>
@@ -107,13 +104,13 @@
             <li class="nav-item">
               <a class="nav-link link-side" href="{% url 'egresosPendientes' %}">Egresos Pendientes</a>
             </li>
-            <li>
+            <li class="nav-item">
               <a class="nav-link link-side" href="{% url 'controlEppPendientes'%}">Controles Pendientes</a>
             </li>
             <li class="nav-item">
               <a class="nav-link link-side" href="{% url 'personal' %}">Responsables</a>
             </li>
-            <li class="nav-item dropdown">
+            <li class="nav-item">
               <a class="nav-link dropdown-toggle link-side" href="#" role="button" data-bs-toggle="dropdown"
                 aria-expanded="false">
                 Transportes
@@ -127,9 +124,11 @@
             </li>
           </ul>
         </div>
+        {% endif %}
 
         <!-- Balanza -->
-        <div class="pt-4 pb-4">
+        {% if 'Balanza' in grupos_usuario or user.is_superuser %}
+          <div class="pt-4 pb-4">
           <div class="pb-4 container-fluid">
             <h2 class="sub-titulo2">Balanza</h2>
           </div>
@@ -148,9 +147,11 @@
             </li>
           </ul>
         </div>
+        {% endif %}
 
         <!-- Inspeccion Quimica -->
-        <div class="pt-4 pb-4">
+        {% if 'InspeccionQ' in grupos_usuario or user.is_superuser %}
+          <div class="pt-4 pb-4">
           <div class="pb-4 container-fluid">
             <h2 class="sub-titulo2">Inspección Quimica</h2>
           </div>
@@ -163,9 +164,11 @@
             </li>
           </ul>
         </div>
+        {% endif %}
 
         <!--PAMO -->
-        <div class="pt-4 pb-4">
+        {% if 'PAMO' in grupos_usuario or user.is_superuser %}
+          <div class="pt-4 pb-4">
           <div class="pb-4 container-fluid">
             <h2 class="sub-titulo2">PAMO</h2>
           </div>
@@ -178,9 +181,11 @@
             </li>
           </ul>
         </div>
+        {% endif %}
 
         <!--PSUL -->
-        <div class="pt-4 pb-4">
+        {% if 'PSUL' in grupos_usuario or user.is_superuser %}
+          <div class="pt-4 pb-4">
           <div class="pb-4 container-fluid">
             <h2 class="sub-titulo2">PSUL</h2>
           </div>
@@ -193,9 +198,11 @@
             </li>
           </ul>
         </div>
+        {% endif %}
 
         <!--HDR -->
-        <div class="pt-4 pb-4">
+        {% if 'user.is_autenticated' or user.is_superuser %}
+          <div class="pt-4 pb-4">
           <div class="pb-4 container-fluid">
             <h2 class="sub-titulo2">HDR</h2>
           </div>
@@ -208,22 +215,24 @@
             </li>
           </ul>
         </div>
+        {% endif %}
 
         <!--Calidad -->
-        <div class="pt-4 pb-4">
+        {% if 'Calidad' in grupos_usuario or user.is_superuser %}
+          <div class="pt-4 pb-4">
           <div class="pb-4 container-fluid">
-            <h2 class="sub-titulo2">HDR</h2>
+            <h2 class="sub-titulo2">Calidad</h2>
           </div>
           <ul class="navbar-nav flex-column ">
             <li class="nav-item">
-              <a href="{% url 'pendientesPSUL' %}" class="nav-link link-side">Pendientes</a>
+              <a href="{% url 'pendientesPSUL' %}" class="nav-link link-side">Gestión</a>
             </li>
             <li class="nav-item">
               <a class="nav-link link-side" href="{% url 'personal' %}">Responsables</a>
             </li>
           </ul>
         </div>
-        <!-- {% endif %} -->
+        {% endif %}
       </aside>
 
       <!-- contenido -->
