@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hoja de ruta</title>
+    <style>
+        table {
+            width: 100%;
+        }
+        table th  {
+            padding-top: 2px;
+            font-size: 12px;
+        }
+
+        table td  {
+            padding-top: 2px;
+            font-size: 11px;
+            margin-left: 5px;
+        }
+
+        label {
+            font-size: 12px;
+        }
+
+        b{
+            font-size: 11px;
+        }
+
+        body {
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+        }
+
+        .td-titulo{
+            text-align: center;
+            background-color: darkgray;
+        }
+        .pamo-psul{
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+        .pamo-psul thead {
+            background-color: lightgray;
+        }
+        .pamo-psul th,
+        .pamo-psul td {
+            border: 1px solid black;
+            padding: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid " >
+        <table style="width: 100%;" border="1">
+            <tr>
+                <td rowspan="2" style="width: 20%; text-align: center;" ><b>REGISTRO</b> <br>
+                    <b>{{docregistro}}</b> </td>
+                
+                <td rowspan="3" style="width: 50%; text-align: center;"><img src="{{icono}}" width="50px" height="50px"> &nbsp; <b>FÁBRICA MILITAR RÍO TERCERO</b></td>
+                <td><b>Fecha Vigencia</b></td>
+                <td style="text-align: center;"><b>{{docfecha}}</b></td>
+            </tr>
+
+            <tr>
+                <td><b>Versión</b></td>
+                <td style="text-align: center;"><b>{{docversion}}</b></td>
+            </tr>
+
+            <tr>
+                <td style="width: 20%; text-align: center;"><b>ORIGINAL</b></td>
+                <td colspan="2" style="text-align: center;"><b>Página 1 de 1</b></td>
+                
+            </tr>
+            <tr>
+                <td colspan="4" style="text-align: center;"><b><p style="font-size: 14px; padding-top: 10px;" > HOJA DE RUTA DE INGRESO DE MATERIA PRIMA</p></b></td>
+            </tr>
+            
+        </table>
+
+        <table style="margin-top: 2px;">
+            <tr>
+                <td colspan="2" class="td-titulo"><b> PORTERÍA 2 </b></td>
+            </tr>
+            <tr>         
+                <td style="width: 60%;">Fecha: &nbsp; <b>{{fecha}}</b><br>
+                    Hora de Llegada:&nbsp; <b> {{producto}} </b><br>
+                    Ingreso para Calefacción de cisterna:&nbsp; <b> {{cliente}} </b><br>
+                    Empresa de Transporte:&nbsp; <b> {{empresa}} </b><br>
+                    Conductor:&nbsp; <b> {{tel_empresa}} </b><br>
+                    DNI/LE:&nbsp; <b> {{contrato}} </b><br>
+                    Producto a Entregar:&nbsp; <b> {{vehiculo}} </b><br>
+                    Dominio Chasis: &nbsp; <b>{{dominio}}</b><br>
+                    Dominio semi: &nbsp; <b>{{dominio_acomplado}} </b><br>
+                </td>
+                <td style="width: 40%">
+                    <br><br><br><br><br><br><br><br>
+                    Atendió: &nbsp; <b> {{responsable_porteria}} </b>
+                </td>
+            </tr>
+        </table>
+        <table style="margin-top: 2px;">
+            <tr>
+                <td colspan="2" class="td-titulo"><b>REQUISITOS PARA EL CHOFER</b></td>
+            </tr>
+            <tr>
+                <td style="width: 60%;">
+                    Fecha: &nbsp; <b> {{fecha_shyma}} </b>
+                    <p>DEBERÁ CUMPLIR CON LO SIGUIENTE:</p>
+                    <b> Elementos de Seguridad Completos.</b><br>
+                    Casco – Máscara – Antiparras PVC – Botines <br>
+                    Pantalón y Camisa Anti ácidos ó Mameluco ignífugobr <br>
+                    Matafuego – Arrestallamas.
+                </td>
+                <td style="width: 40%">
+                    <br><br><br><br><br><br><br>
+                    Atendió:&nbsp; <b> {{responsable_shyma}} </b>
+                </td>
+            </tr>
+        </table>
+        <table style="margin-top: 2px;">
+            <tr>
+                <td colspan="2" class="td-titulo"><b> ALMACEN PQ </b></td>
+            </tr>
+            <tr>
+                <td style="width: 60%;">
+                    Hora de Ingreso:&nbsp; <b>{{ingreso_balanza}} </b><br>
+                    Fecha: &nbsp; <b> {{fecha_balanza}} </b><br>
+                    Proveedor:&nbsp; <b> {{proveedor}} </b><br>
+                    Remito Nº:&nbsp; <b> {{remito}} </b><br>
+                    Peso de Origen:&nbsp; <b> {{peso_origen}} Kgs</b><br>
+                    Observaciones:&nbsp; <b> {{observaciones_pq}}DOD según el IN 11-IQ-07 </b>
+                </td>
+                <td style="width: 40%">
+                    <br><br><br><br><br>
+                    Atendió:&nbsp; <b> {{responsable_shyma}} </b>
+                </td>
+            </tr>
+        </table>
+        <table style="margin-top: 2px;">
+            <tr>
+                <td colspan="2" class="td-titulo"><b> INSPECCION QUIMICA </b></td>
+            </tr>
+            <tr>
+                <td style="width: 60%;">
+                    Fecha:&nbsp; <b> {{fecha_iq}} </b><br>
+                    Hora de Extracción de Muestra: <b> {{hora_muestra}} </b><br>
+                    Autorizado a Descargar:&nbsp; <b> {{autorizado_descarga}} </b><br>
+                    Observaciones:&nbsp; <b> {{observaciones_iq}} </b>
+                </td>
+                <td style="width: 40%"> 
+                    <br><br><br>                   
+                    Atendió:&nbsp; <b> {{responsable_exp}} </b>
+                </td>
+            </tr>
+        </table>
+        <table style="margin-top: 2px;">
+            <tr>
+                <td colspan="2" class="td-titulo"><b> PAMO/PSUL</b></td>
+            </tr>
+            <tr>
+                <td style="width:60%;">
+                    Materia Prima:&nbsp; <b> {{producto_red}} </b><br><br>
+
+                    <div style="width: 50%;align-items: center;align-content: center; margin:auto;">
+                        <table class="pamo-psul" style="text-align: center;" >
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>HORA</th>
+                                    <th>PRESION</th>
+                                    <th>TEMPERATURA</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><b>ENTRADA</b></td>
+                                    <td>{{hora}}</td>
+                                    <td>{{presion}}</td>
+                                    <td>{{temperatura}}</td>
+                                </tr>
+                                <tr>
+                                    <td><b>SALIDA</b></td>
+                                    <td>{{hora_salida}}</td>
+                                    <td>{{presion_salida}}</td>
+                                    <td>{{temperatura_salida}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </td>
+                <td style="width:40%;">
+                    <br><br><br><br><br><br><br><br><br>
+                    Atendió:&nbsp; <b> {{resposable_pamo_psul}} </b>
+                </td>
+            </tr>
+        </table>
+        <table style="margin-top: 2px;">
+            <tr>
+                <td colspan="2" class="td-titulo"><b>ALMACEN PQ</b></td>
+            </tr>
+            <tr>
+                <td style="width: 60%;">
+                    Fecha:&nbsp; <b> {{fecha_eiq}} </b><br>
+                    Hora de Salida:&nbsp; <b> {{hora_Salida}} </b><br>
+                    Peso del Vehículo en FMRT:&nbsp; <b> {{peso_fmrt}} </b><br>
+                    Peso del Vehículo vacio:&nbsp; <b> {{peso_vacio}} </b><br>
+                    Peso de Taquilla:&nbsp; <b> {{peso_taquilla}} </b><br>
+                    Peso de Bolsas/Tarima:&nbsp; <b> {{peso_bolsas}} </b><br>
+                    Peso Neto:&nbsp; <b> {{peso_neto_eiq}} </b><br>
+                    Observaciones:&nbsp; <b> {{observaciones_eiq}} </b>
+                </td>
+                <td style="width: 40%">
+                    Atendió:&nbsp; <b> {{responsable_eiq}} </b>
+                </td>
+            </tr>
+        </table>
+        <table style="margin-top: 2px;">
+            <tr>
+                <td colspan="2" class="td-titulo"><b>POrteria Nº2 </b></td>
+            </tr>
+            <tr>
+                <td style="width: 60%;">
+                    Fecha:&nbsp; <b> {{fecha_ingreso_seq}} </b>
+                    Verificación del vehiculo y Carga:&nbsp; <b> {{verf_crg_vhc_seq}} </b><br>
+                    Salida Autorizada:&nbsp; <b> {{salida_autorizada}} </b><br>
+                    Hora de Salida:&nbsp; <b> {{hora_salida_seq}} </b><br>
+                </td>
+                <td style="width: 40%">
+                    Atendió:&nbsp; <b> {{responsable_seq}} </b>
+                </td>
+            </tr>
+        </table>
+    </div>
+</body>
+</html>
