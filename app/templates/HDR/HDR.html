@@ -65,7 +65,7 @@
                 <td rowspan="2" style="width: 20%; text-align: center;" ><b>REGISTRO</b> <br>
                     <b>{{docregistro}}</b> </td>
                 
-                <td rowspan="3" style="width: 60%; text-align: center;"><img src="{{icono}}" width="50px" height="50px"> &nbsp; <b>FÁBRICA MILITAR RÍO TERCERO</b></td>
+                <td rowspan="3" style="width: 60%; text-align: center;"><img src="/app/static/img/fmrt.jpg" width="50px" height="50px"> &nbsp; <b>FÁBRICA MILITAR RÍO TERCERO</b></td>
                 <td style="width: 10%;"><b>Fecha Vigencia</b></td>
                 <td style="text-align: center;"><b>{{docfecha}}</b></td>
             </tr>
@@ -89,19 +89,19 @@
             </tr>
             
         </table>
-
+        <!-- Tabla de Ingreso a Porteria 2 -->
         <table style="margin-top: 2px;">
             <tr>
                 <td colspan="2" class="td-titulo"><b> PORTERÍA 2 </b></td>
             </tr>
             <tr>         
-                <td style="width: 60%;">Fecha: &nbsp; <b>{{fecha}}</b><br>
-                    Hora de Llegada:&nbsp; <b> {{producto}} </b><br>
-                    Ingreso para Calefacción de cisterna:&nbsp; <b> {{cliente}} </b><br>
+                <td style="width: 60%;">Fecha: &nbsp; <b>{{fecha|date:"d/m/y"}}</b><br>
+                    Hora de Llegada:&nbsp; <b> {{fecha|time:"H:i"}} </b><br>
+                    Ingreso para Calefacción de cisterna:&nbsp; <b> {{calefaccion}} </b><br>
                     Empresa de Transporte:&nbsp; <b> {{empresa}} </b><br>
-                    Conductor:&nbsp; <b> {{tel_empresa}} </b><br>
-                    DNI/LE:&nbsp; <b> {{contrato}} </b><br>
-                    Producto a Entregar:&nbsp; <b> {{vehiculo}} </b><br>
+                    Conductor:&nbsp; <b> {{conductor}} </b><br>
+                    DNI/LE:&nbsp; <b> {{dni}} </b><br>
+                    Producto a Entregar:&nbsp; <b> {{producto}} </b><br>
                     Dominio Chasis: &nbsp; <b>{{dominio}}</b><br>
                     Dominio semi: &nbsp; <b>{{dominio_acomplado}} </b><br>
                 </td>
@@ -111,6 +111,7 @@
                 </td>
             </tr>
         </table>
+        <!-- Tabla de Requisitos para el Chofer -->
         <table style="margin-top: 2px;">
             <tr>
                 <td colspan="2" class="td-titulo"><b>REQUISITOS PARA EL CHOFER</b></td>
@@ -130,6 +131,13 @@
                 </td>
             </tr>
         </table>
+        <table style="margin-top: 2px; width: 100%; border-collapse: collapse;">
+    <tr>
+        <td class="td-titulo"><b>ATENCIÓN</b></td>
+    </tr>
+    <tr><td  style="text-align: center;background-color: black;color: white; font-weight: 600; font-size: large;"><P>EL VEHÍCULO UNA VEZ DESCARGADO</P><p> NO DEBERÁ PERMANECER</p><p>ESTACIONADO DENTRO DE FMRT</p></td></tr>
+</table>
+        <!-- Tabla de Almacen PQ -->
         <table style="margin-top: 2px;">
             <tr>
                 <td colspan="2" class="td-titulo"><b> ALMACEN PQ </b></td>
