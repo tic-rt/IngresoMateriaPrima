@@ -10,6 +10,13 @@
         table {
             width: 100%;
         }
+        .titulo{
+            border: 2px solid black;
+            border-collapse: collapse;
+        }
+        .titulo th, .titulo td {
+            border: 2px solid black;
+        }
         table th  {
             padding-top: 2px;
             font-size: 12px;
@@ -53,28 +60,32 @@
 </head>
 <body>
     <div class="container-fluid " >
-        <table style="width: 100%;" border="1">
+        <table style="width: 100%;" class="titulo">
             <tr>
                 <td rowspan="2" style="width: 20%; text-align: center;" ><b>REGISTRO</b> <br>
                     <b>{{docregistro}}</b> </td>
                 
-                <td rowspan="3" style="width: 50%; text-align: center;"><img src="{{icono}}" width="50px" height="50px"> &nbsp; <b>FÁBRICA MILITAR RÍO TERCERO</b></td>
-                <td><b>Fecha Vigencia</b></td>
+                <td rowspan="3" style="width: 60%; text-align: center;"><img src="{{icono}}" width="50px" height="50px"> &nbsp; <b>FÁBRICA MILITAR RÍO TERCERO</b></td>
+                <td style="width: 10%;"><b>Fecha Vigencia</b></td>
                 <td style="text-align: center;"><b>{{docfecha}}</b></td>
             </tr>
 
             <tr>
-                <td><b>Versión</b></td>
-                <td style="text-align: center;"><b>{{docversion}}</b></td>
+                <td style="width: 10%;"><b>Versión</b></td>
+                <td style="text-align: center;"><b>{{docversion}}1</b></td>
             </tr>
 
             <tr>
                 <td style="width: 20%; text-align: center;"><b>ORIGINAL</b></td>
-                <td colspan="2" style="text-align: center;"><b>Página 1 de 1</b></td>
-                
+                <td colspan="2" style="text-align: center;"><b>Página 1 de 1</b></td>    
             </tr>
+
             <tr>
                 <td colspan="4" style="text-align: center;"><b><p style="font-size: 14px; padding-top: 10px;" > HOJA DE RUTA DE INGRESO DE MATERIA PRIMA</p></b></td>
+            </tr>
+
+            <tr>
+                <td colspan="4" style="text-align: center;"><b><p style="font-size: 10px;" > PRODUCCIÓN QUÍMICA FMRT </p></b></td>
             </tr>
             
         </table>
