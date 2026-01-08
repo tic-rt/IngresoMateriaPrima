@@ -32,7 +32,7 @@
 </head>
 
 <body>
-  <header class="header position-sticky top-0">
+  <header class="header position-sticky top-0 shadow-sm bg-white" style="z-index: 100;">
       <div class="align-items-center d-flex" style="height: 40px;">
         <div class="col-2 d-flex justify-content-center">
           <img src="{% static 'img/fm.jpg' %}" alt="FMRT" srcset="" class="mt-5 pt-5 asd" style="border-radius: 50%;">
@@ -208,7 +208,7 @@
           </div>
           <ul class="navbar-nav flex-column ">
             <li class="nav-item">
-              <a href="{% url 'pendientesPSUL' %}" class="nav-link link-side">Pendientes</a>
+              <a href="{% url 'lista_hdr' %}" class="nav-link link-side">Hojas de Ruta</a>
             </li>
             <li class="nav-item">
               <a class="nav-link link-side" href="{% url 'personal' %}">Responsables</a>
