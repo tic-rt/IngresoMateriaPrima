@@ -304,3 +304,8 @@ def guardarEgreso(request):
         print(excepcion)
         sweetify.error(request, 'Error', text=f'Ocurrio un error {str(excepcion)} ', persistent = 'Aceptar')
         return redirect('egresosPendientes')
+    
+@login_required
+def transito_vehiculos(request):
+    """Esta funcion devuelve datos (json) de los vehiculos en transito"""
+    pass
