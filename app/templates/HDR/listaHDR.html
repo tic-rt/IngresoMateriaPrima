@@ -21,7 +21,6 @@
                         <th class="text-center">Producto</th>
                         <th class="text-center">Dominio Chasis</th>
                         <th class="text-center">Dominio Semi</th>
-                        <th class="text-center">Accion</th>
                     </thead>
                     <tbody>
                         {% for hdr in HDR%}
@@ -55,9 +54,6 @@
                             <td class="text-center">
                                 {{hdr.patente_semi}}
                             </td>
-                            <td>
-
-                            </td>
                         </tr>
                         {% endfor %}
                     </tbody>
@@ -68,6 +64,7 @@
             onclick=history.back()> Regresar</button>
     </div>
 </div>
+
 {% endblock content %}
 {% block js %}
 <script>
@@ -77,24 +74,20 @@
             language:{
                 url:'/static/vendor/datatables/es-Es.json'
             },
-            columnDefs: [
-            {
-                orderable: false,
-                targets: [5]
-            }, 
-        ],
+            order: [[0, 'desc']]
         });
+        
         let tabla = document.getElementById('tabla-hdr')
         if (tabla && tabla.rows.length > 1 ){
             tabla.addEventListener('click', function (event) {
                 let fila = event.target.closest('tr')
-                if (fila.getElementById('nullable') === 'True') {
+
+                if (fila.getAttribute('data-id') === null) {
                     return;
                 }
-
                 if (fila) {
                     id_hdr = fila.getAttribute('data-id')
-                    window.location.href = `{% url 'exportar_hdr'%}?id_hdr=${id_hdr}`;
+                    window.open(`{% url 'exportar_hdr' %}?id_hdr=${id_hdr}`,'_blank');
                 }
             })
         }
