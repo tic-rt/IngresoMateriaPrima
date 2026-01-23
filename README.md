@@ -10,3 +10,5 @@ Shyma2024$
 
 Balanza
 B4l4nz4$2024
+
+python 3.12
