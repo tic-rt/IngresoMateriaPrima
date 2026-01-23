@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:pdf="http://www.reportlab.com/">
 
 <head>
     <meta charset="UTF-8">
@@ -7,77 +7,64 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hoja de ruta</title>
     <style>
-        table {
+        @page {
+            size: A4;
+            margin: 1cm;
+        }
+        .titulo {
             width: 100%;
+            border: 1px solid black;
         }
-        .titulo{
-            border: 2px solid black;
-            border-collapse: collapse;
+        .info {
+            text-align: center;
         }
-        .titulo th, .titulo td {
-            border: 2px solid black;
+        .contenido {
+            width: 50%;
         }
-        table th  {
-            padding-top: 2px;
+        table th {
+            padding-top: 2x;
             font-size: 12px;
         }
-
-        table td  {
+        table td {
             padding-top: 2px;
             font-size: 11px;
             margin-left: 5px;
         }
-
         label {
             font-size: 12px;
         }
-
         b{
             font-size: 11px;
         }
-
-        body {
+        body{
             font-family: Verdana, Geneva, Tahoma, sans-serif;
         }
-
         .td-titulo{
-            text-align: center;
             background-color: darkgray;
-        }
-        .pamo-psul{
-            border: 1px solid black;
-            border-collapse: collapse;
-        }
-        .pamo-psul thead {
-            background-color: lightgray;
-        }
-        .pamo-psul th,
-        .pamo-psul td {
-            border: 1px solid black;
-            padding: 4px;
+            text-align: center;
         }
     </style>
 </head>
 <body>
-    <div class="container-fluid " >
+    <div>
         <table style="width: 100%;" class="titulo">
             <tr>
-                <td rowspan="2" style="width: 20%; text-align: center;" ><b>REGISTRO</b> <br>
-                    <b>{{docregistro}}</b> </td>
+                <td class="info" rowspan="2" style="width: 20%;" ><b>REGISTRO</b> <br>
+                    <b>RIN-09-EXP-03-01</b> </td>
                 
-                <td rowspan="3" style="width: 60%; text-align: center;"><img src="/app/static/img/fmrt.jpg" width="50px" height="50px"> &nbsp; <b>FÁBRICA MILITAR RÍO TERCERO</b></td>
-                <td style="width: 10%;"><b>Fecha Vigencia</b></td>
-                <td style="text-align: center;"><b>{{docfecha}}</b></td>
+                <td rowspan="3" style="width: 50%; text-align: center;"><img src="{{logo_path}}" width="1.35cm" height="1.35cm"> &nbsp; <b>FÁBRICA MILITAR RÍO TERCERO</b></td>
+                <td style="width: 15%;"><b>Fecha Vigencia</b></td>
+                <td class="info"><b>11JUL25</b></td>
             </tr>
 
             <tr>
-                <td style="width: 10%;"><b>Versión</b></td>
-                <td style="text-align: center;"><b>{{docversion}}1</b></td>
+                <td style="width: 15%;"><b>Versión</b></td>
+                <td class="info"><b>17</b></td>
             </tr>
 
             <tr>
                 <td style="width: 20%; text-align: center;"><b>ORIGINAL</b></td>
-                <td colspan="2" style="text-align: center;"><b>Página 1 de 1</b></td>    
+                <td colspan="2" style="text-align: center;"><b> Página 1 de 1</b></td>    
             </tr>
 
             <tr>
@@ -89,48 +76,62 @@
             </tr>
             
         </table>
-        <!-- Tabla de Ingreso a Porteria 2 -->
-        <table style="margin-top: 2px;">
+        <table width="100%" cellspacing="4">
             <tr>
-                <td colspan="2" class="td-titulo"><b> PORTERÍA 2 </b></td>
-            </tr>
-            <tr>         
-                <td style="width: 60%;">Fecha: &nbsp; <b>{{fecha|date:"d/m/y"}}</b><br>
-                    Hora de Llegada:&nbsp; <b> {{fecha|time:"H:i"}} </b><br>
-                    Ingreso para Calefacción de cisterna:&nbsp; <b> {{calefaccion}} </b><br>
-                    Empresa de Transporte:&nbsp; <b> {{empresa}} </b><br>
-                    Conductor:&nbsp; <b> {{conductor}} </b><br>
-                    DNI/LE:&nbsp; <b> {{dni}} </b><br>
-                    Producto a Entregar:&nbsp; <b> {{producto}} </b><br>
-                    Dominio Chasis: &nbsp; <b>{{dominio}}</b><br>
-                    Dominio semi: &nbsp; <b>{{dominio_acomplado}} </b><br>
+            <!-- Columna izquierda -->
+                <td width="50%" valign="top">
+                    <!-- Tabla Portería 2 -->
+                    <table width="100%" class="contenido">
+                        <tr>
+                            <td colspan="2" class="td-titulo"><b>PORTERÍA 2</b></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 60%;">
+                                Fecha: <b>{{fecha|date:"d/m/y"}}</b><br>
+                                Hora: <b>{{fecha|time:"H:i"}}</b><br>
+                                Empresa: <b>{{empresa}}</b><br>
+                                Conductor: <b>{{conductor}}</b><br>
+                                DNI: <b>{{dni}}</b><br>
+                                Producto: <b>{{producto}}</b>
+                            </td>
+                            <td style="width: 40%;">
+                                <br><br><br><br>
+                            Atendió: <br>
+                            <b>{{responsable_porteria}}</b>
+                            </td>
+                        </tr>
+                    </table>
                 </td>
-                <td style="width: 40%">
-                    <br><br><br><br><br><br><br><br>
-                    Atendió: &nbsp; <b> {{responsable_porteria}} </b>
-                </td>
-            </tr>
-        </table>
-        <!-- Tabla de Requisitos para el Chofer -->
-        <table style="margin-top: 2px;">
-            <tr>
-                <td colspan="2" class="td-titulo"><b>REQUISITOS PARA EL CHOFER</b></td>
-            </tr>
-            <tr>
-                <td style="width: 60%;">
-                    Fecha: &nbsp; <b> {{fecha_shyma}} </b>
-                    <p>DEBERÁ CUMPLIR CON LO SIGUIENTE:</p>
-                    <b> Elementos de Seguridad Completos.</b><br>
-                    Casco – Máscara – Antiparras PVC – Botines <br>
-                    Pantalón y Camisa Anti ácidos ó Mameluco ignífugobr <br>
-                    Matafuego – Arrestallamas.
-                </td>
-                <td style="width: 40%">
-                    <br><br><br><br><br><br><br>
-                    Atendió:&nbsp; <b> {{responsable_shyma}} </b>
-                </td>
-            </tr>
-        </table>
+                <!-- Columna derecha -->
+                <td width="1mm"></td>
+                <!-- Espacio entre columnas -->
+                <td width="50%" valign="top">
+                <!-- Tabla Requisitos Chofer -->
+                <table width="100%" class="contenido">
+                    <tr>
+                        <td colspan="2" class="td-titulo"><b>REQUISITOS PARA EL CHOFER (SHyMA)</b></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Fecha: <b>{{epp.fecha_control|date:"d/m/y H:i"}}</b><br>
+                            <b>Elementos de Seguridad:</b><br>
+                            Casco:<b>{{epp.casco}} </b><br>
+                            Máscara:<b>{{epp.mascara}}</b><br>
+                            Antiparras:<b>{{epp.antiparras}}</b><br>
+                            Botines:<b>{{epp.botines}}</b>
+                        </td>
+                        <td>
+                            <br><br>
+                            Pantalon y Camisa:<b>{{epp.pantalon_camisa}} </b><br>
+                            Matafuego:<b>{{epp.matafuego}}</b><br>
+                            Arrestallamas:<b>{{epp.arrestallamas}}</b><br>
+                            Carteleria:<b>{{epp.carteleria}}</b>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
         <table style="margin-top: 2px; width: 100%; border-collapse: collapse;">
     <tr>
         <td class="td-titulo"><b>ATENCIÓN</b></td>
@@ -144,16 +145,16 @@
             </tr>
             <tr>
                 <td style="width: 60%;">
-                    Hora de Ingreso:&nbsp; <b>{{ingreso_balanza}} </b><br>
-                    Fecha: &nbsp; <b> {{fecha_balanza}} </b><br>
-                    Proveedor:&nbsp; <b> {{proveedor}} </b><br>
-                    Remito Nº:&nbsp; <b> {{remito}} </b><br>
-                    Peso de Origen:&nbsp; <b> {{peso_origen}} Kgs</b><br>
-                    Observaciones:&nbsp; <b> {{observaciones_pq}}DOD según el IN 11-IQ-07 </b>
+                    Hora de Ingreso:&nbsp; <b>{{balanza.hora_ingreso|date:"H:i"}} </b><br>
+                    Fecha: &nbsp; <b> {{balanza.hora_ingreso|date:"d/m/y"}} </b><br>
+                    Proveedor:&nbsp; <b> {{balanza.proveedor}} </b><br>
+                    Remito Nº:&nbsp; <b> {{balanza.remito}} </b><br>
+                    Peso de Origen:&nbsp; <b> {{balanza.peso_origen}} Kgs</b><br>
+                    Observaciones:&nbsp; <b> {{balanza.observaciones_pq}}DOD según el IN 11-IQ-07 </b>
                 </td>
                 <td style="width: 40%">
                     <br><br><br><br><br>
-                    Atendió:&nbsp; <b> {{responsable_shyma}} </b>
+                    Atendió:&nbsp; <b> {{balanza.responsable_entrada}} </b>
                 </td>
             </tr>
         </table>
@@ -163,56 +164,58 @@
             </tr>
             <tr>
                 <td style="width: 60%;">
-                    Fecha:&nbsp; <b> {{fecha_iq}} </b><br>
-                    Hora de Extracción de Muestra: <b> {{hora_muestra}} </b><br>
-                    Autorizado a Descargar:&nbsp; <b> {{autorizado_descarga}} </b><br>
-                    Observaciones:&nbsp; <b> {{observaciones_iq}} </b>
+                    Fecha:&nbsp; <b> {{iquimica.fecha|date:"d/m/y"}} </b><br>
+                    Hora de Extracción de Muestra: <b> {{iquimica.fecha|time:"H:i"}} </b><br>
+                    Autorizado a Descargar:&nbsp; <b> {{iquimica.requisitos}} </b><br>
+                    Observaciones:&nbsp; <b> {{iquimica.observacion}} </b>
                 </td>
                 <td style="width: 40%"> 
                     <br><br><br>                   
-                    Atendió:&nbsp; <b> {{responsable_exp}} </b>
+                    Atendió:&nbsp; <b> {{iquimica.responsable}} </b>
                 </td>
             </tr>
         </table>
         <table style="margin-top: 2px;">
             <tr>
-                <td colspan="2" class="td-titulo"><b> PAMO/PSUL</b></td>
+                <td colspan="4" class="td-titulo"><b> PAMO/PSUL</b></td>
             </tr>
             <tr>
-                <td style="width:60%;">
-                    Materia Prima:&nbsp; <b> {{producto_red}} </b><br><br>
-
-                    <div style="width: 50%;align-items: center;align-content: center; margin:auto;">
-                        <table class="pamo-psul" style="text-align: center;" >
+                <td>
+                    Materia Prima:&nbsp; <b> {{pamo.producto}} </b>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4">
+                    <table class="titulo" style="text-align: center; width:50%; vertical-align: center;" >
                             <thead>
-                                <tr>
-                                    <th></th>
-                                    <th>HORA</th>
-                                    <th>PRESION</th>
-                                    <th>TEMPERATURA</th>
+                                <tr style="background-color: lightgray;">
+                                    <th style="padding-top: 2px;"></th>
+                                    <th style="padding-top: 2px;">HORA</th>
+                                    <th style="padding-top: 2px;">PRESION</th>
+                                    <th style="padding-top: 2px;">TEMPERATURA</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
                                     <td><b>ENTRADA</b></td>
-                                    <td>{{hora}}</td>
-                                    <td>{{presion}}</td>
-                                    <td>{{temperatura}}</td>
+                                    <td>{{pamo.hora_ingreso|time:"H:i"}}</td>
+                                    <td>{{pamo.presion_ingreso}}</td>
+                                    <td>{{pamo.temperatura_ingreso}}</td>
                                 </tr>
                                 <tr>
                                     <td><b>SALIDA</b></td>
-                                    <td>{{hora_salida}}</td>
-                                    <td>{{presion_salida}}</td>
-                                    <td>{{temperatura_salida}}</td>
+                                    <td>{{pamo.hora_salida|time:"H:i"}}</td>
+                                    <td>{{pamo.presion_salida}}</td>
+                                    <td>{{pamo.temperatura_salida}}</td>
                                 </tr>
                             </tbody>
                         </table>
-                    </div>
                 </td>
-                <td style="width:40%;">
-                    <br><br><br><br><br><br><br><br><br>
-                    Atendió:&nbsp; <b> {{resposable_pamo_psul}} </b>
-                </td>
+                <tr>
+                    <td>
+                    Atendio:&nbsp; <b> {{pamo.responsable}} </b>
+                    </td>
+                </tr>
             </tr>
         </table>
         <table style="margin-top: 2px;">
@@ -221,17 +224,18 @@
             </tr>
             <tr>
                 <td style="width: 60%;">
-                    Fecha:&nbsp; <b> {{fecha_eiq}} </b><br>
-                    Hora de Salida:&nbsp; <b> {{hora_Salida}} </b><br>
-                    Peso del Vehículo en FMRT:&nbsp; <b> {{peso_fmrt}} </b><br>
-                    Peso del Vehículo vacio:&nbsp; <b> {{peso_vacio}} </b><br>
-                    Peso de Taquilla:&nbsp; <b> {{peso_taquilla}} </b><br>
-                    Peso de Bolsas/Tarima:&nbsp; <b> {{peso_bolsas}} </b><br>
-                    Peso Neto:&nbsp; <b> {{peso_neto_eiq}} </b><br>
+                    Fecha:&nbsp; <b> {{balanza.hora_salida|date:"d/m/y"}} </b><br>
+                    Hora de Salida:&nbsp; <b> {{balanza.hora_salida|date:"H:i"}} </b><br>
+                    Peso del Vehículo en FMRT:&nbsp; <b> {{balanza.peso_fmrt}} </b><br>
+                    Peso del Vehículo vacio:&nbsp; <b> {{balanza.peso_vacio}} </b><br>
+                    Peso de Taquilla:&nbsp; <b> {{balanza.peso_taquilla}} </b><br>
+                    Peso de Bolsas/Tarima:&nbsp; <b> {{balanza.peso_bolsa_tarima}} </b><br>
+                    Peso Neto:&nbsp; <b> {{balanza.peso_neto}} </b><br>
                     Observaciones:&nbsp; <b> {{observaciones_eiq}} </b>
                 </td>
                 <td style="width: 40%">
-                    Atendió:&nbsp; <b> {{responsable_eiq}} </b>
+                    <br><br><br><br><br><br><br>
+                    Atendió:&nbsp; <b> {{balanza.responsable_salida}} </b>
                 </td>
             </tr>
         </table>
@@ -241,13 +245,14 @@
             </tr>
             <tr>
                 <td style="width: 60%;">
-                    Fecha:&nbsp; <b> {{fecha_ingreso_seq}} </b>
-                    Verificación del vehiculo y Carga:&nbsp; <b> {{verf_crg_vhc_seq}} </b><br>
-                    Salida Autorizada:&nbsp; <b> {{salida_autorizada}} </b><br>
-                    Hora de Salida:&nbsp; <b> {{hora_salida_seq}} </b><br>
+                    Fecha:&nbsp; <b> {{egreso.fecha_salida|date:"d/m/y"}} </b>
+                    Verificación del vehiculo y Carga:&nbsp; <b> {{egreso.verificacion}} </b><br>
+                    Salida Autorizada:&nbsp; <b> {{egreso.salida_autorizada}} </b><br>
+                    Hora de Salida:&nbsp; <b> {{egreso.fecha_salida|time:"H:i"}} </b><br>
                 </td>
                 <td style="width: 40%">
-                    Atendió:&nbsp; <b> {{responsable_seq}} </b>
+                    <br><br>
+                    Atendió:&nbsp; <b> {{egreso.responsable}} </b>
                 </td>
             </tr>
         </table>
