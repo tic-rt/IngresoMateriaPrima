@@ -25,7 +25,7 @@ class Personal(models.Model):
         verbose_name = 'Personal'
         
     def __str__(self):
-        return f'{self.nombre} {self.apellido}'
+        return f'{self.legajo}-{self.nombre} {self.apellido}'
     
     def delete(self, *args, **kwargs):#sof delete para mantener la integridad de la db
         self.is_deleted=True
