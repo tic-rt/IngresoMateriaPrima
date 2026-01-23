@@ -38,7 +38,7 @@ class Egreso(Base):
 
 class EPP(models.Model):
     """Esta clase registra los elementos de proteccion personal de un conductor"""
-
+    fecha_control = models.DateTimeField(verbose_name='Fecha de Control', auto_now_add=True)
     casco = models.BooleanField(verbose_name='casco', default=False)
     mascara = models.BooleanField(verbose_name='mascara', default=False)
     antiparras = models.BooleanField(verbose_name='antiparras PVC', default=False)
@@ -48,6 +48,7 @@ class EPP(models.Model):
     arrestallamas = models.BooleanField(verbose_name='arrestallamas')
     carteleria = models.BooleanField(verbose_name='carteleria', default=False)
     responsable = models.ForeignKey(Personal, on_delete=models.PROTECT)
+    hdr = models.ForeignKey(HDR, on_delete=models.PROTECT)
 
     class Meta:
         """Meta definicion para la clase EPP"""
