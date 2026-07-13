@@ -29,10 +29,17 @@ def cantidad_camiones(request):
                          })
     
 def transito(request):
-    hoy = timezone.now()
-    ingresos_en_curso = Ingreso.objects.filter(ingresado = True, hdr__estado='Activo').count()
-    en_transito = Ingreso.objects.filter(ingresado = True, hdr__estado='Activo').count()
-    ingresos_finalizados = Egreso.objects.filter(salida_autorizada = True, hdr_id__estado='Finalizado',fecha_salida = hoy).count()
+    hoy = timezone.now().date()
+    print(hoy)
+    ingresos_en_curso = Ingreso.objects.filter(ingresado = True,hora_ingreso__date=hoy).count()
+    en_transito = Ingreso.objects.filter(ingresado = True,hora_ingreso__date=hoy, hdr__estado='Activo').count()
+    ingresos_finalizados = Egreso.objects.filter(salida_autorizada = True, hdr__estado='Finalizado',fecha_salida__date = hoy).count()
+    
+    data = {
+        'labels': ['Ingreso','En transito', 'Finalizados'],
+        'data': [ingresos_en_curso, en_transito, ingresos_finalizados],
+    }
+    print("DEBUG BACKEND:", data)
     
     return JsonResponse({
         'labels': ['Ingreso','En transito', 'Finalizados'],

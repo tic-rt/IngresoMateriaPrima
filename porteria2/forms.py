@@ -77,7 +77,7 @@ class FormIngreso(forms.ModelForm):
         else:
             self.fields['laborable'].initial = False  # Valor por defecto si es fin de semana
             self.fields['laborable'].widget.attrs['hidden'] = 'true'
-            self.helper.layout = self.helper.layout[0].remove('laborable')
+            #self.helper.layout = self.helper.layout[0].remove('laborable')
         
         self.helper.layout = Layout(
             Div(

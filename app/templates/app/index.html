@@ -25,19 +25,33 @@
 {% endblock content %}
 {% block js %}
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        function leerDatos(){
-            fetch('{% url "cantidad_camiones" %}')
+document.addEventListener('DOMContentLoaded', function () {
+
+    let chartCamiones = null;
+    let chartTransito = null;
+
+    function leerDatos() {
+
+        // -------------------------
+        // CAMIONES
+        // -------------------------
+        fetch('{% url "cantidad_camiones" %}')
             .then(response => response.json())
             .then(data => {
-                const cantCamiones = document.getElementById('cantCamiones').getContext('2d');
-                const chart = new Chart(cantCamiones, {
+
+                const valores = data.data || [];
+
+                const ctx = document.getElementById('cantCamiones').getContext('2d');
+
+                if (chartCamiones) chartCamiones.destroy();
+
+                chartCamiones = new Chart(ctx, {
                     type: 'bar',
                     data: {
-                        labels: data.labels,
+                        labels: data.labels || [],
                         datasets: [{
-                            label:"Cantidad de camiones hoy",
-                            data: data.data,
+                            label: "Cantidad de camiones hoy",
+                            data: valores,
                             backgroundColor: [
                                 'rgba(75, 192, 192, 0.2)',
                                 'rgba(255, 206, 86, 0.2)',
@@ -54,9 +68,6 @@
                         }]
                     },
                     options: {
-                        label:false,
-                        borderWidth:1,
-                        borderWidth:1,
                         responsive: true,
                         maintainAspectRatio: true,
                         scales: {
@@ -71,17 +82,53 @@
                     }
                 });
             });
-            fetch('{% url "transito" %}')
+
+
+        // -------------------------
+        // TRÁNSITO
+        // -------------------------
+        fetch('{% url "transito" %}')
             .then(response => response.json())
             .then(data => {
-                const transito = document.getElementById('transito').getContext('2d');
-                const chart = new Chart(transito, {
+
+                const valores = data.data || [];
+
+                const ctx = document.getElementById('transito').getContext('2d');
+
+                if (chartTransito) chartTransito.destroy();
+
+                // Si no hay datos, mostrar gráfico vacío controlado
+                const sinDatos = valores.length === 0 || valores.every(v => v === 0);
+
+                if (sinDatos) {
+                    chartTransito = new Chart(ctx, {
+                        type: 'doughnut',
+                        data: {
+                            labels: ['Sin vehículos'],
+                            datasets: [{
+                                data: [1],
+                                backgroundColor: ['rgba(200,200,200,0.3)'],
+                                borderColor: ['rgba(200,200,200,1)'],
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            cutout: '60%'
+                        }
+                    });
+
+                    return;
+                }
+
+                chartTransito = new Chart(ctx, {
                     type: 'doughnut',
                     data: {
-                        labels: data.labels,
+                        labels: data.labels || [],
                         datasets: [{
-                            label: 'Vehiculos en tránsito',
-                            data: data.data,
+                            label: 'Vehículos en tránsito',
+                            data: valores,
                             backgroundColor: [
                                 'rgba(240, 243, 32,0.3)',
                                 'rgba(43, 243, 32,0.3)',
@@ -96,16 +143,17 @@
                         }]
                     },
                     options: {
-                        borderWidth:1,
                         responsive: true,
                         maintainAspectRatio: false,
                         cutout: '60%'
                     }
                 });
             });
-        }
-        timer = setTimeout(leerDatos(), 1000); // Espera 1 segundo antes de la primera llamada
-        
-    });
+    }
+
+    // Primera carga
+    setTimeout(leerDatos, 1000);
+
+});
 </script>
 {% endblock js %}

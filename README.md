@@ -1,6 +1,6 @@
 superusuario
-usuario:Administrador
-password:Tic2024$
+usuario:Tic
+password:Magenta1
 
 porteria2
 Pa$$w0rd2

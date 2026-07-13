@@ -64,7 +64,7 @@ def guardarNuevoIngreso(request):
 
     except Exception as excepcion:
         sweetify.error(request, title='excepcion al registrar Ingreso', text=f'Ocurrio un error {str(excepcion)}', persistent='Aceptar')
-        return render(request, 'porteria2/nuevoIngreso.html', {'formulario_ingreso': formulario})
+        return render(request, 'porteria2/nuevoIngreso.html')
 
 @login_required
 @permission_required('porteria2.view_epp')
@@ -101,7 +101,7 @@ def controlEpp(request):
                 return redirect('nuevoIngreso')
         else:
             sweetify.error(request, title='Error con Ingreso o HDR', text='No se encuentra la hoja de ruta o el ingreso referenciado', persistent='Aceptar')
-            return redirect('nuevoingreso')
+            return redirect('nuevoIngreso')
 
     except Exception as excepcion:
         sweetify.error(request, title='Ocurrio un error', text =f'Ocurrio un error {str(excepcion)} al intentar cargar los datos', persistent = 'Aceptar')
@@ -132,6 +132,7 @@ def guardarControlEpp(request):
         if request.method == 'POST':
             form_control = FormEPP(request.POST)
             id_hdr = request.GET.get('id_hdr')
+            print(id_hdr)
             id_ingreso = request.GET.get('id_ingreso')
             existe_id_hdr = HDR.objects.filter(id = id_hdr, is_deleted = False, estado = 'Activo',sector = 'Porteria 2').exists()
             existe_id_ingreso = Ingreso.objects.filter(id = id_ingreso, is_deleted = False, ingresado = False).exists()
@@ -159,10 +160,12 @@ def guardarControlEpp(request):
 
                     if todos :
                         hdr.sector = 'Almacen PQ'
+                        hdr.save()
                         ingreso.ingresado = True
                         ingreso.save()
-                        hdr.save()
-                        form_control.save()
+                        epp = form_control.save(commit=False)
+                        epp.hdr = hdr
+                        epp.save()
                         sweetify.success(request, 'Control EPP', text='Se ha guardado el control de EPP', timer=3000)
                         return redirect('nuevoIngreso')
                     else:#se redirige para guardar el rechazo con el motivo 
