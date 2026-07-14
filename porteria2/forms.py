@@ -161,7 +161,10 @@ class FormEgreso(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(FormEgreso, self).__init__(*args, **kwargs)
-        self.fields['responsable'].queryset = Personal.objects.filter(is_deleted=False , sector='Porteria 2')
+        self.fields['responsable'].queryset = Personal.objects.filter(is_deleted=False , sector='Porteria 2')    
+        self.fields['fecha_salida'].initial = timezone.now()
+        self.fields['verificacion'].required = True
+        self.fields['salida_autorizada'].required = True
         
     def clean_verificacion(self):
         verificacion = self.cleaned_data.get('verificacion')

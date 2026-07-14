@@ -44,8 +44,9 @@
               {% csrf_token %}
               <div class="row">
                 <div class="col-2">
-                  <label class="form-label" for="fecha salida">Fecha</label>
-                  <input class="form-control" type="text" id="fecha salida" readonly value="" >
+                  <label class="form-label" for="fecha_salida2">Fecha</label>
+                  <input class="form-control" type="text" id="fecha_salida2" readonly value="" >
+                  <input type="datetime" name = 'fecha_salida' id="fecha_salida" hidden>
                 </div>
                 <div class="col-8"></div>
                <div class="col-2">

@@ -5,7 +5,8 @@ from django.db import models
 sectores = [
     ('Porteria 2', 'Porteria 2'),
     ('Inspeccion Quimica','Inspeccion Quimica'),
-    ('Balanza','Balanza'),
+    ('Almacen PQ','Almacen PQ'),
+    ('SHYMA','SHYMA'),
     ('PAMO','PAMO'),
     ('PSUL', 'PSUL')
 ]

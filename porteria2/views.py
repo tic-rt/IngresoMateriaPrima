@@ -51,7 +51,6 @@ def guardarNuevoIngreso(request):
                 sweetify.success(request, title="Ingreso Guardado",text="Ingreso de vehiculo registrado", timer=3000)
                 return redirect(f'controlEpp/?id_hdr={hdr.id}&id_ingreso={ingreso.id}')
             else:
-                print(formulario.errors)
                 errores = []
                 for campo, mensajes in formulario.errors.items():
                     for mensaje in mensajes:
@@ -81,7 +80,6 @@ def controlEpp(request):
             existe_ingreso = Ingreso.objects.filter(id=id_ingreso, is_deleted = False, ingresado=False).exists()#controla si existe el ingreso
         
             if(existe_id and existe_ingreso):
-                #hdr = formHDR
                 ingreso = Ingreso.objects.get(id = id_ingreso, is_deleted = False, ingresado = False)
                 empresa_transporte = ingreso.empresa_transporte
                 producto = ingreso.producto
@@ -115,9 +113,9 @@ def mostrarControlEpp(request):
     try:
         ingresos = Ingreso.objects.filter( ingresado = False, is_deleted = False, hdr__estado='Activo')
         if ingresos:
-            sweetify.toast(request,  'Controles Pendientes de EPP', icon='warning', timer=3000,allowOutsideClick=False, timerProgressBar = False)
+            sweetify.toast(request,  'Controles Pendientes de EPP', icon='warning', timer=3000, timerProgressBar = False)
         else:
-            sweetify.toast(request, 'Sin controles de EPP pendientes', icon='info', timer=3000, allowOutsideClick=False, timerProgressBar=False )
+            sweetify.toast(request, 'Sin controles de EPP pendientes', icon='info', timer=3000, timerProgressBar=False )
         return render(request,'porteria2/pendientes.html',
                         {'ingresos':ingresos})
     except Exception as excepcion:
@@ -227,15 +225,15 @@ def guardarRechazo(request):
     except Exception as excepcion:
         sweetify.error(request, 'Excepcion', text = f'Ocurrio un error {str(excepcion)}', persistent = 'Aceptar')
         return redirect('nuevoIngreso')
-
+    
 @login_required
+@permission_required('porteria2.view_egreso', login_url='index')
 def egresosPendientes(request):
     """Esta funcion devuelve a todos los egresos pendientes"""
     
     try:
         egresos = Ingreso.objects.filter(is_deleted=False, ingresado=True, hdr__sector ='Porteria 2 E',hdr__estado= 'Activo')
         if egresos:
-            sweetify.toast(request, 'Egresos Pendientes', text='hay egresos pendientes', icon='info', timer=3000, allowOutsideClick=False, timerProgressBar=False)
             return render(request,'porteria2/egresosPendientes.html',{'egresos':egresos})
         else:
             sweetify.toast(request, 'Egresos Pendientes', text='No hay egresos pendientes', icon='info', timer=3000, allowOutsideClick=False, timerProgressBar=False)
@@ -245,11 +243,12 @@ def egresosPendientes(request):
         return redirect('nuevoIngreso')
     
 @login_required
+@permission_required('porteria2.view_egreso', login_url='index')
 def egreso(request):
     """Esta funcion devuelve un egreso pendiente """
-    
-    if request.method == 'GET':
-        id_ingreso = request.GET.get('id_ingreso')
+    try:
+        if request.method == 'GET':
+            id_ingreso = request.GET.get('id_ingreso')
 
         if Ingreso.objects.filter(id=id_ingreso, is_deleted = False, ingresado=True, hdr__estado= 'Activo', hdr__sector = 'Porteria 2 E').exists():
             print(id_ingreso)
@@ -268,9 +267,9 @@ def egreso(request):
     else:
         sweetify.error(request,'Error', text='Hubo un error al cargar el ingreso referenciado no existe', persistent = 'Aceptar')
         return redirect('egresosPendientes')
-            
-    
+
 @login_required
+@permission_required('porteria2.add_egreso', login_url='index')
 def guardarEgreso(request):
     """Esta funcion guarda un egreso de vehiculo"""
     try:
@@ -282,7 +281,7 @@ def guardarEgreso(request):
             if existe_id:
                 ingreso = Ingreso.objects.get(id = id_ingreso)
                 hdr = ingreso.hdr
-                
+                print(formulario_egreso)
                 if formulario_egreso.is_valid():
                     egreso:Egreso = formulario_egreso.save(commit=False)
                     egreso.hdr = hdr

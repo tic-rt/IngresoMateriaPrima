@@ -11,21 +11,52 @@ import sweetify
 @permission_required('personal.view_personal', login_url='index')
 def personal(request):
     """Esta funcion devuelve todos los responsables de sector"""
-    usuario:User = request.user
-    personal = Personal.objects.filter(is_deleted=False).order_by('apellido','nombre')
-    form_responsable = FormPersonal()
     
-    if usuario.is_superuser :
-        grupo = 'Balanza'
-        responsables = personal
-    else:
-        grupo = usuario.groups.first()
-        if grupo :
-            responsables = personal.filter(sector=grupo.name)
-        else:
-            sweetify.error(request,'No tiene permisos', text='No pertenece a ningun sector, contacte con el administrador',persistent='Aceptar')
-            return redirect('index')
-
+    usuario_conectado = request.user
+    form_responsable = None
+    responsables = None
+    sector = None 
+    
+    sectores_disponibles = { 'Porteria 2': 'Porteria 2',
+                            'Inspeccion Quimica': 'Inspeccion Quimica',
+                            'Almacen PQ': 'Almacen PQ',
+                            'SHYMA': 'SHYMA',
+                            'PAMO': 'PAMO',
+                            'PSUL': 'PSUL'
+                            }
+    
+    if usuario_conectado.is_superuser:
+        responsables = Personal.objects.all()
+        form_responsable = FormPersonal(initial={'sector': None})  # No pasamos usuario_conectado aquí
+        
+    elif usuario_conectado.username == 'Porteria2':
+        responsables = Personal.objects.filter(is_deleted = False, sector ='Porteria 2')
+        sector = 'Porteria 2'
+        
+    elif usuario_conectado.username == 'Shyma':
+        sector = 'SHYMA'
+        responsables = Personal.objects.filter(is_deleted = False, sector ='SHYMA')
+        
+    elif usuario_conectado.username == 'Balanza':
+        sector = 'Balanza'
+        responsables = Personal.objects.filter(is_deleted = False, sector ='Almacen PQ')
+        
+    elif usuario_conectado.username == 'Laboratorio':
+        sector = 'Inspeccion Quimica'
+        responsables = Personal.objects.filter(is_deleted = False, sector ='Inspeccion Quimica')
+        
+    elif usuario_conectado.username == 'Pamo':
+        sector = 'PAMO'
+        responsables = Personal.objects.filter(is_deleted = False, sector ='PAMO')
+    
+    elif usuario_conectado.username == 'Psul':
+        sector = 'PSUL'
+        responsables = Personal.objects.filter(is_deleted = False, sector ='PSUL')
+        
+    form_responsable = FormPersonal(initial={'sector': sector, 'sectores_disponibles': sectores_disponibles})
+    
+    print(form_responsable)
+    
     return render(request,'personal/personal.html',
                 {'responsables':responsables,
                 'form_responsables':form_responsable})
