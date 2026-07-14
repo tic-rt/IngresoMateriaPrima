@@ -28,7 +28,7 @@ class FormIngreso(forms.ModelForm):
             'patente_chasis',
             'patente_semi',
             'remito',
-            'laboral',
+            'laborable',
             'responsable'
         ]
 
@@ -45,7 +45,7 @@ class FormIngreso(forms.ModelForm):
             }),
             'patente_chasis': forms.Select(),
             'patente_semi': forms.Select(),
-            'laboral': forms.Select(choices=laboral_opciones,attrs={'class': 'form-control'}),
+            'laborable': forms.Select(choices=laboral_opciones,attrs={'class': 'form-control'}),
             'responsable': forms.Select(attrs={
                 'class': 'form-control'
             }),
@@ -73,11 +73,11 @@ class FormIngreso(forms.ModelForm):
         self.helper.form_action = reverse('guardarNuevoIngreso')
         
         if self._dia_semana(): 
-            self.fields['laboral'].initial = True  # Valor por defecto si es un día laborable
+            self.fields['laborable'].initial = True  # Valor por defecto si es un día laborable
         else:
-            self.fields['laboral'].initial = False  # Valor por defecto si es fin de semana
-            self.fields['laboral'].widget.attrs['hidden'] = 'true'
-            self.helper.layout = self.helper.layout[0].remove('laboral')
+            self.fields['laborable'].initial = False  # Valor por defecto si es fin de semana
+            self.fields['laborable'].widget.attrs['hidden'] = 'true'
+            #self.helper.layout = self.helper.layout[0].remove('laborable')
         
         self.helper.layout = Layout(
             Div(
@@ -116,7 +116,7 @@ class FormIngreso(forms.ModelForm):
                 Div(
                     HTML('<h5>Inspeccion Quimica Presente</h5>'),
                     Row(
-                        Column('laboral',
+                        Column('laborable',
                                 css_class='col-4'),
                         Column(HTML('<div class= "bg-danger-subtle mt-4 border border-warning fs-6 fw-semibold"><p>Indicar si personal de Inspección Química se encuentra presente,seleccione "No" si se trata de feriado o asueto</div>'),css_class='col-8')
                     ),
@@ -149,13 +149,11 @@ class FormEgreso(forms.ModelForm):
                     (False, 'No')]
 
         fields = [
-            'fecha_salida',
             'verificacion',
             'salida_autorizada',
             'responsable']
 
         widgets = {
-            'fecha_salida':forms.DateTimeInput(attrs={'type':'datetime'}),
             'verificacion': forms.Select(choices=opciones, attrs={'class': 'form-control'}),
             'salida_autorizada': forms.Select(choices=opciones, attrs={'class':'form-control'}),
             'responsable': forms.Select(attrs={'class': 'form-control'})
@@ -213,6 +211,7 @@ class FormEPP(forms.ModelForm):
         super(FormEPP, self).__init__(*args, **kwargs)
         self.helper = FormHelper(self)
         self.helper.add_input(Submit('submit','Guardar Control'))
+        self.fields['responsable'].queryset = Personal.objects.filter(is_deleted=False , sector='Porteria 2')
         #self.helper.form_action = reverse('guardarControlEpp','?id_hdr={{id_hdr}}&id_ingreso={{id_ingreso}}')
         self.helper.layout = Layout(
             Div(

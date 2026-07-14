@@ -44,23 +44,20 @@ def guardarInspeccion(request):
             id_ingreso = request.POST.get('id_ingreso')
             id_hdr = request.POST.get('id_hdr')
             formulario_control = FormLaboratorio(request.POST)
-            print('la funcion')
-            print (f'id de de ingreso {id_ingreso}')
-            print(f'id de hdr {id_hdr}')
             if __controlIds(id_ingreso, id_hdr):
                 ingreso = Ingreso.objects.get(id = id_ingreso, is_deleted = False, hdr_id = id_hdr)
                 hdr = ingreso.hdr
                 
                 if formulario_control.is_valid():
                     #Si es amoniaco o azufre liquido debo guardar y  enviarlo a control de PAMPO\PSUL
-                    if ingreso.producto.nombre == 'Azufre Líquidoº':
+                    if ingreso.producto.producto == 'Azufre Líquidoº':
                         hdr.sector = 'PSUL'
                         hdr.save()
                         formulario_control.instance.hdr = hdr
                         formulario_control.save()
                         sweetify.success(request, 'Guardado', text=f'Control de Inspección de {ingreso.producto} guardado', timer=3000)
                         return redirect('pendientesInspeccion')
-                    elif ingreso.producto.nombre == 'Amoníaco':
+                    elif ingreso.producto.producto == 'Amoníaco':
                         hdr.sector = 'PAMO'
                         hdr.save()
                         formulario_control.instance.hdr = hdr

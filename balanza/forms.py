@@ -49,7 +49,7 @@ class FormBalanza(forms.ModelForm):
         super(FormBalanza, self).__init__(*args, **kwargs)
         self.helper = FormHelper(self)
         self.helper.add_input(Submit('Submit', 'Guardar pesaje'))
-        self.fields['responsable_entrada'].queryset = Personal.objects.filter(is_deleted = False, sector = 'Almacen PQ')
+        self.fields['responsable_entrada'].queryset = Personal.objects.filter(is_deleted = False, sector = 'Balanza')
         self.helper.layout = Layout(
             Div(
                 Row(
@@ -130,7 +130,7 @@ class FormBalanzaSalida(forms.ModelForm):
         super(FormBalanzaSalida, self).__init__(*args, **kwargs)
         self.helper = FormHelper(self)
         self.helper.add_input(Submit('Submit', 'Guardar pesaje'))
-        self.fields['responsable_salida'].queryset = Personal.objects.filter(is_deleted = False, sector = 'Almacen PQ')
+        self.fields['responsable_salida'].queryset = Personal.objects.filter(is_deleted = False, sector = 'Balanza')
         self.helper.layout = Layout(
             Div(
                 Row(

@@ -1,0 +1,97 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="container-fluid d-flex flex-column">
+    <div class="container fondo-balanza" style="height: 120px;"></div>
+    <div class="text-center pt-4 mb-5">
+        <div>
+            <h3>HDR</h3>
+        </div>
+        <div class="d-flex justify-content-center mb-5">
+            <div class="col-10 col-sm-8 ">
+                <table
+                    class="table table-striped table-bordered table-hover icon-link-hover"
+                    id="tabla-hdr">
+                    <thead class="nullable">
+                        <!---<th class="text-center">HDR</th> -->
+                        <th class="text-center">Fecha</th>
+                        <th class="text-center">Estado</th>
+                        <!-- <th class="text-center">Proveedor</th>-->
+                        <th class="text-center">Producto</th>
+                        <th class="text-center">Dominio Chasis</th>
+                        <th class="text-center">Dominio Semi</th>
+                    </thead>
+                    <tbody>
+                        {% for hdr in HDR%}
+                        <tr data-id="{{hdr.id}}" data-hdr="{{hdr.hdr_id}}">
+                            <!--<td class="text-center">
+                                {{hdr.id}}
+                            </td>-->
+                            <td class="text-center">
+                                {{hdr.hora_ingreso|date:"d/m/Y H:i"}}
+                            </td>
+                            <td class="text-center">
+                                {% if hdr.hdr.estado == "Finalizado" %}
+                                <div style="font-size: large;"
+                                    class="text-success ">
+                                    <i class="bi bi-check-circle-fill"></i>
+                                </div>
+                                {% else %}
+                                <div style="font-size: larger;"
+                                    class="text-warning">
+                                    <i
+                                        class="bi bi-exclamation-triangle-fill"></i>
+                                </div>
+                                {% endif %}
+                            </td>
+                            <td class="text-center">
+                                {{hdr.producto}}
+                            </td>
+                            <td class="text-center">
+                                {{hdr.patente_chasis}}
+                            </td>
+                            <td class="text-center">
+                                {{hdr.patente_semi}}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <button class="btn btn-danger float-end bi bi-arrow-left-circle"
+            onclick=history.back()> Regresar</button>
+    </div>
+</div>
+
+{% endblock content %}
+{% block js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        let tabla_hdr = new DataTable('#tabla-hdr',{
+            responsive: true,
+            language:{
+                url:'/static/vendor/datatables/es-Es.json'
+            },
+            order: [[0, 'desc']]
+        });
+        
+        let tabla = document.getElementById('tabla-hdr')
+        if (tabla && tabla.rows.length > 1 ){
+            tabla.addEventListener('click', function (event) {
+                let fila = event.target.closest('tr')
+
+                if (fila.getAttribute('data-id') === null) {
+                    return;
+                }
+                if (fila) {
+                    id_hdr = fila.getAttribute('data-id')
+                    window.open(`{% url 'exportar_hdr' %}?id_hdr=${id_hdr}`,'_blank');
+                }
+            })
+        }
+    });
+</script>
+
+{% endblock js %}

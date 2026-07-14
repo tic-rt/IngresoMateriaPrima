@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class ShymaConfig(AppConfig):
+class CalidadConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'shyma'
+    name = 'calidad'

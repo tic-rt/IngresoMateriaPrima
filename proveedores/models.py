@@ -11,17 +11,17 @@ from base.models import Base
 
 class Producto(Base):
     """Productos que se van a recibir """
-    nombre = models.TextField(max_length=100, verbose_name='Producto',blank=False, null=False, default='')
+    producto = models.TextField(max_length=100, verbose_name='Producto',blank=False, null=False, default='')
     
     class Meta:
         """Meta para definicion de Producto"""
 
         verbose_name = 'Producto'
         verbose_name_plural = 'Productos'
-        ordering = ['nombre']
+        ordering = ['producto']
     
     def __str__(self):
-        return self.nombre
+        return self.producto
 
 class Proveedor(Base):
     """Los proveedores que entregaran Producto"""

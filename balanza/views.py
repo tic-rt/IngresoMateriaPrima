@@ -9,6 +9,9 @@ from hdr.models import HDR
 from porteria2.models import Ingreso
 
 # Create your views here.
+def balanza_index(request):
+    """Funcion que devuelve la vista principal de balanza"""
+    return render(request,'balanza/index.html')
 
 def pendientes(request):
     """Funcion que devuelve todos los ingresos autorizados y que siguen a balanza"""

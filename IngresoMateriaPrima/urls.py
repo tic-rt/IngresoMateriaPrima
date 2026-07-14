@@ -29,4 +29,6 @@ urlpatterns = [
     path('PAMO/', include('pamo.urls')),
     path('PSUL/', include('psul.urls')),
     path('auth/',include('auth.urls')),
+    path('hdr/',include('hdr.urls')),
+    path('calidad/',include('calidad.urls'))
 ]

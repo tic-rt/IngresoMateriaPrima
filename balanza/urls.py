@@ -1,10 +1,11 @@
 
 from django.urls import path
 
-from balanza.views import guardarPesaje, guardarPesaje2, pendientes, pesaje, egresos, pesajeSalida
+from balanza.views import balanza_index, guardarPesaje, guardarPesaje2, pendientes, pesaje, egresos, pesajeSalida
 
 
 urlpatterns = [
+    path('inicio/', balanza_index, name='balanzaIndex'),
     path('pendientes', pendientes,name='pendientesBalanza'),
     path('pesaje/', pesaje, name='pesaje'),
     path('guardarPesaje/', guardarPesaje, name='guardarPesaje'),

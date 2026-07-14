@@ -1,6 +1,6 @@
 superusuario
-usuario:Administrador
-password:Tic2024$
+usuario:Tic
+password:Magenta1
 
 Porteria2
 Password2024
@@ -16,7 +16,6 @@ L4b0r4t0r10$
 
 
 Pamo
-Pamo#2025
 Pamo#2025
 
 Psul

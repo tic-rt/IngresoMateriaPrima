@@ -14,7 +14,6 @@ def mostrar(request):
         if request.method == 'GET':
             proveedores = Proveedor.objects.filter(is_deleted = False)
             productos = Producto.objects.filter(is_deleted = False)
-
             return render(request, 'proveedor/proveedor.html',
                           {'proveedores':proveedores,
                            'productos':productos})

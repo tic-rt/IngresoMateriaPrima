@@ -1,4 +1,5 @@
 from datetime import datetime
+from django.http import HttpResponse
 from django.utils import timezone
 from django.shortcuts import redirect, render
 import sweetify
@@ -6,7 +7,7 @@ import sweetify
 from hdr.forms import FormHDR
 from hdr.models import HDR
 from porteria2.forms import FormEPP, FormEgreso, FormIngreso
-from porteria2.models import Ingreso
+from porteria2.models import Egreso, Ingreso
 from django.contrib.auth.decorators import login_required, permission_required
 
 # Create your views here.
@@ -62,17 +63,18 @@ def guardarNuevoIngreso(request):
 
     except Exception as excepcion:
         sweetify.error(request, title='excepcion al registrar Ingreso', text=f'Ocurrio un error {str(excepcion)}', persistent='Aceptar')
-        return render(request, 'porteria2/nuevoIngreso.html', {'formulario_ingreso': formulario})
+        return render(request, 'porteria2/nuevoIngreso.html')
 
 @login_required
 @permission_required('porteria2.view_epp')
 def controlEpp(request):
     """esta funcion muestra el ultimo ingreso y se procede al control de epp"""
-    
     try:
         if request.method =='GET':
             id_hdr = request.GET.get('id_hdr')
             id_ingreso = request.GET.get('id_ingreso')
+            print(id_hdr)
+            print(id_ingreso)
             
             existe_id = HDR.objects.filter(id =id_hdr,is_deleted = False, estado ='Activo', sector='Porteria 2').exists()#controla si existe la hdr
             existe_ingreso = Ingreso.objects.filter(id=id_ingreso, is_deleted = False, ingresado=False).exists()#controla si existe el ingreso
@@ -97,7 +99,7 @@ def controlEpp(request):
                 return redirect('nuevoIngreso')
         else:
             sweetify.error(request, title='Error con Ingreso o HDR', text='No se encuentra la hoja de ruta o el ingreso referenciado', persistent='Aceptar')
-            return redirect('nuevoingreso')
+            return redirect('nuevoIngreso')
 
     except Exception as excepcion:
         sweetify.error(request, title='Ocurrio un error', text =f'Ocurrio un error {str(excepcion)} al intentar cargar los datos', persistent = 'Aceptar')
@@ -128,6 +130,7 @@ def guardarControlEpp(request):
         if request.method == 'POST':
             form_control = FormEPP(request.POST)
             id_hdr = request.GET.get('id_hdr')
+            print(id_hdr)
             id_ingreso = request.GET.get('id_ingreso')
             existe_id_hdr = HDR.objects.filter(id = id_hdr, is_deleted = False, estado = 'Activo',sector = 'Porteria 2').exists()
             existe_id_ingreso = Ingreso.objects.filter(id = id_ingreso, is_deleted = False, ingresado = False).exists()
@@ -155,10 +158,12 @@ def guardarControlEpp(request):
 
                     if todos :
                         hdr.sector = 'Almacen PQ'
+                        hdr.save()
                         ingreso.ingresado = True
                         ingreso.save()
-                        hdr.save()
-                        form_control.save()
+                        epp = form_control.save(commit=False)
+                        epp.hdr = hdr
+                        epp.save()
                         sweetify.success(request, 'Control EPP', text='Se ha guardado el control de EPP', timer=3000)
                         return redirect('nuevoIngreso')
                     else:#se redirige para guardar el rechazo con el motivo 
@@ -227,8 +232,9 @@ def egresosPendientes(request):
     """Esta funcion devuelve a todos los egresos pendientes"""
     
     try:
-        egresos = Ingreso.objects.filter(is_deleted=False, ingresado=True, hdr__sector ='Porteria 2 E')
+        egresos = Ingreso.objects.filter(is_deleted=False, ingresado=True, hdr__sector ='Porteria 2 E',hdr__estado= 'Activo')
         if egresos:
+            sweetify.toast(request, 'Egresos Pendientes', text='hay egresos pendientes', icon='info', timer=3000, allowOutsideClick=False, timerProgressBar=False)
             return render(request,'porteria2/egresosPendientes.html',{'egresos':egresos})
         else:
             sweetify.toast(request, 'Egresos Pendientes', text='No hay egresos pendientes', icon='info', timer=3000, allowOutsideClick=False, timerProgressBar=False)
@@ -241,24 +247,27 @@ def egresosPendientes(request):
 @permission_required('porteria2.view_egreso', login_url='index')
 def egreso(request):
     """Esta funcion devuelve un egreso pendiente """
-    try:
-        if request.method == 'GET':
-            id_ingreso = request.GET.get('id_ingreso')
+    
+    if request.method == 'GET':
+        id_ingreso = request.GET.get('id_ingreso')
 
-            if Ingreso.objects.filter(id=id_ingreso, is_deleted = False, ingresado=True, hdr__estado= 'Activo', hdr__sector = 'Porteria 2 E').exists():
-                ingreso = Ingreso.objects.get(id=id_ingreso)
-                formulario_egreso = FormEgreso(initial={'verificacion':None,'salida_autorizada':None,})
-                return render(request, 'porteria2/egreso.html',{
-                    'ingreso':ingreso,
-                    'formulario_egreso':formulario_egreso
+        if Ingreso.objects.filter(id=id_ingreso, is_deleted = False, ingresado=True, hdr__estado= 'Activo', hdr__sector = 'Porteria 2 E').exists():
+            print(id_ingreso)
+            print ('ingreso existe')
+            ingreso = Ingreso.objects.get(id=id_ingreso)
+            print ('ingreso cargado')
+            formulario_egreso = FormEgreso(initial={'verificacion':None,'salida_autorizada':None,})
+            return render(request, 'porteria2/egreso.html',{
+                'ingreso':ingreso,
+                'formulario_egreso':formulario_egreso
                     })
 
-            else:
-                sweetify.error(request,'Error', text='Hubo un error al cargar el ingreso referenciado no existe', persistent = 'Aceptar')
-                return redirect('egresosPendientes')
         else:
             sweetify.error(request,'Error', text='Hubo un error al cargar el ingreso referenciado no existe', persistent = 'Aceptar')
             return redirect('egresosPendientes')
+    else:
+        sweetify.error(request,'Error', text='Hubo un error al cargar el ingreso referenciado no existe', persistent = 'Aceptar')
+        return redirect('egresosPendientes')
             
     except Exception as excepcion:
         sweetify.error(request,'Error', text=f'Ocurrio un error {str(excepcion)}', persistent = 'Aceptar')
@@ -270,22 +279,20 @@ def guardarEgreso(request):
     """Esta funcion guarda un egreso de vehiculo"""
     try:
         if request.method == 'POST':
-            formulario_egreso = FormEgreso(request.POST)
-            print(formulario_egreso)
-            formulario_egreso.instance.fecha_salida = datetime.now()
-            id_ingreso = request.GET.get('id_ingreso')
-            print(f'el id de ingreso es {id_ingreso}')
+            formulario_egreso = FormEgreso(request.POST)            
+            id_ingreso = request.GET.get('id_ingreso')            
             existe_id = Ingreso.objects.filter(id = id_ingreso, is_deleted = False, ingresado = True, hdr__estado = 'Activo' ).exists()
-            print(existe_id)
             
             if existe_id:
                 ingreso = Ingreso.objects.get(id = id_ingreso)
                 hdr = ingreso.hdr
                 print(formulario_egreso)
                 if formulario_egreso.is_valid():
-                    #formulario_egreso.save()
-                    hdr.sector = 'Finalizado'
-                    #hdr.save()
+                    egreso:Egreso = formulario_egreso.save(commit=False)
+                    egreso.hdr = hdr
+                    egreso.save()
+                    hdr.estado = 'Finalizado'
+                    hdr.save()
                     sweetify.success(request,'Egreso Guardado', text=f'El egreso del vehiculo {ingreso.patente_chasis} {ingreso.patente_semi} se ha guardado', timer=3000)
                     return redirect('egresosPendientes')
                 else:
@@ -304,3 +311,8 @@ def guardarEgreso(request):
         print(excepcion)
         sweetify.error(request, 'Error', text=f'Ocurrio un error {str(excepcion)} ', persistent = 'Aceptar')
         return redirect('egresosPendientes')
+    
+@login_required
+def transito_vehiculos(request):
+    """Esta funcion devuelve datos (json) de los vehiculos en transito"""
+    pass
