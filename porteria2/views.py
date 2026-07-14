@@ -247,27 +247,27 @@ def egresosPendientes(request):
 @permission_required('porteria2.view_egreso', login_url='index')
 def egreso(request):
     """Esta funcion devuelve un egreso pendiente """
-    
-    if request.method == 'GET':
-        id_ingreso = request.GET.get('id_ingreso')
+    try:
+        if request.method == 'GET':
+            id_ingreso = request.GET.get('id_ingreso')
 
-        if Ingreso.objects.filter(id=id_ingreso, is_deleted = False, ingresado=True, hdr__estado= 'Activo', hdr__sector = 'Porteria 2 E').exists():
-            print(id_ingreso)
-            print ('ingreso existe')
-            ingreso = Ingreso.objects.get(id=id_ingreso)
-            print ('ingreso cargado')
-            formulario_egreso = FormEgreso(initial={'verificacion':None,'salida_autorizada':None,})
-            return render(request, 'porteria2/egreso.html',{
-                'ingreso':ingreso,
-                'formulario_egreso':formulario_egreso
+            if Ingreso.objects.filter(id=id_ingreso, is_deleted = False, ingresado=True, hdr__estado= 'Activo', hdr__sector = 'Porteria 2 E').exists():
+                print(id_ingreso)
+                print ('ingreso existe')
+                ingreso = Ingreso.objects.get(id=id_ingreso)
+                print ('ingreso cargado')
+                formulario_egreso = FormEgreso(initial={'verificacion':None,'salida_autorizada':None,})
+                return render(request, 'porteria2/egreso.html',{
+                    'ingreso':ingreso,
+                    'formulario_egreso':formulario_egreso
                     })
 
+            else:
+                sweetify.error(request,'Error', text='Hubo un error al cargar el ingreso referenciado no existe', persistent = 'Aceptar')
+                return redirect('egresosPendientes')
         else:
             sweetify.error(request,'Error', text='Hubo un error al cargar el ingreso referenciado no existe', persistent = 'Aceptar')
             return redirect('egresosPendientes')
-    else:
-        sweetify.error(request,'Error', text='Hubo un error al cargar el ingreso referenciado no existe', persistent = 'Aceptar')
-        return redirect('egresosPendientes')
             
     except Exception as excepcion:
         sweetify.error(request,'Error', text=f'Ocurrio un error {str(excepcion)}', persistent = 'Aceptar')
