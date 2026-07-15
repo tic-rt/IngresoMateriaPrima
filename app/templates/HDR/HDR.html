@@ -198,15 +198,15 @@
                             <tbody>
                                 <tr>
                                     <td><b>ENTRADA</b></td>
-                                    <td>{{pamo.hora_ingreso|time:"H:i"}}</td>
-                                    <td>{{pamo.presion_ingreso}}</td>
-                                    <td>{{pamo.temperatura_ingreso}}</td>
+                                    <td> {% if pamo.hora_ingreso %}{{pamo.hora_ingreso|time:"H:i"}} Hs.{% endif %}</td>
+                                    <td>{% if pamo.presion_ingreso %} {{pamo.presion_ingreso}} Kgs.{% endif %}</td>
+                                    <td>{% if pamo.temperatura_ingreso %} {{pamo.temperatura_ingreso}} °C.{% endif %}</td>
                                 </tr>
                                 <tr>
                                     <td><b>SALIDA</b></td>
-                                    <td>{{pamo.hora_salida|time:"H:i"}}</td>
-                                    <td>{{pamo.presion_salida}}</td>
-                                    <td>{{pamo.temperatura_salida}}</td>
+                                    <td> {% if pamo.hora_salida %}{{pamo.hora_salida|time:"H:i"}} Hs.{% endif %}</td>
+                                    <td>{% if pamo.presion_salida %} {{pamo.presion_salida}} Kgs.{% endif %}</td>
+                                    <td>{% if pamo.temperatura_salida %} {{pamo.temperatura_salida}} °C.{% endif %}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -226,11 +226,11 @@
                 <td style="width: 60%;">
                     Fecha:&nbsp; <b> {{balanza.hora_salida|date:"d/m/y"}} </b><br>
                     Hora de Salida:&nbsp; <b> {{balanza.hora_salida|date:"H:i"}} </b><br>
-                    Peso del Vehículo en FMRT:&nbsp; <b> {{balanza.peso_fmrt}} </b><br>
-                    Peso del Vehículo vacio:&nbsp; <b> {{balanza.peso_vacio}} </b><br>
-                    Peso de Taquilla:&nbsp; <b> {{balanza.peso_taquilla}} </b><br>
-                    Peso de Bolsas/Tarima:&nbsp; <b> {{balanza.peso_bolsa_tarima}} </b><br>
-                    Peso Neto:&nbsp; <b> {{balanza.peso_neto}} </b><br>
+                    Peso del Vehículo en FMRT:&nbsp; <b> {% if balanza.peso_fmrt != 0 %} {{balanza.peso_fmrt}} {% else %} {% endif %} </b><br>
+                    Peso del Vehículo vacio:&nbsp; <b> {% if balanza.peso_vacio != 0 %} {{balanza.peso_vacio}} {% else %} {% endif %} </b><br>
+                    Peso de Taquilla:&nbsp; <b> {% if balanza.peso_taquilla != 0 %} {{balanza.peso_taquilla}} {% else %} {% endif %} </b><br>
+                    Peso de Bolsas/Tarima:&nbsp; <b> {% if balanza.peso_bolsa_tarima != 0 %} {{balanza.peso_bolsa_tarima}} {% else %} {% endif %} </b><br>
+                    Peso Neto:&nbsp; <b> {% if balanza.peso_neto != 0 %} {{balanza.peso_neto}} {% else %} {% endif %} </b><br>
                     Observaciones:&nbsp; <b> {{observaciones_eiq}} </b>
                 </td>
                 <td style="width: 40%">
