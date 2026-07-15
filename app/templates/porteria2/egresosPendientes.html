@@ -11,30 +11,30 @@
         <div class="d-flex justify-content-center mb-5">
             <div class="col-10 col-sm-8 ">
                 <table class="table table-striped table-bordered table-hover icon-link-hover" id="tabla-pendientes">
-                    <thead>
+                    <tr>
                         <th class="text-center">Empresa</th>
-                        <th class="text-center">Camión</th>
-                        <th class="text-center">Semi</th>
+                        <th class="text-center">Patente Chasis</th>
+                        <th class="text-center">Patente Semi</th>
                         <th class="text-center">Producto</th>
-                        <th class="text-center">Fecha de ingreso</th>
-                    </thead>
+                        <th class="text-center">Fecha y hora de ingreso</th>
+                    </tr>
                     <tbody>
-                        {% for egreso in egresos%}
-                        <tr class="disparador" data-id="{{egreso.id}}" data-hdr="{{egreso.hdr_id}}">
+                        {% for ingreso in egresos%}
+                        <tr class="disparador" data-id="{{ingreso.id}}" data-hdr="{{ingreso.hdr_id}}">
                             <td>
-                                {{egreso.empresa_transporte}}
+                                {{ingreso.empresa_transporte}}
                             </td>
                             <td>
-                                {{egreso.patente_chasis}}
+                                {{ingreso.patente_chasis}}
                             </td>
                             <td>
-                                {{egreso.patente_semi}}
+                                {{ingreso.patente_semi}}
                             </td>
                             <td>
-                                {{egreso.producto}}
+                                {{ingreso.producto}}
                             </td>
                             <td>
-                                {{egreso.hora_ingreso|date:"d/m/Y H:i"}}
+                                {{ingreso.hora_ingreso|date:"d/m/Y H:i"}}
                             </td>
                         </tr>
                         {% endfor %}
