@@ -125,7 +125,6 @@ def guardarPesaje2(request):
                 formulario_pesaje = FormBalanzaSalida(request.POST, instance = balanza)
                 print(formulario_pesaje)
                 formulario_pesaje.instance.fecha_salida = hoy
-                print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
                 print(formulario_pesaje)
                 
                 if formulario_pesaje.is_valid():
