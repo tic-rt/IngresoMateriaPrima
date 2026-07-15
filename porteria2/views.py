@@ -232,13 +232,13 @@ def egresosPendientes(request):
     """Esta funcion devuelve a todos los egresos pendientes"""
     
     try:
-        egresos = Ingreso.objects.filter(is_deleted=False, ingresado=True, hdr__sector ='Porteria 2 E',hdr__estado= 'Activo')
-        if egresos:
+        ingreso = Ingreso.objects.filter(is_deleted=False, ingresado=True, hdr__sector ='Porteria 2 E',hdr__estado= 'Activo')
+        if ingreso:
             sweetify.toast(request, 'Egresos Pendientes', text='hay egresos pendientes', icon='info', timer=3000, allowOutsideClick=False, timerProgressBar=False)
-            return render(request,'porteria2/egresosPendientes.html',{'egresos':egresos})
+            return render(request,'porteria2/egresosPendientes.html',{'egresos':ingreso})
         else:
             sweetify.toast(request, 'Egresos Pendientes', text='No hay egresos pendientes', icon='info', timer=3000, allowOutsideClick=False, timerProgressBar=False)
-            return render(request,'porteria2/egresosPendientes.html',{'egresos':egresos})
+            return render(request,'porteria2/egresosPendientes.html',{'egresos':ingreso})
     except Exception as excepcion:
         sweetify.error(request, 'Excepcion', text = f'Ocurrio un error {str(excepcion)}', persistent ='Aceptar')
         return redirect('nuevoIngreso')
@@ -252,11 +252,9 @@ def egreso(request):
             id_ingreso = request.GET.get('id_ingreso')
 
             if Ingreso.objects.filter(id=id_ingreso, is_deleted = False, ingresado=True, hdr__estado= 'Activo', hdr__sector = 'Porteria 2 E').exists():
-                print(id_ingreso)
-                print ('ingreso existe')
                 ingreso = Ingreso.objects.get(id=id_ingreso)
-                print ('ingreso cargado')
                 formulario_egreso = FormEgreso(initial={'verificacion':None,'salida_autorizada':None,})
+                
                 return render(request, 'porteria2/egreso.html',{
                     'ingreso':ingreso,
                     'formulario_egreso':formulario_egreso
