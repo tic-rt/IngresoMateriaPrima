@@ -42,21 +42,28 @@ class FormPersonal(ModelForm):
         }
 
     def __init__(self, *args, **kwargs):
-        # Extraemos el sector y los sectores disponibles de 'initial'
-        sector = kwargs.get('initial', {}).get('sector', None)
-        sectores_disponibles = kwargs.get('initial', {}).get('sectores_disponibles', {})
+        # Extraemos sector y sectores_disponibles como kwargs directos
+        sector = kwargs.pop('sector', None)
+        sectores_disponibles = kwargs.pop('sectores_disponibles', None)
 
         super().__init__(*args, **kwargs)
 
-        # Establecemos las opciones del campo 'sector' en función de los sectores disponibles
-        if sector:
-            # Si el sector está definido (especificado por la vista), solo mostramos ese sector
-            self.fields['sector'].choices = [(sector, sectores_disponibles[sector])]
+        if sectores_disponibles:
+            if sector:
+                self.fields['sector'].choices = [(sector, sectores_disponibles[sector])]
+            else:
+                self.fields['sector'].choices = list(sectores_disponibles.items())
         else:
-            # Si no se define un sector específico, mostramos todos los sectores disponibles
-            self.fields['sector'].choices = list(sectores_disponibles.items())
+            self.fields['sector'].choices = self.base_fields['sector'].choices
 
-        # Si ya hay un sector inicial, lo asignamos
+        # Si hay una instancia (edición), asegurar que su sector esté en las opciones
+        if self.instance and self.instance.pk:
+            instancia_sector = self.instance.sector
+            if instancia_sector:
+                sectores_actuales = dict(self.fields['sector'].choices)
+                if instancia_sector not in sectores_actuales:
+                    self.fields['sector'].choices = list(self.fields['sector'].choices) + [(instancia_sector, instancia_sector)]
+
         if sector:
             self.fields['sector'].initial = sector
             

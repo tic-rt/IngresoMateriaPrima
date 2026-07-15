@@ -2,10 +2,40 @@ from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required, permission_required
 from personal.forms import FormPersonal
 from personal.models import Personal
-from django.contrib.auth.models import User
 import sweetify
 
 # Create your views here.
+
+
+def get_sector_form_initial(user):
+    """Devuelve el sector inicial y los sectores disponibles para el formulario."""
+    sectores_disponibles = {
+        'Porteria 2': 'Porteria 2',
+        'Inspeccion Quimica': 'Inspeccion Quimica',
+        'Almacen PQ': 'Almacen PQ',
+        'SHYMA': 'SHYMA',
+        'PAMO': 'PAMO',
+        'PSUL': 'PSUL',
+    }
+
+    if user.is_superuser:
+        return {'sector': None, 'sectores_disponibles': sectores_disponibles}
+
+    sector_por_usuario = {
+        'porteria2': 'Porteria 2',
+        'shyma': 'SHYMA',
+        'balanza': 'Almacen PQ',
+        'laboratorio': 'Inspeccion Quimica',
+        'pamo': 'PAMO',
+        'psul': 'PSUL',
+    }
+
+    sector = sector_por_usuario.get(user.username.lower())
+    if sector:
+        return {'sector': sector, 'sectores_disponibles': {sector: sectores_disponibles[sector]}}
+
+    return {'sector': None, 'sectores_disponibles': sectores_disponibles}
+
 
 @login_required
 @permission_required('personal.view_personal', login_url='index')
@@ -13,61 +43,31 @@ def personal(request):
     """Esta funcion devuelve todos los responsables de sector"""
     
     usuario_conectado = request.user
-    form_responsable = None
+    sector_initial = get_sector_form_initial(usuario_conectado)
     responsables = None
-    sector = None 
-    
-    sectores_disponibles = { 'Porteria 2': 'Porteria 2',
-                            'Inspeccion Quimica': 'Inspeccion Quimica',
-                            'Almacen PQ': 'Almacen PQ',
-                            'SHYMA': 'SHYMA',
-                            'PAMO': 'PAMO',
-                            'PSUL': 'PSUL'
-                            }
-    
+
     if usuario_conectado.is_superuser:
-        responsables = Personal.objects.all()
-        form_responsable = FormPersonal(initial={'sector': None})  # No pasamos usuario_conectado aquí
-        
-    elif usuario_conectado.username == 'Porteria2':
-        responsables = Personal.objects.filter(is_deleted = False, sector ='Porteria 2')
-        sector = 'Porteria 2'
-        
-    elif usuario_conectado.username == 'Shyma':
-        sector = 'SHYMA'
-        responsables = Personal.objects.filter(is_deleted = False, sector ='SHYMA')
-        
-    elif usuario_conectado.username == 'Balanza':
-        sector = 'Balanza'
-        responsables = Personal.objects.filter(is_deleted = False, sector ='Almacen PQ')
-        
-    elif usuario_conectado.username == 'Laboratorio':
-        sector = 'Inspeccion Quimica'
-        responsables = Personal.objects.filter(is_deleted = False, sector ='Inspeccion Quimica')
-        
-    elif usuario_conectado.username == 'Pamo':
-        sector = 'PAMO'
-        responsables = Personal.objects.filter(is_deleted = False, sector ='PAMO')
-    
-    elif usuario_conectado.username == 'Psul':
-        sector = 'PSUL'
-        responsables = Personal.objects.filter(is_deleted = False, sector ='PSUL')
-        
-    form_responsable = FormPersonal(initial={'sector': sector, 'sectores_disponibles': sectores_disponibles})
-    
-    print(form_responsable)
-    
+        responsables = Personal.objects.filter(is_deleted=False)
+    else:
+        sector = sector_initial['sector']
+        if sector:
+            responsables = Personal.objects.filter(is_deleted=False, sector=sector)
+        else:
+            responsables = Personal.objects.none()
+
+    form_responsable = FormPersonal(**sector_initial)
+
     return render(request,'personal/personal.html',
                 {'responsables':responsables,
                 'form_responsables':form_responsable})
-    
+     
 @login_required
 @permission_required('personal.add_personal', login_url='index')
 def agregarPersonal(request):
     """Esta funcion agrega un nuevo responsable a un area o sector"""
     try:
         if request.method == 'POST':
-            formulario = FormPersonal(request.POST)
+            formulario = FormPersonal(request.POST, **get_sector_form_initial(request.user))
             
             if formulario.is_valid():
                 formulario.save()
@@ -97,7 +97,7 @@ def editarPersonal(request):
 
             if Personal.objects.filter(id=id_responsable).exists():
                 instancia = Personal.objects.get(id=id_responsable)
-                form_editar = FormPersonal(instance=instancia)
+                form_editar = FormPersonal(instance=instancia, **get_sector_form_initial(request.user))
                 return render(request,'personal/editar.html',{'form_editar':form_editar})
             else:
                 sweetify.error(request,'No permitido', text='EL agente no existe o fue eliminado')
@@ -140,7 +140,7 @@ def actualizar(request):
         if(request.method=='POST'):
             id_responsable = request.POST.get('id')
             instancia = Personal.objects.get(id=id_responsable)
-            formulario = FormPersonal(request.POST, instance=instancia)
+            formulario = FormPersonal(request.POST, instance=instancia, **get_sector_form_initial(request.user))
 
             if formulario.is_valid() and formulario :
                 formulario.save()
@@ -152,7 +152,8 @@ def actualizar(request):
                 for campo, mensajes in formulario.errors.items():
                     for mensaje in mensajes:
                         errores.append(f'{campo}: {mensaje}')
-                        errores_str = '<br>'.join(errores)
+                
+                errores_str = '<br>'.join(errores)
                 
                 sweetify.warning(request,'Error al editar', text = errores_str, persistent = 'Aceptar')
                 return redirect('personal')
