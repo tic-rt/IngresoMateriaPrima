@@ -46,12 +46,11 @@
                 <div class="col-2">
                   <label class="form-label" for="fecha_salida2">Fecha</label>
                   <input class="form-control" type="text" id="fecha_salida2" readonly value="" >
-                  <input type="datetime" name = 'fecha_salida' id="fecha_salida" hidden>
                 </div>
                 <div class="col-8"></div>
                <div class="col-2">
-                  <label class="form-label" for="hora salida">Hora</label>
-                  <input type="text" class="form-control text-center" id="hora salida" value="" readonly>
+                  <label class="form-label" for="hora_salida">Hora</label>
+                  <input type="text" class="form-control text-center" id="hora_salida" value="" readonly>
                 </div> 
               </div>
               <div class="row mt-3">
@@ -87,11 +86,10 @@
 {% block js %}
 <script>
 document.addEventListener('DOMContentLoaded', function(){
-  var tiempo = document.getElementById('hora salida')
-  var fecha = document.getElementById('fecha salida')
+  var tiempo = document.getElementById('hora_salida')
+  var fechaVisible = document.getElementById('fecha_salida2')
 
-  fecha.value = hoy()
-  //fecha.value = new Date().toLocaleString('sv-SE', { timeZone: 'America/Argentina/Buenos_Aires' }).slice(0, 16);
+  fechaVisible.value = hoy()
   tiempo.value= hora()
 
   setInterval(function (){
