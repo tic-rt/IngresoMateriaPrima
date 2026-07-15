@@ -29,7 +29,6 @@ def agregarProveedor(request):
     try:
         if request.method == 'POST':
             nombre_proveedor:str = request.POST.get('proveedor')
-            nombre_proveedor = nombre_proveedor.title()
             proveedor = Proveedor(nombre=nombre_proveedor)
             proveedor.save()
             print(nombre_proveedor)
