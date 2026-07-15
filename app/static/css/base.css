@@ -85,6 +85,9 @@
   opacity: 1; 
   z-index: -1;
 }
+.disparador {
+  cursor: pointer; /* Cambia el cursor al pasar sobre la fila */
+}
 
 /*fondo para camiones.html*/
 .fondo-camiones {
