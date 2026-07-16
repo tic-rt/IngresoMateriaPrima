@@ -25,7 +25,7 @@
                     </thead>
                     <tbody>
                         {% for responsable in responsables %}
-                        <tr>
+                        <tr class="disparador" data-id="{{responsable.id}}">
                             <td>{{responsable.nombre}}</td>
                             <td>{{responsable.apellido}}</td>
                             <td class="text-center">{{responsable.legajo}}</td>
