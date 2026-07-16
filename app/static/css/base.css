@@ -1,13 +1,8 @@
 /* Estilos para el header */
-.header {
-    background-color: #00498d; 
+.header{
+    background: linear-gradient(311deg, rgba(2, 10, 46, 1) 0%, rgba(0, 73, 141, 1) 25%);
     color: aliceblue;
-    width: 100%;
-  }
-  .logo{
-    margin-left: 5%;
-    min-width: 40px;
-    min-height: auto;
+    width:100%;
   }
   
   .boton-salida{
@@ -17,34 +12,48 @@
   }
   
 /* Ajustes para la navbar */
-.navbar {
-  background-color: rgb(193, 195, 197);
-  z-index: 1000; /* Asegura que la navbar esté sobre la barra lateral */
-  /* min-height: 70px; */
+.navbar .nav-item .nav-link{
+  color:rgb(199, 204, 209) !important;
+  font-size: 1.3rem;
+
 }
+.navbar .nav-item .nav-link:hover{
+  color: rgb(242, 242, 250)!important;
+  font-weight: 600;
+}
+
 /* Ajustes para la barra lateral */
 .lateral {
   padding-top: 2%;
-  background-color: #00498d; 
+  background: rgb(2, 10, 46);
+  background: linear-gradient(311deg, rgba(2, 10, 46, 1) 0%, rgba(0, 73, 141, 1) 25%);
   min-height: 87vh;
 } 
 
 .lateral .nav-item .nav-link {
   color: rgb(199, 204, 209);
+  font-size: 1.2rem;
+}
+.lateral .nav-item .nav-link:hover {
+  color: rgb(242, 242, 250)!important;
+  transition: 300ms;
+  font-weight: 600;
+  font-size: 1.3rem;
+  
+  
 }
 
-h4 {
+.sub-titulo2, .titulo {
   color : aliceblue;
 }
 
 .link-side {
   color:  rgb(193, 195, 197);
   transition: 200ms; /* Suaviza la transición del cambio de tamaño */
-  ;
 }
-.link-side:hover {
-  font-size: 1.1rem;
-  color: aliceblue;
+.lateral .link-side:hover {
+  font-size: 1.2rem;
+  color: rgb(245, 245, 245);
 }
 
 /*Capitalizar la primer letra de cada palabra*/
@@ -75,6 +84,9 @@ h4 {
   background-repeat: no-repeat;
   opacity: 1; 
   z-index: -1;
+}
+.disparador {
+  cursor: pointer; /* Cambia el cursor al pasar sobre la fila */
 }
 
 /*fondo para camiones.html*/
@@ -152,6 +164,26 @@ h4 {
   width: 100%;
   height: 100%;
   background-image: url('../img/epp.jpg');
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 1;
+  z-index: -1;
+}
+/*fondo para balanza.html*/
+.fondo-balanza {
+  position: relative;
+  overflow: hidden;
+}
+
+.fondo-balanza::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('../img/fondo-balanza.webp');
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;

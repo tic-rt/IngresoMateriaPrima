@@ -41,6 +41,32 @@ class FormPersonal(ModelForm):
             })
         }
 
+    def __init__(self, *args, **kwargs):
+        # Extraemos sector y sectores_disponibles como kwargs directos
+        sector = kwargs.pop('sector', None)
+        sectores_disponibles = kwargs.pop('sectores_disponibles', None)
+
+        super().__init__(*args, **kwargs)
+
+        if sectores_disponibles:
+            if sector:
+                self.fields['sector'].choices = [(sector, sectores_disponibles[sector])]
+            else:
+                self.fields['sector'].choices = list(sectores_disponibles.items())
+        else:
+            self.fields['sector'].choices = self.base_fields['sector'].choices
+
+        # Si hay una instancia (edición), asegurar que su sector esté en las opciones
+        if self.instance and self.instance.pk:
+            instancia_sector = self.instance.sector
+            if instancia_sector:
+                sectores_actuales = dict(self.fields['sector'].choices)
+                if instancia_sector not in sectores_actuales:
+                    self.fields['sector'].choices = list(self.fields['sector'].choices) + [(instancia_sector, instancia_sector)]
+
+        if sector:
+            self.fields['sector'].initial = sector
+            
     def clean_nombre(self):
         nombre :str = self.cleaned_data.get('nombre')
 

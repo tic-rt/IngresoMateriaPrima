@@ -52,6 +52,11 @@ INSTALLED_APPS = [
     'personal',
     'proveedores',
     'transporte',
+    'balanza',
+    'laboratorio',
+    'pamo',
+    'psul',
+    'calidad'
 ]
 
 MIDDLEWARE = [
@@ -77,6 +82,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'app.context_processors.grupos_usuario',
             ],
         },
     },
@@ -120,11 +126,11 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'es-ES'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'America/Argentina/Buenos_Aires'
 
 USE_I18N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)

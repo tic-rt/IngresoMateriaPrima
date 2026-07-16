@@ -1,11 +1,12 @@
 
-from datetime import date
+from datetime import date, datetime
+from django.utils import timezone
 from django import forms
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit, Layout, Row, Column, Div, HTML
 from django.urls import reverse
 from personal.models import Personal
-from porteria2.models import EPP, Ingreso
+from porteria2.models import EPP, Egreso, Ingreso
 from proveedores.models import Producto
 from transporte.models import Camion, Conductor, Semi, Transporte
 
@@ -17,7 +18,8 @@ class FormIngreso(forms.ModelForm):
         """Clase Meta para el formulario de ingreso"""
 
         model = Ingreso
-
+        laboral_opciones = [(True, 'Sí'),
+                            (False, 'No')]
         fields = [
             'ingreso_calefaccion',
             'empresa_transporte',
@@ -26,6 +28,7 @@ class FormIngreso(forms.ModelForm):
             'patente_chasis',
             'patente_semi',
             'remito',
+            'laborable',
             'responsable'
         ]
 
@@ -42,6 +45,7 @@ class FormIngreso(forms.ModelForm):
             }),
             'patente_chasis': forms.Select(),
             'patente_semi': forms.Select(),
+            'laborable': forms.Select(choices=laboral_opciones,attrs={'class': 'form-control'}),
             'responsable': forms.Select(attrs={
                 'class': 'form-control'
             }),
@@ -65,8 +69,16 @@ class FormIngreso(forms.ModelForm):
             is_deleted=False, vencimiento_seguro__gte=hoy)
         self.fields['patente_semi'].empty_label = 'Seleccione un semi'
         self.fields['responsable'].queryset = Personal.objects.filter(
-            is_deleted=False)
+            is_deleted=False, sector = 'Porteria 2')
         self.helper.form_action = reverse('guardarNuevoIngreso')
+        
+        if self._dia_semana(): 
+            self.fields['laborable'].initial = True  # Valor por defecto si es un día laborable
+        else:
+            self.fields['laborable'].initial = False  # Valor por defecto si es fin de semana
+            self.fields['laborable'].widget.attrs['hidden'] = 'true'
+            #self.helper.layout = self.helper.layout[0].remove('laborable')
+        
         self.helper.layout = Layout(
             Div(
                 Div(
@@ -102,6 +114,15 @@ class FormIngreso(forms.ModelForm):
                     css_class='border p-3 mb-3 shadow'
                 ),
                 Div(
+                    HTML('<h5>Inspeccion Quimica Presente</h5>'),
+                    Row(
+                        Column('laborable',
+                                css_class='col-4'),
+                        Column(HTML('<div class= "bg-danger-subtle mt-4 border border-warning fs-6 fw-semibold"><p>Indicar si personal de Inspección Química se encuentra presente,seleccione "No" si se trata de feriado o asueto</div>'),css_class='col-8')
+                    ),
+                    css_class='border p-3 mb-3 shadow'
+                ),
+                Div(
                     HTML('<h5> Responsable </h5>'),
                     Row(
                         Column('responsable', css_class='col-6'),
@@ -110,6 +131,51 @@ class FormIngreso(forms.ModelForm):
                 )
             ),
         )
+    def _dia_semana(self):
+        hoy = date.today().weekday()
+        if hoy == 5 or hoy == 6 :
+            return False #si es sabado o domingo 
+        else:
+            return True #de lunes a viernes y debo preguntar si es feriado
+
+class FormEgreso(forms.ModelForm):
+    """Formulario para egreso de vehiculo"""
+
+    class Meta:
+        model = Egreso
+
+        opciones = [(None, 'Seleccione una opción'),
+                    (True, 'Sí'),
+                    (False, 'No')]
+
+        fields = [
+            'verificacion',
+            'salida_autorizada',
+            'responsable']
+
+        widgets = {
+            'verificacion': forms.Select(choices=opciones, attrs={'class': 'form-control'}),
+            'salida_autorizada': forms.Select(choices=opciones, attrs={'class':'form-control'}),
+            'responsable': forms.Select(attrs={'class': 'form-control'})
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(FormEgreso, self).__init__(*args, **kwargs)
+        self.fields['responsable'].queryset = Personal.objects.filter(is_deleted=False , sector='Porteria 2')    
+        self.fields['verificacion'].required = True
+        self.fields['salida_autorizada'].required = True
+        
+    def clean_verificacion(self):
+        verificacion = self.cleaned_data.get('verificacion')
+        if verificacion is None:
+            raise forms.ValidationError("Debes seleccionar una opción válida para la verificación.")
+        return verificacion
+
+    def clean_salida_autorizada(self):
+        salida_autorizada = self.cleaned_data.get('salida_autorizada')
+        if salida_autorizada is None:
+            raise forms.ValidationError('Debes seleccionar una opción válida')
+        return salida_autorizada
 
 class FormEPP(forms.ModelForm):
     """Formulario para control de EPP"""
@@ -144,6 +210,7 @@ class FormEPP(forms.ModelForm):
         super(FormEPP, self).__init__(*args, **kwargs)
         self.helper = FormHelper(self)
         self.helper.add_input(Submit('submit','Guardar Control'))
+        self.fields['responsable'].queryset = Personal.objects.filter(is_deleted=False , sector='Porteria 2')
         #self.helper.form_action = reverse('guardarControlEpp','?id_hdr={{id_hdr}}&id_ingreso={{id_ingreso}}')
         self.helper.layout = Layout(
             Div(

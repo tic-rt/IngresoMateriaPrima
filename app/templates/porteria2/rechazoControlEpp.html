@@ -41,7 +41,6 @@
                     {% crispy form_epp %}
                 </div>
                 <div class="row">
-                    el ide de ingreso es {{id_ingreso}}
                     <form action="{% url 'guardarRechazo' %}?id_ingreso={{id_ingreso}}" method="POST">
                         {% csrf_token %}
                         {{  form_hdr|crispy }}

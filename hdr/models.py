@@ -6,9 +6,12 @@ from base.models import Base
 
 sector = [
    ('Porteria 2','Porteria 2'),
+   ('Porteria 2 E','Porteria 2 E'),
    ('Almacen PQ','Almacen PQ'),
+   ('Almacen PQ E','Almacen PQ E'),
    ('Inspeccion PQ','Inspeccion PQ'),
-   ('PAMO/PSUL','PAMO/PSUL'),
+   ('PAMO','PAMO'),
+   ('PSUL','PSUL')
 ]
 estado=[
    ('Activo','Activo'),

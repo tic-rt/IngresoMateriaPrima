@@ -5,6 +5,10 @@ from django.db import models
 sectores = [
     ('Porteria 2', 'Porteria 2'),
     ('Inspeccion Quimica','Inspeccion Quimica'),
+    ('Almacen PQ','Almacen PQ'),
+    ('SHYMA','SHYMA'),
+    ('PAMO','PAMO'),
+    ('PSUL', 'PSUL')
 ]
 
 class Personal(models.Model):
@@ -22,7 +26,7 @@ class Personal(models.Model):
         verbose_name = 'Personal'
         
     def __str__(self):
-        return f'{self.nombre} {self.apellido} {self.legajo} '
+        return f'{self.legajo}-{self.nombre} {self.apellido}'
     
     def delete(self, *args, **kwargs):#sof delete para mantener la integridad de la db
         self.is_deleted=True

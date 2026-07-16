@@ -1,0 +1,15 @@
+almahdi.code-django
+anderseandersen.html-class-suggestions
+anteprimorac.html-end-tag-labels
+kevinrose.vsc-python-indent
+mhutchie.git-graph
+ms-python.autopep8
+ms-python.debugpy
+ms-python.python
+ms-python.vscode-pylance
+ms-vscode.live-server
+oderwat.indent-rainbow
+pkief.material-icon-theme
+vincaslt.highlight-matching-tag
+yy0931.vscode-sqlite3-editor
+zignd.html-css-class-completion
