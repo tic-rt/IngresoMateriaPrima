@@ -38,5 +38,3 @@ class Base(models.Model):
     class Meta:
         """Meta defincion para Base ."""
         abstract = True
-        verbose_name = 'Modelo Base'
-        verbose_name_plural = 'Modelos Base'
