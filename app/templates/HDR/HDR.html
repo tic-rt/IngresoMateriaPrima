@@ -224,7 +224,7 @@
             </tr>
             <tr>
                 <td style="width: 60%;">
-                    Fecha:&nbsp; <b> {{balanza.hora_salida}} </b><br>
+                    Fecha:&nbsp; <b> {{balanza.hora_salida|date:"d/m/y"}} </b><br>
                     Hora de Salida:&nbsp; <b> {{balanza.hora_salida|date:"H:i"}} </b><br>
                     Peso del Vehículo en FMRT:&nbsp; <b> {% if balanza.peso_fmrt != 0 %} {{balanza.peso_fmrt}} {% else %} {% endif %} </b><br>
                     Peso del Vehículo vacio:&nbsp; <b> {% if balanza.peso_vacio != 0 %} {{balanza.peso_vacio}} {% else %} {% endif %} </b><br>
@@ -235,7 +235,7 @@
                 </td>
                 <td style="width: 40%">
                     <br><br><br><br><br><br><br>
-                    Atendió:&nbsp; <b> {{balanza.responsable_salida}} </b>
+                    Atendió:&nbsp; <b> {% if balanza.responsable_salida %} {{balanza.responsable_salida}} {% else %} {% endif %} </b>
                 </td>
             </tr>
         </table>
