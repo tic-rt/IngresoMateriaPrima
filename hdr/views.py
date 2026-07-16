@@ -12,7 +12,7 @@ from porteria2.models import EPP, Egreso, Ingreso
 
 # Create your views here.
 @login_required
-@permission_required('hdr.view_hdr', login_url='login')
+@permission_required('hdr.view_hdr', raise_exception=True)
 def lista_hdr(request):
     """Funcion que devuelve la vista principal de hdr"""
     hdr = None
