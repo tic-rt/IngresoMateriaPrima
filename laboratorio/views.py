@@ -20,7 +20,7 @@ def pendientes(request):
         return redirect ('index')
     
 @login_required
-@permission_required('laboratorio.view_ingreso', raise_exception=True)
+@permission_required('porteria2.view_ingreso', raise_exception=True)
 def inspeccion(request):
     """Esta funcion devuelve la vista de pendientes de inspeccion quimica"""
     try:
@@ -45,7 +45,7 @@ def inspeccion(request):
 
 @transaction.atomic
 @login_required
-@permission_required('laboratorio.add_laboratorio', raise_exception=True)
+@permission_required('laboratorio.add_inspeccion', raise_exception=True)
 def guardarInspeccion(request):
     """Esta funcion guarda un control de inspeccion quimica """
     try:
