@@ -105,9 +105,7 @@ def pesajeSalida(request):
         if request.method == 'GET':
             id_ingreso = request.GET.get('id_ingreso')
             existe_id = Ingreso.objects.filter(id = id_ingreso,is_deleted = False).exists()
-            print('comprobando ingreso .....')
             if existe_id:
-                print('habilitado....')
                 ingreso = Ingreso.objects.get(id = id_ingreso)
                 balanza = Balanza.objects.get(hdr = ingreso.hdr.id)
                 formulario_peso = FormBalanzaSalida(instance = balanza)
@@ -138,7 +136,7 @@ def guardarPesaje2(request):
                 ingreso = Ingreso.objects.get(id=id_ingreso)
                 hdr = ingreso.hdr
                 balanza = Balanza.objects.get(hdr = hdr)
-                hoy = datetime.now()
+                hoy = timezone.now()
                 formulario_pesaje = FormBalanzaSalida(request.POST, instance = balanza)
                 formulario_pesaje.instance.fecha_salida = hoy
                 
