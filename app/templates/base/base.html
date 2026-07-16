@@ -92,7 +92,7 @@
       <!-- barra lateral -->
       <aside class="lateral col-4 col-sm-2 d-flex justify-content-start flex-column  border-end border-1 border-black shadow">
         <!-- Porteria 2 -->
-        {% if 'Porteria 2' in grupos_usuario or user.is_superuser %}
+        {% if 'G_Porteria2' in grupos_usuario or user.is_superuser %}
         <div class="pt-4 pb-4">
           <div class="pb-4 container-fluid">
             <h2 class="sub-titulo2">Porteria 2</h2>
@@ -127,7 +127,7 @@
         {% endif %}
 
         <!-- Balanza -->
-        {% if 'Balanza' in grupos_usuario or user.is_superuser %}
+        {% if 'G_Balanza' in grupos_usuario or user.is_superuser %}
           <div class="pt-4 pb-4">
           <div class="pb-4 container-fluid">
             <h2 class="sub-titulo2">Balanza</h2>
@@ -150,7 +150,7 @@
         {% endif %}
 
         <!-- Inspeccion Quimica -->
-        {% if 'InspeccionQ' in grupos_usuario or user.is_superuser %}
+        {% if 'G_Laboratorio' in grupos_usuario or user.is_superuser %}
           <div class="pt-4 pb-4">
           <div class="pb-4 container-fluid">
             <h2 class="sub-titulo2">Inspección Quimica</h2>
@@ -167,7 +167,7 @@
         {% endif %}
 
         <!--PAMO -->
-        {% if 'PAMO' in grupos_usuario or user.is_superuser %}
+        {% if 'G_PAMO' in grupos_usuario or user.is_superuser %}
           <div class="pt-4 pb-4">
           <div class="pb-4 container-fluid">
             <h2 class="sub-titulo2">PAMO</h2>
