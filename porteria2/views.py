@@ -1,6 +1,3 @@
-from datetime import datetime
-from django.http import HttpResponse
-from django.utils import timezone
 from django.shortcuts import redirect, render
 import sweetify
 
@@ -9,6 +6,7 @@ from hdr.models import HDR
 from porteria2.forms import FormEPP, FormEgreso, FormIngreso
 from porteria2.models import Egreso, Ingreso
 from django.contrib.auth.decorators import login_required, permission_required
+from django.db import transaction
 
 # Create your views here.
 
@@ -35,6 +33,7 @@ def nuevoIngreso(request):
 
 @login_required
 @permission_required('porteria2.add_ingreso',login_url='index')
+@transaction.atomic
 def guardarNuevoIngreso(request):
     """Esta funcion registra un nuevo ingreso de vehiculo a realizar descarga de materia prima y crea la hoja de ruta hdr"""
     # formulario_ingreso = FormIngreso()
@@ -45,7 +44,7 @@ def guardarNuevoIngreso(request):
             if formulario.is_valid():
                 hdr = HDR()  # creando la hdr
                 hdr.save()
-                ingreso: Ingreso = formulario.save(commit=False)  # falta guardar
+                ingreso: Ingreso = formulario.save(commit=False)
                 ingreso.hdr = hdr
                 ingreso.save()
                 sweetify.success(request, title="Ingreso Guardado",text="Ingreso de vehiculo registrado", timer=3000)
@@ -73,8 +72,6 @@ def controlEpp(request):
         if request.method =='GET':
             id_hdr = request.GET.get('id_hdr')
             id_ingreso = request.GET.get('id_ingreso')
-            print(id_hdr)
-            print(id_ingreso)
             
             existe_id = HDR.objects.filter(id =id_hdr,is_deleted = False, estado ='Activo', sector='Porteria 2').exists()#controla si existe la hdr
             existe_ingreso = Ingreso.objects.filter(id=id_ingreso, is_deleted = False, ingresado=False).exists()#controla si existe el ingreso
@@ -124,13 +121,14 @@ def mostrarControlEpp(request):
 
 @login_required
 @permission_required('porteria2.add_epp')
+@transaction.atomic
 def guardarControlEpp(request):
     """ esta funcion guarda un control de EPP validado, si es rechazado redirecciona  """
     try:
         if request.method == 'POST':
             form_control = FormEPP(request.POST)
             id_hdr = request.GET.get('id_hdr')
-            print(id_hdr)
+
             id_ingreso = request.GET.get('id_ingreso')
             existe_id_hdr = HDR.objects.filter(id = id_hdr, is_deleted = False, estado = 'Activo',sector = 'Porteria 2').exists()
             existe_id_ingreso = Ingreso.objects.filter(id = id_ingreso, is_deleted = False, ingresado = False).exists()
@@ -157,13 +155,15 @@ def guardarControlEpp(request):
                     todos = all([casco, mascara, antiparras, botines, pantalon_camisa, matafuego, arrestallamas, carteleria])
 
                     if todos :
-                        hdr.sector = 'Almacen PQ'
-                        hdr.save()
-                        ingreso.ingresado = True
-                        ingreso.save()
                         epp = form_control.save(commit=False)
                         epp.hdr = hdr
                         epp.save()
+
+                        ingreso.ingresado = True
+                        ingreso.save()
+
+                        hdr.sector = 'Almacen PQ'
+                        hdr.save()
                         sweetify.success(request, 'Control EPP', text='Se ha guardado el control de EPP', timer=3000)
                         return redirect('nuevoIngreso')
                     else:#se redirige para guardar el rechazo con el motivo 
@@ -196,6 +196,7 @@ def guardarControlEpp(request):
 
 @login_required
 @permission_required('hdr.change_hdr', login_url='index')
+@transaction.atomic
 def guardarRechazo(request):
     id_ingreso = request.GET.get('id_ingreso')
     existe_id = Ingreso.objects.filter(id = id_ingreso)
@@ -273,6 +274,7 @@ def egreso(request):
 
 @login_required
 @permission_required('porteria2.add_egreso', login_url='index')
+@transaction.atomic
 def guardarEgreso(request):
     """Esta funcion guarda un egreso de vehiculo"""
     try:
@@ -288,6 +290,7 @@ def guardarEgreso(request):
                 if formulario_egreso.is_valid():
                     egreso:Egreso = formulario_egreso.save(commit=False)
                     egreso.hdr = hdr
+                    egreso.sector = 'Porteria 2 E'
                     egreso.save()
                     hdr.estado = 'Finalizado'
                     hdr.save()
