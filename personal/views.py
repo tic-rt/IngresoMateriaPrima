@@ -80,11 +80,11 @@ def agregarPersonal(request):
                         errores.append(f'{campo}: {mensaje}')
                 
                 errores_str = '<br>'.join(errores)
-                sweetify.warning(request,'Error al agregar empresa de transporte', text = errores_str, persistent = 'Aceptar')
+                sweetify.warning(request,'Error al agregar nuevo Personal', text = errores_str, persistent = 'Aceptar')
                 return redirect('personal')
             
     except Exception as excepcion:
-        sweetify.error('Error al agregar Empresa de transporte', persistent=f'ocurrio un error {str(excepcion)}')
+        sweetify.error('Error al agregar Nuevo Personal', persistent=f'ocurrio un error {str(excepcion)}')
         return redirect('personal')
 
 @login_required
