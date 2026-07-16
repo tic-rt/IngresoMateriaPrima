@@ -7,12 +7,18 @@ from balanza.forms import FormBalanza, FormBalanzaSalida
 from balanza.models import Balanza
 from hdr.models import HDR
 from porteria2.models import Ingreso
+from django.contrib.auth.decorators import login_required, permission_required
+from django.db import transaction
 
 # Create your views here.
+@login_required
+@permission_required('porteria2.view_ingreso', raise_exception=True)
 def balanza_index(request):
     """Funcion que devuelve la vista principal de balanza"""
     return render(request,'balanza/index.html')
 
+@login_required
+@permission_required('porteria2.view_ingreso', raise_exception=True)
 def pendientes(request):
     """Funcion que devuelve todos los ingresos autorizados y que siguen a balanza"""
 
@@ -23,6 +29,8 @@ def pendientes(request):
         sweetify.error(request,'Error', text=f'Ocurrio un error {str(excepcion)}', persistent = 'Aceptar')
         return redirect('index')
 
+@login_required
+@permission_required('porteria2.view_ingreso', raise_exception=True)
 def pesaje(request):
     """funcion para cargar datos de la balanza"""
 
@@ -47,6 +55,8 @@ def pesaje(request):
         sweetify.error(request, 'Error', text=f'Ocurrio un error {str(excepcion)}', persistent='Aceptar')
         return redirect('index')
 
+@login_required
+@permission_required('porteria2.add_ingreso', raise_exception=True)
 def guardarPesaje(request):
     try:
         if request.method == 'POST':
@@ -74,6 +84,8 @@ def guardarPesaje(request):
         sweetify.error(request,'Error', text=f'Ocurrio un error {str(excepcion)}', persistent = 'Aceptar')
         return redirect('pendientesBalanza')
 
+@login_required
+@permission_required('porteria2.view_ingreso',login_url='index')
 def egresos(request):
     """Funcion que devuelve todos los egresos pendientes de PAMO y PSUL"""
 
@@ -84,6 +96,8 @@ def egresos(request):
         sweetify.error(request,'Error', text=f'Ocurrio un error {str(excepcion)}', persistent = 'Aceptar')
         return redirect('index')
 
+@login_required
+@permission_required('balanza.add_balanza', raise_exception=True)
 def pesajeSalida(request):
     """funcion para cargar datos de la balanza"""
 
@@ -111,6 +125,9 @@ def pesajeSalida(request):
         sweetify.error(request, 'Error', text=f'Ocurrio un error {str(excepcion)}', persistent='Aceptar')
         return redirect('index')
 
+@transaction.atomic
+@login_required
+@permission_required('balanza.add_balanza', raise_exception=True)
 def guardarPesaje2(request):
     try:
         if request.method == 'POST':
@@ -119,13 +136,11 @@ def guardarPesaje2(request):
             
             if existe_id_ingreso:
                 ingreso = Ingreso.objects.get(id=id_ingreso)
-                hdr = Ingreso.objects.get(id = id_ingreso).hdr
-                balanza = Balanza.objects.get(id = hdr.id)
+                hdr = ingreso.hdr
+                balanza = Balanza.objects.get(hdr = hdr)
                 hoy = datetime.now()
                 formulario_pesaje = FormBalanzaSalida(request.POST, instance = balanza)
-                print(formulario_pesaje)
                 formulario_pesaje.instance.fecha_salida = hoy
-                print(formulario_pesaje)
                 
                 if formulario_pesaje.is_valid():
                     formulario_pesaje.save()
