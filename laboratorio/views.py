@@ -4,9 +4,12 @@ import sweetify
 from hdr.models import HDR
 from laboratorio.forms import FormLaboratorio
 from porteria2.models import Ingreso
+from django.contrib.auth.decorators import login_required, permission_required
+from django.db import transaction
 
 # Create your views here.
-
+@login_required
+@permission_required('porteria2.view_ingreso', raise_exception=True)
 def pendientes(request):
     """muestra los camiones pendientes de control despues que pasaron"""
     try:
@@ -15,8 +18,10 @@ def pendientes(request):
     except Exception as excepcion:
         sweetify.error(request, 'Error', text=f'Ocurrio un error {str(excepcion)}', persistent = 'Aceptar')
         return redirect ('index')
-
+@login_required
+@permission_required('laboratorio.view_ingreso', raise_exception=True)
 def inspeccion(request):
+    """Esta funcion devuelve la vista de control de inspeccion quimica"""
     try:
         if request.method == 'GET':
             id_ingreso = request.GET.get('id_ingreso')
@@ -37,6 +42,9 @@ def inspeccion(request):
         sweetify.error(request, 'Error', text=f'Ocurrio un error {str(excepcion)}', persistent = 'Aceptar')
         return redirect('pendientesInspeccion')
 
+@transaction.atomic
+@login_required
+@permission_required('laboratorio.add_laboratorio', raise_exception=True)
 def guardarInspeccion(request):
     """Esta funcion guarda un control de inspeccion quimica """
     try:
@@ -50,27 +58,20 @@ def guardarInspeccion(request):
                 
                 if formulario_control.is_valid():
                     #Si es amoniaco o azufre liquido debo guardar y  enviarlo a control de PAMPO\PSUL
-                    if ingreso.producto.producto == 'Azufre Líquidoº':
+                    if ingreso.producto.producto == 'Azufre Líquido':
                         hdr.sector = 'PSUL'
-                        hdr.save()
-                        formulario_control.instance.hdr = hdr
-                        formulario_control.save()
-                        sweetify.success(request, 'Guardado', text=f'Control de Inspección de {ingreso.producto} guardado', timer=3000)
-                        return redirect('pendientesInspeccion')
                     elif ingreso.producto.producto == 'Amoníaco':
                         hdr.sector = 'PAMO'
-                        hdr.save()
-                        formulario_control.instance.hdr = hdr
-                        formulario_control.save()
-                        sweetify.success(request, 'Guardado', text=f'Control de Inspección de {ingreso.producto} guardado', timer=3000)
-                        return redirect('pendientesInspeccion')
                     else:
                         hdr.sector = 'Almacen PQ E'
-                        hdr.save()
-                        formulario_control.instance.hdr = hdr
-                        formulario_control.save()
-                        sweetify.success(request, 'Guardado', text=f'Control de Inspección de {ingreso.producto} guardado', timer=3000)
-                        return redirect('pendientesInspeccion')
+
+                    hdr.save(update_fields=['sector'])
+                    inspeccion = formulario_control.save(commit=False)
+                    inspeccion.hdr = hdr
+                    inspeccion.save()
+                    
+                    sweetify.success(request, 'Guardado', text=f'Control de Inspección de {ingreso.producto} guardado', timer=3000)
+                    return redirect('pendientesInspeccion')
                         
                 else:
                     return render(request, 'laboratorio/control.html',{'ingreso':ingreso,'formulario_inspeccion':formulario_control})
