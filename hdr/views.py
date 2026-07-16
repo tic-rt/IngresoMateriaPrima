@@ -90,6 +90,7 @@ def _control_epp(id_hdr):
         ).get(hdr_id=id_hdr)
         
         return {
+            "fecha_control": epp.fecha_control,
             "casco": 'SI' if epp.casco else 'NO',
             "mascara": 'SI' if epp.mascara else 'NO',
             "antiparras": 'SI' if epp.antiparras else 'NO',
