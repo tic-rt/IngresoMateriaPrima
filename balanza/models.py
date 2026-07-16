@@ -16,7 +16,7 @@ class Balanza(Base):
     #destino = models.TextField(max_length=100,default='Fabrica Militar Rio Tercero', blank=False, null=False )
     responsable_entrada = models.ForeignKey(Personal,on_delete=models.PROTECT, verbose_name='Responsable Entrada', related_name='responsable_entrada')
     observaciones = models.TextField(max_length=100,default='DOD según el IN 11-IQ-07', blank=False, null=False)
-    hdr = models.ForeignKey(HDR, on_delete=models.PROTECT, verbose_name='HDR')
+    hdr = models.OneToOneField(HDR, on_delete=models.PROTECT, verbose_name='HDR')
     fecha_salida = models.DateTimeField(verbose_name='Fecha de Salida', null=True)
     peso_fmrt = models.IntegerField(verbose_name='Peso en FMRT',blank=False, null=True, default=0)
     peso_vacio = models.IntegerField(verbose_name='Peso vacio',blank=False, null=True, default=0)
