@@ -5,13 +5,13 @@ from personal.models import Personal
 
 
 class formPsul(forms.ModelForm):
-    
+
+    responsable = forms.ModelChoiceField(queryset=Personal.objects.filter(is_deleted=False, sector='PSUL'),
+                                         widget=forms.Select(attrs={'class':'form-control'}),
+                                         empty_label='Seleccione un responsable')
 
     class Meta:
         model = PamoPsul
-        responsable = forms.ModelChoiceField(queryset=Personal.objects.filter(is_deleted=False, sector='PSUL'),
-                                             widget=forms.Select(attrs={'class':'form-control'}),
-                                             empty_label='Seleccione un responsable')
         
         fields = ('hora_ingreso',
                   'presion_ingreso',

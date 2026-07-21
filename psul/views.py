@@ -1,13 +1,16 @@
 from django.shortcuts import redirect, render
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 import sweetify
 
 from hdr.models import HDR
 from psul.forms import formPsul
 from porteria2.models import Ingreso
-
+from django.db import transaction
 # Create your views here.
+
+@transaction.atomic
 @login_required
+@permission_required('porteria2.view_ingreso', raise_exception=True)
 def pendientes(request):
     """muestra los camiones pendientes de control que provienen de IQ"""
     try:
@@ -19,6 +22,7 @@ def pendientes(request):
         return redirect ('index')
 
 @login_required
+@permission_required('porteria2.view_ingreso', raise_exception=True)
 def controlPsul(request):
     """control de presion y temperatura para psul"""
     try:
@@ -32,8 +36,10 @@ def controlPsul(request):
     except Exception as excepcion:
         sweetify.error(request, 'Error', text = f'Ocurrio un error {str(excepcion)}', persistent = 'Aceptar')
         return redirect('pendientesPSUL')
-
+    
+@transaction.atomic
 @login_required
+@permission_required('pamo.add_pamo psul', raise_exception=True)
 def guardarPsul(request):
     try:
         if request.method == 'POST':

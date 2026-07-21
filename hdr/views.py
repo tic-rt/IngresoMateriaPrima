@@ -1,14 +1,21 @@
 import os
+from io import BytesIO
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.template.loader import render_to_string
 from xhtml2pdf import pisa
 from django.contrib.auth.decorators import login_required, permission_required
 from IngresoMateriaPrima import settings
+from hdr.models import HDR
 from balanza.models import Balanza
 from laboratorio.models import Inspeccion
 from pamo.models import PamoPsul
 from porteria2.models import EPP, Egreso, Ingreso
+from reportlab.lib.pagesizes import A4
+from reportlab.lib import colors
+from reportlab.pdfgen import canvas
+from pypdf import PdfReader, PdfWriter
+from django.core.paginator import Paginator
 
 # Create your views here.
 @login_required
@@ -17,7 +24,16 @@ def lista_hdr(request):
     """Funcion que devuelve la vista principal de hdr"""
     hdr = None
     try:
-        hdr = Ingreso.objects.filter(ingresado = True)
+        hdr = Ingreso.objects.filter().all()
+        
+        paginador = Paginator(hdr, 10)
+        page = request.GET.get('page', 1)
+        page_number = request.GET.get('page')
+        
+        if page_number is None:
+            page_number = 1 
+            
+        hdr = paginador.get_page(page)
     except Exception as excepcion:
         pass
     
@@ -38,10 +54,91 @@ def exportar_hdr(request):
         "fmrt.jpg"
     )
     
-    respuesta = HttpResponse(content_type='application/pdf')
-    pisa.CreatePDF(render_to_string('HDR/HDR.html',contexto), dest=respuesta)
-
-    return respuesta
+    # Generar PDF base desde el HTML
+    buffer_base = BytesIO()
+    pisa.CreatePDF(render_to_string('HDR/HDR.html', contexto), dest=buffer_base)
+    
+    # Si el estado es "Rechazado", superponer el sello en diagonal
+    if contexto.get('estado_hdr') == 'Rechazado':
+        # Crear watermark con ReportLab
+        buffer_watermark = BytesIO()
+        c = canvas.Canvas(buffer_watermark, pagesize=A4)
+        width, height = A4  # 595.27 x 841.89 pts
+        
+        c.saveState()
+        # Mover al centro de la página
+        c.translate(width / 2, height / 2)
+        # Rotar -30 grados (diagonal)
+        c.rotate(-30)
+        
+        # Calcular tamaño de fuente para que ocupe exactamente el 80% del ancho de página
+        texto = "RECHAZADO"
+        # Usar un tamaño de referencia para calcular el factor de escala
+        font_size_ref = 100
+        c.setFont("Helvetica-Bold", font_size_ref)
+        text_width_ref = c.stringWidth(texto, "Helvetica-Bold", font_size_ref)
+        # Escalar para que ocupe el 80% del ancho de página
+        font_size = (width * 0.80) * font_size_ref / text_width_ref
+        c.setFont("Helvetica-Bold", font_size)
+        
+        # Color rojo semitransparente (alpha=0.40)
+        c.setFillColor(colors.Color(1, 0, 0, alpha=0.40))
+        
+        # Dibujar texto centrado
+        c.drawCentredString(0, 0, texto)
+        
+        # Obtener la observación (motivo del rechazo)
+        observacion = contexto.get('observacion_hdr', '')
+        
+        # Calcular posiciones para el rectángulo considerando ambos textos
+        text_width = c.stringWidth(texto, "Helvetica-Bold", font_size)
+        text_height = font_size * 1.2
+        
+        # Si hay observación, dibujarla debajo en fuente más pequeña
+        if observacion:
+            font_size_obs = font_size * 0.20
+            c.setFont("Helvetica", font_size_obs)
+            c.setFillColor(colors.Color(1, 0, 0, alpha=0.40))
+            # Posicionar debajo del texto "RECHAZADO" con un pequeño margen
+            y_offset = -text_height / 2 + font_size_obs * 0.5
+            c.drawCentredString(0, y_offset, observacion)
+            
+            # Calcular ancho de la observación y ajustar el rectángulo
+            text_width_obs = c.stringWidth(observacion, "Helvetica", font_size_obs)
+            max_width = max(text_width, text_width_obs)
+            total_height = text_height + font_size_obs * 1.5
+            # Margen adicional para la observación
+            c.setStrokeColor(colors.Color(1, 0, 0, alpha=0.40))
+            c.setLineWidth(4)
+            c.rect(-max_width / 2 - 20, -total_height / 2 + font_size * 0.1, max_width + 40, total_height + font_size * 0.3, stroke=1, fill=0)
+        else:
+            # Sin observación, rectángulo original solo para "RECHAZADO"
+            c.setStrokeColor(colors.Color(1, 0, 0, alpha=0.40))
+            c.setLineWidth(4)
+            c.rect(-text_width / 2 - 20, -text_height / 2 + 15, text_width + 40, text_height + 20, stroke=1, fill=0)
+        
+        c.restoreState()
+        c.save()
+        
+        # Fusionar watermark sobre el PDF base
+        buffer_watermark.seek(0)
+        base_pdf = PdfReader(buffer_base)
+        watermark_pdf = PdfReader(buffer_watermark)
+        writer = PdfWriter()
+        
+        for page_num in range(len(base_pdf.pages)):
+            page = base_pdf.pages[page_num]
+            page.merge_page(watermark_pdf.pages[0])
+            writer.add_page(page)
+        
+        resultado = BytesIO()
+        writer.write(resultado)
+        resultado.seek(0)
+        return HttpResponse(resultado, content_type='application/pdf')
+    
+    # Si no es rechazado, devolver el PDF base
+    buffer_base.seek(0)
+    return HttpResponse(buffer_base, content_type='application/pdf')
 
 def _completado(id_hdr):
     """funcion que devuelve todos los datos para completar la HDR"""
@@ -52,6 +149,12 @@ def _completado(id_hdr):
     contexto.update({'iquimica': _iquimica(id_hdr)})
     contexto.update({'pamo': _pamo(id_hdr)})
     contexto.update({'egreso': _egreso(id_hdr)})
+    try:
+        hdr_obj = HDR.objects.get(id=id_hdr)
+        contexto['estado_hdr'] = hdr_obj.estado
+        contexto['observacion_hdr'] = hdr_obj.observacion
+    except HDR.DoesNotExist:
+        contexto['estado_hdr'] = ''
     return contexto
 
 def _porteria_ingreso(id_hdr):
@@ -90,6 +193,7 @@ def _control_epp(id_hdr):
         ).get(hdr_id=id_hdr)
         
         return {
+            "fecha_control": epp.fecha_control,
             "casco": 'SI' if epp.casco else 'NO',
             "mascara": 'SI' if epp.mascara else 'NO',
             "antiparras": 'SI' if epp.antiparras else 'NO',

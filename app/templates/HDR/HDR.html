@@ -83,7 +83,7 @@
                     <!-- Tabla Portería 2 -->
                     <table width="100%" class="contenido">
                         <tr>
-                            <td colspan="2" class="td-titulo"><b>PORTERÍA 2</b></td>
+                            <td colspan="2" class="td-titulo"><b>PORTERÍA Nº2</b></td>
                         </tr>
                         <tr>
                             <td style="width: 60%;">
@@ -235,13 +235,13 @@
                 </td>
                 <td style="width: 40%">
                     <br><br><br><br><br><br><br>
-                    Atendió:&nbsp; <b> {{balanza.responsable_salida}} </b>
+                    Atendió:&nbsp; <b> {% if balanza.responsable_salida %} {{balanza.responsable_salida}} {% else %} {% endif %} </b>
                 </td>
             </tr>
         </table>
         <table style="margin-top: 2px;">
             <tr>
-                <td colspan="2" class="td-titulo"><b>POrteria Nº2 </b></td>
+                <td colspan="2" class="td-titulo"><b>PORTERIA Nº2 </b></td>
             </tr>
             <tr>
                 <td style="width: 60%;">

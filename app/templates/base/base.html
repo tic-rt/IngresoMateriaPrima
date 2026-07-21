@@ -184,7 +184,7 @@
         {% endif %}
 
         <!--PSUL -->
-        {% if 'PSUL' in grupos_usuario or user.is_superuser %}
+        {% if 'G_Psul' in grupos_usuario or user.is_superuser %}
           <div class="pt-4 pb-4">
           <div class="pb-4 container-fluid">
             <h2 class="sub-titulo2">PSUL</h2>
@@ -210,15 +210,12 @@
             <li class="nav-item">
               <a href="{% url 'lista_hdr' %}" class="nav-link link-side">Hojas de Ruta</a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link link-side" href="{% url 'personal' %}">Responsables</a>
-            </li>
           </ul>
         </div>
         {% endif %}
 
         <!--Calidad -->
-        {% if 'Calidad' in grupos_usuario or user.is_superuser %}
+        {% if 'G_Calidad' in grupos_usuario or user.is_superuser %}
           <div class="pt-4 pb-4">
           <div class="pb-4 container-fluid">
             <h2 class="sub-titulo2">Calidad</h2>
