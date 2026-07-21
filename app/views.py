@@ -3,13 +3,20 @@ from django.http import JsonResponse
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 
+from porteria2.dashboard import index_porteria, dashboard_json
+
 from porteria2.models import Egreso, Ingreso
 
 # Create your views here.
 
 @login_required
 def index(request):
-    return render(request,'app/index.html')
+    ingresos = Ingreso.objects.filter(ingresado = True, hdr__estado='Activo')
+    cantidad = ingresos.count()
+    return render(request,'app/index.html',{
+                                            'ingresos':ingresos, 
+                                            'cantidad':cantidad
+                                            })
 
 def cantidad_camiones(request):
     hoy = timezone.now()

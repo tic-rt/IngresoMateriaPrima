@@ -4,156 +4,110 @@
 {% block content %}
 <!-- Grafico de cantidad de camiones ingresados -->
 <div class="container text-center mt-5 mb-4">
-    <h2 class="bold">Cant. de camiones por Materia Prima</h2>
+    <h3 class="fw-bold text-center">Seguimiento de camiones</h3>
 </div>
 <div class="container text-center card-body shadow p-3 mb-5 bg-body rounded border border-2">
-    <canvas class="center" id="cantCamiones" width="400" height="100">
+    <table class = "table table-responsive" style="width: 100%;">
+        <caption></caption>
+        <thead>
+            <tr>
+                <th>Dominio</th>
+                <th>Balanza</th>
+                <th>Inspección química</th>
+                <th>Descarga</th>
+                <th>Balanza</th>
+                <th>Portería 2</th>
+            </tr>
+        </thead>
+        <tbody>
+            
+            {% for ingreso in ingresos %}
+              <tr>
+                <td>{{ingreso.patente_chasis.patente}}</td>
+                <!-- <td>{{ingreso.producto}}</td> -->
+                <td>{% if ingreso.hdr.sector == 'Almacen PQ' and ingreso.producto.producto == 'Amoníaco' %}<img src="{% static 'img/amoniaco-tanker.png' %}" alt="Camión verde" width="50">{% endif %} 
+                    {% if ingreso.hdr.sector == 'Almacen PQ' and ingreso.producto.producto == 'Azufre sólido' %}<img src="{% static 'img/sulf-granel-tanker.png' %}" alt="Camión verde" width="50">{% endif %} 
+                    {% if ingreso.hdr.sector == 'Almacen PQ' and ingreso.producto.producto == 'Azufre Líquido' %}<img src="{% static 'img/sulf-liq-tanker.png' %}" alt="Camión verde" width="50">{% endif%}
+                    {% if ingreso.hdr.sector == 'Almacen PQ' and ingreso.producto.producto == 'Hipoclorito' %}<img src="{% static 'img/hipoclorito-tanker.png' %}" alt="Camión verde" width="50">{% endif%}
+                </td>
+                <td>{% if ingreso.hdr.sector == 'Inspeccion PQ' and ingreso.producto.producto == 'Amoníaco' %}<img src="{% static 'img/amoniaco-tanker.png' %}" alt="Camión verde" width="50">{% endif %} 
+                    {% if ingreso.hdr.sector == 'Inspeccion PQ' and ingreso.producto.producto == 'Azufre sólido' %}<img src="{% static 'img/sulf-granel-tanker.png' %}" alt="Camión verde" width="50">{% endif %} 
+                    {% if ingreso.hdr.sector == 'Inspeccion PQ' and ingreso.producto.producto == 'Azufre Líquido' %}<img src="{% static 'img/sulf-liq-tanker.png' %}" alt="Camión verde" width="50">{% endif%}
+                    {% if ingreso.hdr.sector == 'Inspeccion PQ' and ingreso.producto.producto == 'Hipoclorito' %}<img src="{% static 'img/hipoclorito-tanker.png' %}" alt="Camión verde" width="50">{% endif%}
+                </td>
+                 <td>{% if ingreso.producto.producto == 'Amoníaco' and ingreso.hdr.sector == 'PAMO' %}<img src="{% static 'img/amoniaco-tanker.png' %}" alt="Camión verde" width="50">{% endif %} 
+                    {% if ingreso.producto.producto == 'Azufre sólido' and ingreso.hdr.sector == 'PSUL' %}<img src="{% static 'img/sulf-granel-tanker.png' %}" alt="Camión verde" width="50">{% endif %} 
+                    {% if ingreso.producto.producto == 'Azufre Líquido' and ingreso.hdr.sector == 'PSUL' %}<img src="{% static 'img/sulf-liq-tanker.png' %}" alt="Camión verde" width="50">{% endif%}
+                    {% if ingreso.producto.producto == 'Hipoclorito' and ingreso.hdr.sector == 'Hipoclorito' %}<img src="{% static 'img/hipoclorito-tanker.png' %}" alt="Camión verde" width="50">{% endif%}
+                </td>
+                 <td>{% if ingreso.hdr.sector == 'Almacen PQ E' and ingreso.producto.producto == 'Amoníaco' %}<img src="{% static 'img/amoniaco-tanker.png' %}" alt="Camión verde" width="50">{% endif %} 
+                    {% if ingreso.hdr.sector == 'Almacen PQ E' and ingreso.producto.producto == 'Azufre sólido' %}<img src="{% static 'img/sulf-granel-tanker.png' %}" alt="Camión verde" width="50">{% endif %} 
+                    {% if ingreso.hdr.sector == 'Almacen PQ E' and ingreso.producto.producto == 'Azufre Líquido' %}<img src="{% static 'img/sulf-liq-tanker.png' %}" alt="Camión verde" width="50">{% endif%}
+                    {% if ingreso.hdr.sector == 'Almacen PQ E' and ingreso.producto.producto == 'Hipoclorito' %}<img src="{% static 'img/hipoclorito-tanker.png' %}" alt="Camión verde" width="50">{% endif%}
+                </td>
+                 <td>
+                    {% if ingreso.hdr.sector == 'Porteria 2 E' and ingreso.producto.producto == 'Amoníaco' %}<img src="{% static 'img/amoniaco-tanker.png' %}" alt="Camión verde" width="50">{% endif %} 
+                    {% if ingreso.hdr.sector == 'Porteria 2 E' and ingreso.producto.producto == 'Azufre sólido' %}<img src="{% static 'img/sulf-granel-tanker.png' %}" alt="Camión verde" width="50">{% endif %} 
+                    {% if ingreso.hdr.sector == 'Porteria 2 E' and ingreso.producto.producto == 'Azufre Líquido' %}<img src="{% static 'img/sulf-liq-tanker.png' %}" alt="Camión verde" width="50">{% endif%}
+                    {% if ingreso.hdr.sector == 'Portewria 2 E' and ingreso.producto.producto == 'Hipoclorito' %}<img src="{% static 'img/hipoclorito-tanker.png' %}" alt="Camión verde" width="50">{% endif%}
+                </td>
 
-</canvas>
-</div>
+              </tr>  
+            {% endfor %}
+        </tbody>
+        <footer>
+            <div class="col-3 rounded-pill" style="border: 1px solid rgba(255, 0, 0, 0.5); background-clip: padding-box;">
+                <div class="  text-center">
+                    <div>Cantidad de vehiculos: <strong>{{cantidad}}</strong></div>
+                </div>
+            </div>
+        </footer>
+    </table>
+    <div class="container">
+        <div  style="width: 100%; height: 5px; background: linear-gradient(92deg, #031633 0%, #00498d 50%, #5ae647fb 65%, #dc345d 80%);"> </div>
+    </div>
 
-<!-- Grafico de camiones ingresados y en transito -->
-<div class="container text-center mt-5 mb-4 pt-5">
-    <h2 class="bold">Vehiculos en Transito</h2>
-</div>
-<div class="container text-center card-body shadow p-3 mb-5 bg-body rounded border border-2">
-    <canvas class="center" id="transito" width="400" height="400">
+    
+    <br>
+    <hr>
 
-</canvas>
+    <table style="width: 50%;">
+        <caption>Referencias</caption>
+        <thead>
+            <th>Amoníaco</th>
+            <th>Azufre liquido</th>
+            <th>Azufre granel</th>
+            <th>Hipoclorito</th>
+        </thead>
+        <body>
+            <tr>
+                <td>
+                    <img src="{% static 'img/amoniaco-tanker.png' %}" alt="Camión verde" width="50">
+                </td>
+                <td>
+                    <img src="{% static 'img/sulf-liq-tanker.png' %}" alt="Camión verde" width="50">
+                </td> 
+                <td>
+                    <img src="{% static 'img/sulf-granel-tanker.png' %}" alt="Camión verde" width="50">
+                </td>  
+                <td>
+                    <img src="{% static 'img/hipoclorito-tanker.png' %}" alt="Camión verde" width="50">
+                </td>
+            </tr>
+            
+            
+        </body>
+    </table>
+
 </div>
 
 {% endblock content %}
 {% block js %}
 <script>
-document.addEventListener('DOMContentLoaded', function () {
-
-    let chartCamiones = null;
-    let chartTransito = null;
-
-    function leerDatos() {
-
-        // -------------------------
-        // CAMIONES
-        // -------------------------
-        fetch('{% url "cantidad_camiones" %}')
-            .then(response => response.json())
-            .then(data => {
-
-                const valores = data.data || [];
-
-                const ctx = document.getElementById('cantCamiones').getContext('2d');
-
-                if (chartCamiones) chartCamiones.destroy();
-
-                chartCamiones = new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels: data.labels || [],
-                        datasets: [{
-                            label: "Cantidad de camiones hoy",
-                            data: valores,
-                            backgroundColor: [
-                                'rgba(75, 192, 192, 0.2)',
-                                'rgba(255, 206, 86, 0.2)',
-                                'rgba(153, 102, 255, 0.2)',
-                                'rgba(255, 99, 132, 0.2)'
-                            ],
-                            borderColor: [
-                                'rgba(75, 192, 192, 1)',
-                                'rgba(255, 206, 86, 1)',
-                                'rgba(153, 102, 255, 1)',
-                                'rgba(255, 99, 132, 1)'
-                            ],
-                            borderWidth: 1
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: true,
-                        scales: {
-                            y: {
-                                beginAtZero: true,
-                                ticks: {
-                                    stepSize: 1,
-                                    precision: 0
-                                }
-                            }
-                        }
-                    }
-                });
-            });
-
-
-        // -------------------------
-        // TRÁNSITO
-        // -------------------------
-        fetch('{% url "transito" %}')
-            .then(response => response.json())
-            .then(data => {
-
-                const valores = data.data || [];
-
-                const ctx = document.getElementById('transito').getContext('2d');
-
-                if (chartTransito) chartTransito.destroy();
-
-                // Si no hay datos, mostrar gráfico vacío controlado
-                const sinDatos = valores.length === 0 || valores.every(v => v === 0);
-
-                if (sinDatos) {
-                    chartTransito = new Chart(ctx, {
-                        type: 'doughnut',
-                        data: {
-                            labels: ['Sin vehículos'],
-                            datasets: [{
-                                data: [1],
-                                backgroundColor: ['rgba(200,200,200,0.3)'],
-                                borderColor: ['rgba(200,200,200,1)'],
-                                borderWidth: 1
-                            }]
-                        },
-                        options: {
-                            responsive: true,
-                            maintainAspectRatio: false,
-                            cutout: '60%'
-                        }
-                    });
-
-                    return;
-                }
-
-                chartTransito = new Chart(ctx, {
-                    type: 'doughnut',
-                    data: {
-                        labels: data.labels || [],
-                        datasets: [{
-                            label: 'Vehículos en tránsito',
-                            data: valores,
-                            backgroundColor: [
-                                'rgba(240, 243, 32,0.3)',
-                                'rgba(43, 243, 32,0.3)',
-                                'rgba(255, 99, 132, 0.3)'
-                            ],
-                            borderColor: [
-                                'rgba(240, 243, 32, 1)',
-                                'rgba(43, 243, 32, 1)',
-                                'rgba(255, 99, 132, 1)'
-                            ],
-                            borderWidth: 1
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        cutout: '60%'
-                    }
-                });
-            });
-    }
-
-    // Primera carga
-    setTimeout(leerDatos, 1000);
-
+document.addEventListener('DOMContentLoaded', function() {
+    setInterval(function () {
+        location.reload();
+    }, 60000);
 });
 </script>
 {% endblock js %}
