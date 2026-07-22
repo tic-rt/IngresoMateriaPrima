@@ -14,34 +14,16 @@
         </div>
     </div>
 
-    <!-- Fila 1: Charts doughnut -->
-    <div class="row justify-content-around shadow-lg rounded pt-3 mb-3">
-         <!--Grafico 1-->
-        <div class="col-md-5 mb-4">
-            <div class="card shadow-sm h-100">
-                <div class="card-header bg-primary text-white text-center">
-                    <h5 class="mb-0">Ingresados por Empresa</h5>
-                </div>
-                <div class="card-body d-flex justify-content-center align-items-center">
-                    <canvas id="chartIngresadosHoy"></canvas>
-                </div>
-            </div>
-        </div>
-        <!--Grafico 2-->
-        <div class="col-md-5 mb-4">
-            <div class="card shadow-sm h-100">
-                <div class="card-header bg-info text-white text-center">
-                    <h5 class="mb-0">En Tránsito por Producto</h5>
-                </div>
-                <div class="card-body d-flex justify-content-center align-items-center">
-                    <canvas id="chartEnTransito" ></canvas>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <!-- Fila 2: Cards de resumen -->
-    <div class="row mb-4">
+    <div class="row mb-4 justify-content-around">
+        <div class="col-md-3 mb-3" id="cardTransito">
+            <div class="card text-white bg-success h-100" style="box-shadow: 0px 0px 20px 0px black;">
+                <div class="card-body text-center">
+                    <h2 class="card-title" id="totalTransito">0</h2>
+                    <p class="card-text mb-0">En Tránsito</p>
+                </div>
+            </div>
+        </div>
         <div class="col-md-3 mb-3">
             <div class="card text-white bg-danger h-100" style="box-shadow: 0px 0px 20px 0px black;">
                 <div class="card-body text-center">
@@ -59,14 +41,6 @@
             </div>
         </div>
         <div class="col-md-3 mb-3">
-            <div class="card text-white bg-success h-100" style="box-shadow: 0px 0px 20px 0px black;">
-                <div class="card-body text-center">
-                    <h2 class="card-title" id="totalTransito">0</h2>
-                    <p class="card-text mb-0">En Tránsito</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3 mb-3">
             <div class="card text-white bg-secondary h-100" style="box-shadow: 0px 0px 20px 0px black;">
                 <div class="card-body text-center">
                     <h2 class="card-title" id="totalFinalizados">0</h2>
@@ -75,6 +49,38 @@
             </div>
         </div>
     </div>
+
+    <!-- Fila 1: Charts doughnut -->
+    <div class="row justify-content-around shadow-lg rounded pt-3 mb-3">
+         <!--Grafico 1-->
+        <div class="col-md-5 mb-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-header bg-primary text-white text-center">
+                    <h5 class="mb-0">Ingresados por Empresa</h5>
+                </div>
+                <div class="card-body d-flex justify-content-center align-items-center">
+                    <div style="width: 320px; height: 320px;">
+                        <canvas id="chartIngresadosHoy"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--Grafico 2-->
+        <div class="col-md-5 mb-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-header bg-info text-white text-center">
+                    <h5 class="mb-0">En Tránsito por Producto</h5>
+                </div>
+                <div class="card-body d-flex justify-content-center align-items-center">
+                    <div style="width: 320px; height: 320px;">
+                        <canvas id="chartEnTransito"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
 </div>
 {% endblock content %}
 
@@ -166,6 +172,15 @@ function cambiarPeriodo(periodo, btn) {
     // Actualizar clase active en los botones
     document.querySelectorAll('.btn-group .btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
+
+    // Mostrar u ocultar la card
+    const cardTransito = document.getElementById('cardTransito');
+
+    if (periodo === 'hoy') {
+        cardTransito.classList.remove('d-none');
+    } else {
+        cardTransito.classList.add('d-none');
+    }
 
     // Recargar dashboard con el nuevo período
     cargarDashboard(periodo);

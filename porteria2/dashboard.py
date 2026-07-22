@@ -67,8 +67,6 @@ def dashboard_json(request):
     total_transito = (
         Ingreso.objects
         .filter(
-            hora_ingreso__date__gte=fecha_inicio,
-            hora_ingreso__date__lte=hoy,
             ingresado=True,
             hdr__estado='Activo',
             is_deleted=False
