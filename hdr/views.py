@@ -25,15 +25,7 @@ def lista_hdr(request):
     hdr = None
     try:
         hdr = Ingreso.objects.filter().all()
-        
-        paginador = Paginator(hdr, 10)
-        page = request.GET.get('page', 1)
-        page_number = request.GET.get('page')
-        
-        if page_number is None:
-            page_number = 1 
-            
-        hdr = paginador.get_page(page)
+
     except Exception as excepcion:
         pass
     
