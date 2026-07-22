@@ -4,6 +4,8 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 
 from porteria2.dashboard import index_porteria, dashboard_json
+from balanza.dashboard import dashboard_kilos_json
+from laboratorio.dashboard import dashboard_inspecciones_json
 
 from porteria2.models import Egreso, Ingreso
 

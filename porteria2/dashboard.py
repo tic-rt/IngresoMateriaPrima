@@ -11,7 +11,7 @@ from porteria2.models import Egreso, Ingreso
 @permission_required('porteria2.view_ingreso', login_url='index')
 def index_porteria(request):
     """chart de vehiculos ingresados e informacion relevante para porteria"""
-    return render(request, 'porteria2/porteria2.html')
+    return render(request, 'porteria2/index_porteria.html')
 
 
 def _obtener_fecha_inicio(periodo):

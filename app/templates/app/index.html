@@ -3,9 +3,7 @@
 
 {% block content %}
 <!-- Grafico de cantidad de camiones ingresados -->
-<div class="container text-center mt-5 mb-4">
-    <h3 class="fw-bold text-center">Seguimiento de camiones</h3>
-</div>
+
 <div class="container text-center card-body shadow p-3 mb-5 bg-body rounded border border-2">
     <table class = "table table-responsive" style="width: 100%;">
         <caption></caption>
@@ -49,7 +47,7 @@
                     {% if ingreso.hdr.sector == 'Porteria 2 E' and ingreso.producto.producto == 'Amoníaco' %}<img src="{% static 'img/amoniaco-tanker.png' %}" alt="Camión verde" width="50">{% endif %} 
                     {% if ingreso.hdr.sector == 'Porteria 2 E' and ingreso.producto.producto == 'Azufre sólido' %}<img src="{% static 'img/sulf-granel-tanker.png' %}" alt="Camión verde" width="50">{% endif %} 
                     {% if ingreso.hdr.sector == 'Porteria 2 E' and ingreso.producto.producto == 'Azufre Líquido' %}<img src="{% static 'img/sulf-liq-tanker.png' %}" alt="Camión verde" width="50">{% endif%}
-                    {% if ingreso.hdr.sector == 'Portewria 2 E' and ingreso.producto.producto == 'Hipoclorito' %}<img src="{% static 'img/hipoclorito-tanker.png' %}" alt="Camión verde" width="50">{% endif%}
+                    {% if ingreso.hdr.sector == 'Porteria 2 E' and ingreso.producto.producto == 'Hipoclorito' %}<img src="{% static 'img/hipoclorito-tanker.png' %}" alt="Camión verde" width="50">{% endif%}
                 </td>
 
               </tr>  
