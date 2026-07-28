@@ -16,6 +16,7 @@ from reportlab.lib import colors
 from reportlab.pdfgen import canvas
 from pypdf import PdfReader, PdfWriter
 from django.core.paginator import Paginator
+import sweetify
 
 # Create your views here.
 @login_required
@@ -29,12 +30,17 @@ def lista_hdr(request):
         
         # Configurar paginación del lado del servidor
         page_number = request.GET.get('page', 1)
-        items_per_page = 10  # Cantidad de registros por página
+        items_per_page = 3  # Cantidad de registros por página
         paginator = Paginator(hdr_list, items_per_page)
         page_obj = paginator.get_page(page_number)
 
     except Exception as excepcion:
-        pass
+        sweetify.error(
+            request, 
+            'Error al cargar la lista de HDR. Por favor, intente nuevamente.', 
+            button='Ok', 
+            timer=5000
+        )
     
     return render(request,'HDR/listaHDR.html',{'page_obj': page_obj})
 
