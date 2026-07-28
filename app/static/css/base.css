@@ -32,13 +32,13 @@
 
 .lateral .nav-item .nav-link {
   color: rgb(199, 204, 209);
-  font-size: 1.2rem;
+  font-size: 1.1rem;
 }
 .lateral .nav-item .nav-link:hover {
   color: rgb(242, 242, 250)!important;
   transition: 300ms;
   font-weight: 600;
-  font-size: 1.3rem;
+  font-size: 1.2rem;
   
   
 }
