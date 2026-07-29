@@ -64,6 +64,10 @@ def guardarInspeccion(request):
                     #Si es amoniaco o azufre liquido debo guardar y  enviarlo a control de PAMPO\PSUL
                     if ingreso.producto.producto == 'Azufre Líquido':
                         hdr.sector = 'PSUL'
+                    elif ingreso.producto.producto == 'Azufre Sólido':
+                        hdr.sector = 'PSUL'
+                    elif ingreso.producto.producto == 'Hipoclorito':
+                        hdr.sector = 'PAMO'
                     elif ingreso.producto.producto == 'Amoníaco':
                         hdr.sector = 'PAMO'
                     else:
