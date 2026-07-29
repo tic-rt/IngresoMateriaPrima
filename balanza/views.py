@@ -54,7 +54,8 @@ def pesaje(request):
     except Exception as excepcion:
         sweetify.error(request, 'Error', text=f'Ocurrio un error {str(excepcion)}', persistent='Aceptar')
         return redirect('index')
-
+    
+@transaction.atomic
 @login_required
 @permission_required('porteria2.add_ingreso', raise_exception=True)
 def guardarPesaje(request):
@@ -99,7 +100,7 @@ def egresos(request):
 @login_required
 @permission_required('balanza.add_balanza', raise_exception=True)
 def pesajeSalida(request):
-    """funcion para cargar datos de la balanza"""
+    """funcion para cargar datos de la balanza a la entrada del camion"""
 
     try:
         if request.method == 'GET':
@@ -127,6 +128,7 @@ def pesajeSalida(request):
 @login_required
 @permission_required('balanza.add_balanza', raise_exception=True)
 def guardarPesaje2(request):
+    """funcion para guardar datos de la balanza a la salida del camion"""
     try:
         if request.method == 'POST':
             id_ingreso = request.GET.get('id_ingreso')
