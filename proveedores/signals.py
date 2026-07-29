@@ -8,6 +8,6 @@ def populate_producto(sender, **kwargs):
     if Producto.objects.count() == 0:
         # Si está vacía, poblarla con productos predeterminados
         Producto.objects.create(producto="Azufre Líquido")
-        Producto.objects.create(producto="Azufre sólido o a granel")
+        Producto.objects.create(producto="Azufre sólido")
         Producto.objects.create(producto="Amoníaco")
         Producto.objects.create(producto="Hipoclorito")
