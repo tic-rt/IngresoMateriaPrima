@@ -1,8 +1,11 @@
+from datetime import timezone
+
 from django.shortcuts import redirect, render
 import sweetify
 
 from hdr.models import HDR
 from laboratorio.forms import FormLaboratorio
+from laboratorio.models import Inspeccion
 from porteria2.models import Ingreso
 from django.contrib.auth.decorators import login_required, permission_required
 from django.db import transaction
@@ -97,3 +100,16 @@ def __controlIds(id_ingreso, id_hdr):
     else:
         return False
     
+@login_required
+def crear_inspeccion(hdr):
+    """Esta funcion crea un objeto de inspeccion para un ingreso y hdr determinado para un dia no laborable"""
+    inspeccion = Inspeccion.objects.create(
+        fecha = timezone.now(),
+        certificado = None,
+        requisitos = None,
+        responsable = None,
+        observacion = None,
+        cerrado = False,
+        hdr = hdr,
+    )
+    inspeccion.save()
