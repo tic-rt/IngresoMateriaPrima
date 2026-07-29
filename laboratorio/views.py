@@ -1,4 +1,3 @@
-from datetime import timezone
 
 from django.shortcuts import redirect, render
 import sweetify
@@ -6,6 +5,7 @@ import sweetify
 from hdr.models import HDR
 from laboratorio.forms import FormLaboratorio
 from laboratorio.models import Inspeccion
+from personal.models import Personal
 from porteria2.models import Ingreso
 from django.contrib.auth.decorators import login_required, permission_required
 from django.db import transaction
@@ -90,6 +90,7 @@ def guardarInspeccion(request):
                 return redirect('pendientesInspeccion')
             
     except Exception as excepcion:
+        transaction.set_rollback(True)
         sweetify.error(request, 'Error', text=f'Ocurrió un error: {str(excepcion)}', persistent='Aceptar')
         return redirect('pendientesInspeccion')
 
@@ -105,16 +106,23 @@ def __controlIds(id_ingreso, id_hdr):
     else:
         return False
     
-@login_required
 def crear_inspeccion(hdr):
-    """Esta funcion crea un objeto de inspeccion para un ingreso y hdr determinado para un dia no laborable"""
-    inspeccion = Inspeccion.objects.create(
-        fecha = timezone.now(),
-        certificado = None,
-        requisitos = None,
-        responsable = None,
-        observacion = None,
+    """Esta funcion crea una instancia de inspeccion para posterior control"""
+    personal_sin_asignar, _ = Personal.objects.get_or_create(
+        legajo='--',
+        defaults={
+            'sector': 'Inspeccion Quimica',
+            'nombre': 'Sin',
+            'apellido': 'Asignar',
+            'is_deleted': False
+        }
+    )
+    inspeccion = Inspeccion.objects.create(  
+        certificado = False,
+        requisitos = False,
+        responsable = personal_sin_asignar,
+        observacion = '',
         cerrado = False,
         hdr = hdr,
-    )
-    inspeccion.save()
+        )   
+    inspeccion.save()         
