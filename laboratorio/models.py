@@ -13,4 +13,5 @@ class Inspeccion(Base):
     requisitos = models.BooleanField(verbose_name='Cumple requisitos')
     responsable = models.ForeignKey(Personal, on_delete=models.PROTECT)
     observacion = models.TextField(verbose_name='observacion', max_length=200, blank=True, null=True)
+    cerrado = models.BooleanField(verbose_name='Cerrado', default=False)
     hdr = models.OneToOneField(HDR, on_delete=models.PROTECT, verbose_name='HDR')
