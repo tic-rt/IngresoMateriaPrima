@@ -71,6 +71,7 @@ def guardarInspeccion(request):
 
                     hdr.save(update_fields=['sector'])
                     inspeccion = formulario_control.save(commit=False)
+                    inspeccion.cerrado = True
                     inspeccion.hdr = hdr
                     inspeccion.save()
                     
