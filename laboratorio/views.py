@@ -120,6 +120,7 @@ def crear_inspeccion(hdr):
     inspeccion = Inspeccion.objects.create(  
         certificado = False,
         requisitos = False,
+        descargar = False,
         responsable = personal_sin_asignar,
         observacion = '',
         cerrado = False,

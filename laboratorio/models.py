@@ -11,6 +11,7 @@ class Inspeccion(Base):
     fecha = models.DateTimeField(verbose_name='Fecha de Inspeccion', auto_now_add=True)
     certificado = models.BooleanField(verbose_name='Ingresa con certificado')
     requisitos = models.BooleanField(verbose_name='Cumple requisitos')
+    descargar = models.BooleanField(verbose_name='Autorizado a descargar',default=True)
     responsable = models.ForeignKey(Personal, on_delete=models.PROTECT)
     observacion = models.TextField(verbose_name='observacion', max_length=200, blank=True, null=True)
     cerrado = models.BooleanField(verbose_name='Cerrado', default=False)
