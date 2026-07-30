@@ -166,7 +166,7 @@
                 <td style="width: 60%;">
                     Fecha:&nbsp; <b> {{iquimica.fecha|date:"d/m/y"}} </b><br>
                     Hora de Extracción de Muestra: <b> {{iquimica.fecha|time:"H:i"}} </b><br>
-                    Autorizado a Descargar:&nbsp; <b> {{iquimica.requisitos}} </b><br>
+                    Autorizado a Descargar:&nbsp; <b> {{iquimica.descargar}} </b><br>
                     Observaciones:&nbsp; <b> {{iquimica.observacion}} </b>
                 </td>
                 <td style="width: 40%"> 
@@ -235,7 +235,7 @@
                 </td>
                 <td style="width: 40%">
                     <br><br><br><br><br><br><br>
-                    Atendió:&nbsp; <b> {% if balanza.responsable_salida %} {{balanza.responsable_salida}} {% else %} {% endif %} </b>
+                    Atendió:&nbsp; <b> {% if balanza.responsable_salida != None %} {{balanza.responsable_salida}} {% else %} {% endif %} </b>
                 </td>
             </tr>
         </table>
