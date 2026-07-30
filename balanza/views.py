@@ -6,6 +6,7 @@ import sweetify
 from balanza.forms import FormBalanza, FormBalanzaSalida
 from balanza.models import Balanza
 from hdr.models import HDR
+from laboratorio.views import crear_inspeccion
 from porteria2.models import Ingreso
 from django.contrib.auth.decorators import login_required, permission_required
 from django.db import transaction
@@ -54,7 +55,8 @@ def pesaje(request):
     except Exception as excepcion:
         sweetify.error(request, 'Error', text=f'Ocurrio un error {str(excepcion)}', persistent='Aceptar')
         return redirect('index')
-
+    
+@transaction.atomic
 @login_required
 @permission_required('porteria2.add_ingreso', raise_exception=True)
 def guardarPesaje(request):
@@ -70,7 +72,7 @@ def guardarPesaje(request):
                 formulario_pesaje.instance.hora_ingreso = timezone.now()
                 formulario_pesaje.instance.hdr = hdr
                 formulario_pesaje.save()
-                hdr.sector = 'Inspeccion PQ'
+                _definir_sector(ingreso,hdr)
                 hdr.save()
                 sweetify.success(request,'Guardado', text = f'Se ha guardado el pesaje para {ingreso.empresa_transporte} {ingreso.patente_chasis}', timer=3000)#faltaaa
                 return redirect('pendientesBalanza')
@@ -81,6 +83,7 @@ def guardarPesaje(request):
         else:
             return redirect('pendientesBalanza')
     except Exception as excepcion:
+        transaction.set_rollback(True)
         sweetify.error(request,'Error', text=f'Ocurrio un error {str(excepcion)}', persistent = 'Aceptar')
         return redirect('pendientesBalanza')
 
@@ -99,7 +102,7 @@ def egresos(request):
 @login_required
 @permission_required('balanza.add_balanza', raise_exception=True)
 def pesajeSalida(request):
-    """funcion para cargar datos de la balanza"""
+    """funcion para cargar datos de la balanza a la entrada del camion"""
 
     try:
         if request.method == 'GET':
@@ -127,6 +130,7 @@ def pesajeSalida(request):
 @login_required
 @permission_required('balanza.add_balanza', raise_exception=True)
 def guardarPesaje2(request):
+    """funcion para guardar datos de la balanza a la salida del camion"""
     try:
         if request.method == 'POST':
             id_ingreso = request.GET.get('id_ingreso')
@@ -156,5 +160,27 @@ def guardarPesaje2(request):
         else:
             return redirect('egresos')
     except Exception as excepcion:
+        transaction.set_rollback(True)
         sweetify.error(request,'Error', text=f'Ocurrio un error {str(excepcion)}', persistent = 'Aceptar')
         return redirect('egresos')
+
+def _definir_sector(ingreso,hdr):
+    """Funcion que define el sector de un hdr de acuerdo a si es dia laborable o no"""
+    if ingreso.laborable:
+        hdr.sector = 'Inspeccion PQ'
+    #para dia no laborable se crea la inspeccion y se define el sector de acuerdo al producto
+    else:
+        match ingreso.producto.producto:
+            case 'Azufre Líquido':
+                hdr.sector = 'PSUL'
+            case 'Azufre Sólido':
+                hdr.sector = 'PSUL'
+            case 'Amoníaco':
+                hdr.sector = 'PAMO'
+            case 'Hipoclorito':
+                hdr.sector = 'PAMO'
+            case _:
+                hdr.sector = 'Almacen PQ E'
+        #se crea la inspeccion para dia no laborable, inspeccion pq lo cerrara posteriormente
+        crear_inspeccion(hdr)
+        

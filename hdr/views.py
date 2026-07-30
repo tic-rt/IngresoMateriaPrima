@@ -236,7 +236,7 @@ def _balanza(id_hdr):
             "peso_taquilla": balanza.peso_taquilla,
             "peso_bolsa_tarima": balanza.peso_bolsa_tarima,
             "peso_neto": balanza.peso_neto,
-            "responsable_salida": str(balanza.responsable_salida),
+            "responsable_salida": balanza.responsable_salida,
             }
     else:
         pass

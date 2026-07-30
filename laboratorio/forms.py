@@ -20,9 +20,16 @@ class FormLaboratorio(forms.ModelForm):
         (True, 'Sí'),
         (False, 'No'),
     ]
+
+    DESCARGA_CHOICES = [
+            (None, 'Seleccione una opción'),
+            (True, 'Sí'),
+            (False, 'No'),
+        ]
     
     certificado = forms.ChoiceField(choices=CERTIFICADO_CHOICES, required=True)
     requisitos = forms.ChoiceField(choices=REQUISITOS_CHOICES, required=True)
+    descargar = forms.ChoiceField( choices=DESCARGA_CHOICES, required=True)
 
     class Meta:
         model = Inspeccion
@@ -30,12 +37,14 @@ class FormLaboratorio(forms.ModelForm):
         fields = [
         'certificado',
         'requisitos',
+        'descargar',
         'responsable',
         'observacion']
 
         widgets = {
             'certificado':forms.Select(attrs={'class':'form-control'}),
             'requisitos':forms.Select(attrs={'class':'form-control'}),
+            'descargar':forms.Select(attrs={'class':'form-control'}),
             'responsable':forms.Select(attrs={'class':'form-control'}),
             'observacion':forms.Textarea(attrs=
                                            {'class':'form-control',
@@ -48,11 +57,13 @@ class FormLaboratorio(forms.ModelForm):
         self.fields['responsable'].queryset = Personal.objects.filter(is_deleted = False, sector = 'Inspeccion Quimica')
         self.fields['certificado'].empty_label = 'Seleccione una opción'
         self.fields['requisitos'].empty_label = 'Seleccione una opción'
+        self.fields['descargar'].empty_label = 'Seleccione una opcion'
         self.helper.add_input(Submit('Submit','Guardar'))
         self.helper.layout = Layout(
             Row(
-                Column('certificado', css_class='col-6'),
-                Column('requisitos', css_class='col-6'),
+                Column('certificado', css_class='col-4'),
+                Column('requisitos', css_class='col-4'),
+                Column('descargar',css_class='col-4'),
                 css_class='mb-3',
                 ),
             Row(
