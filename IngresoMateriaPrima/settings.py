@@ -56,7 +56,8 @@ INSTALLED_APPS = [
     'laboratorio',
     'pamo',
     'psul',
-    'calidad'
+    'calidad',
+    'shyma'
 ]
 
 MIDDLEWARE = [
