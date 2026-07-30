@@ -12,9 +12,6 @@
   }
   
 /* Ajustes para la navbar */
-.navbar .navbar-collapse{
-    padding-left: 90px;
-}
 .navbar .nav-item .nav-link{
   color:rgb(199, 204, 209) !important;
   font-size: 1.3rem;
@@ -277,6 +274,9 @@
 .fondo-balanza {
   position: relative;
   overflow: hidden;
+  width: 180px;  /*Define un ancho fijo */
+  /*aspect-ratio: 1 / 1; /* Forzar a que sea un cuadrado perfecto */
+  /*border-radius: 30%; /* Corta el contenedor en forma circular */
 }
 
 .fondo-balanza::before {
@@ -287,7 +287,7 @@
   width: 100%;
   height: 100%;
   background-image: url('../img/Ingreso-camion.png');
-  background-size: contain;
+  background-size: cover; /* Cambiado a cover para llenar todo el círculo */
   background-position: center;
   background-repeat: no-repeat;
   opacity: 1;
