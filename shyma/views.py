@@ -44,7 +44,7 @@ def cargar_en_transito(request):
         return redirect('index')
     
 @login_required
-@permission_required('porteria2.change_hdr', raise_exception=True)
+@permission_required('HDR.change_hdr', raise_exception=True)
 @transaction.atomic
 def guardar_rechazo(request):
     """Esta funcion guarda un rechazo por parte de SHYMA, actualizando el estado de la HDR a Rechazado y guardando la observacion"""
