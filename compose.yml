@@ -1,0 +1,9 @@
+services:
+  materias-primas:
+    build: .
+    container_name: materias-primas
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./db.sqlite3:/app/db.sqlite3
+    restart: unless-stopped
