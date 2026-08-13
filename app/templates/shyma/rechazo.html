@@ -1,0 +1,88 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+  <div class="container-fluid d-flex flex-column mb-5">
+    <div class="container fondo-transportes" style="height: 180px;"></div>
+    <div class="text-center pt-4 mb-5">
+      <div>
+        <h3>Nuevo Ingreso</h3>
+      </div>
+      <div class="d-flex justify-content-center">
+        <div class="col-10 col-sm-8 ">
+          {% crispy formulario_ingreso %}
+        </div>
+      </div>
+      
+      <form method="POST" action="{% url 'guardar_rechazo' %}">
+        {% csrf_token %}
+        <input type="hidden" name="id_ingreso" value="{{ id_ingreso }}">
+        <div class="d-flex justify-content-center">
+          <div class="col-10 col-sm-8 ">
+              <label for="observacion-rechazo"><strong>Motivo del rechazo</strong></label>
+              <textarea class="form-control" name="observacion" id="observacion-rechazo" rows="3" maxlength="200"></textarea>
+              <div>
+                <button class="mt-3 btn bg-danger btn-danger" type="submit">Guardar rechazo</button>
+              </div>
+          </div>
+        </div>
+      </form>
+
+      <button class="btn btn-warning float-end bi bi-arrow-left-circle"  onclick=history.back()> Regresar</button>
+    </div>
+  </div>
+{% endblock %}
+
+{% block js %}
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+      // Cuando la empresa de transporte cambie, actualizamos los demás selectores
+      const empresaTransporteSelect = document.querySelector('[name="empresa_transporte"]');
+      
+      empresaTransporteSelect.addEventListener('change', function() {
+        const empresaId = this.value;
+
+        //limpiando los select 
+        const camionSelect = document.querySelector('[name="patente_chasis"]');
+        const semiSelect = document.querySelector('[name="patente_semi"]');
+        const conductorSelect = document.querySelector('[name="conductor"]');
+        
+        camionSelect.innerHTML = '<option value="">Seleccione un camión</option>';
+        semiSelect.innerHTML = '<option value="">Seleccione un semi</option>';
+        conductorSelect.innerHTML = '<option value="">Seleccione un conductor</option>';
+
+        if (empresaId) {
+          // Hacer la solicitud 
+          fetch(`{% url 'obtenerDatos' %}?empresa_id=${empresaId}`)
+            .then(response => response.json())
+            .then(data => {
+              // Actualizar el campo de camiones
+              const camionSelect = document.querySelector('[name="patente_chasis"]');
+              camionSelect.innerHTML = '<option value="">Seleccione un camión</option>';
+              data.camiones.forEach(camion => {
+                camionSelect.innerHTML += `<option value="${camion.id}">${camion.nombre}</option>`;
+              });
+
+              // Actualizar el campo de semis
+              const semiSelect = document.querySelector('[name="patente_semi"]');
+              semiSelect.innerHTML = '<option value="">Seleccione un semi</option>';
+              data.semis.forEach(semi => {
+                semiSelect.innerHTML += `<option value="${semi.id}">${semi.nombre}</option>`;
+              });
+
+              // Actualizar el campo de conductores
+              const conductorSelect = document.querySelector('[name="conductor"]');
+              conductorSelect.innerHTML = '<option value="">Seleccione un conductor</option>';
+              data.conductores.forEach(conductor => {
+                conductorSelect.innerHTML += `<option value="${conductor.id}">${conductor.nombre}</option>`;
+              });
+            })
+            .catch(error => {
+              console.error('Error:', error);
+            });
+        }
+      });
+    });
+</script>
+{% endblock js %}
