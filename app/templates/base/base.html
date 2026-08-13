@@ -195,6 +195,9 @@
               <a href="{% url 'pendientesInspeccion' %}" class="nav-link link-side">Pendientes</a>
             </li>
             <li class="nav-item">
+              <a href="{% url 'inspeccion_pendiente' %}" class="nav-link link-side">Controles dias no laborables</a>
+            </li>
+            <li class="nav-item">
               <a class="nav-link link-side" href="{% url 'personal' %}">Responsables</a>
             </li>
           </ul>
@@ -258,6 +261,23 @@
           <ul class="navbar-nav flex-column ">
             <li class="nav-item">
               <a href="{% url 'gestion_calidad' %}" class="nav-link link-side">Gestión</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link link-side" href="{% url 'personal' %}">Responsables</a>
+            </li>
+          </ul>
+        </div>
+        {% endif %}
+
+        <!--Shyma -->
+        {% if 'G_Shyma' in grupos_usuario or user.is_superuser%}
+        <div class="pt-4 pb-4">
+          <div class="pb-4 container-fluid">
+            <h2 class="sub-titulo2">Shyma</h2>
+          </div>
+          <ul class="navbar-nav flex-column ">
+            <li class="nav-item">
+              <a href="{% url 'en_transito' %}" class="nav-link link-side">Vehiculos en Tránsito</a>
             </li>
             <li class="nav-item">
               <a class="nav-link link-side" href="{% url 'personal' %}">Responsables</a>
