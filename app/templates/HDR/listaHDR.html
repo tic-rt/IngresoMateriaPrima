@@ -41,7 +41,8 @@
                                 {% elif hdr.hdr.estado == "Rechazado" %}
                                 <div style="font-size: larger;"
                                     class="text-danger">
-                                    <i class="bi bi-slash-circle-fill"></i>
+                                    <i class="bi bi-slash-circle-fill"
+                                        title="Rechazado por: {{ hdr.hdr.rechazado_por }}"></i>
                                 {% else %}
                                 <div style="font-size: larger;"
                                     class="text-warning">

@@ -20,6 +20,13 @@
         <input type="hidden" name="id_ingreso" value="{{ id_ingreso }}">
         <div class="d-flex justify-content-center">
           <div class="col-10 col-sm-8 ">
+              <label for="id_personal"><strong>Rechazado por</strong></label>
+              <select class="form-control" name="id_personal" id="id_personal" required>
+                <option value="">Seleccione un personal</option>
+                {% for personal in personal_shyma %}
+                <option value="{{ personal.id }}">{{ personal }}</option>
+                {% endfor %}
+              </select>
               <label for="observacion-rechazo"><strong>Motivo del rechazo</strong></label>
               <textarea class="form-control" name="observacion" id="observacion-rechazo" rows="3" maxlength="200"></textarea>
               <div>

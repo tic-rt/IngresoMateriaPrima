@@ -4,6 +4,7 @@ import sweetify
 from django.shortcuts import redirect, render
 from porteria2.models import Ingreso
 from porteria2.forms import FormIngreso
+from personal.models import Personal
 from django.contrib.auth.decorators import login_required, permission_required
 from django.db import transaction
 
@@ -36,25 +37,30 @@ def cargar_en_transito(request):
             for field in formulario_ingreso.fields.values():
                 field.disabled = True
                 formulario_ingreso.helper.inputs = []
+
+            personal_shyma = Personal.objects.filter(sector = 'SHYMA', is_deleted = False)
                 
-            return render(request,'shyma/rechazo.html',{'ingreso':ingreso,'formulario_ingreso':formulario_ingreso,'id_ingreso':id_ingreso,'id_hdr':id_hdr})
+            return render(request,'shyma/rechazo.html',{'ingreso':ingreso,'formulario_ingreso':formulario_ingreso,'id_ingreso':id_ingreso,'id_hdr':id_hdr,'personal_shyma':personal_shyma})
 
     except Exception as excepcion:
         sweetify.error(request,'Error', text = f'Ha ocurrido un error {str(excepcion)}', persistent = 'Aceptar' )
         return redirect('index')
     
 @login_required
-@permission_required('HDR.change_hdr', raise_exception=True)
+@permission_required('hdr.change_hdr', raise_exception=True)
 @transaction.atomic
 def guardar_rechazo(request):
     """Esta funcion guarda un rechazo por parte de SHYMA, actualizando el estado de la HDR a Rechazado y guardando la observacion"""
     try:
         if request.method == 'POST':
                 id_ingreso = request.POST.get('id_ingreso')
+                id_personal = request.POST.get('id_personal')
                 observacion = request.POST.get('observacion', '').strip()
                 ingreso = Ingreso.objects.get(id = id_ingreso)
                 hdr = ingreso.hdr
                 hdr.estado = 'Rechazado'
+                if id_personal:
+                    hdr.rechazado_por = Personal.objects.get(id = id_personal)
                 if observacion:
                     if hdr.observacion:
                         hdr.observacion = f"{hdr.observacion}\n{observacion}"[:200]
@@ -64,5 +70,6 @@ def guardar_rechazo(request):
                 sweetify.success(request, 'Exito', text= 'Se ha rechazado la HDR correctamente', persistent = 'Aceptar')
                 return redirect('en_transito')
     except Exception as excepcion:
+        print( {str(excepcion)})
         sweetify.error(request, 'Error', text= f'Ocurrio un error al rechazar la HDR {str(excepcion)}', persistent = 'Aceptar')
         return redirect('en_transito')
