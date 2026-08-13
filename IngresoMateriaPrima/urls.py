@@ -30,5 +30,6 @@ urlpatterns = [
     path('PSUL/', include('psul.urls')),
     path('auth/',include('auth.urls')),
     path('hdr/',include('hdr.urls')),
-    path('calidad/',include('calidad.urls'))
+    path('calidad/',include('calidad.urls')),
+    path('shyma/',include('shyma.urls'))
 ]
