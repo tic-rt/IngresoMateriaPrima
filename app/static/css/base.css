@@ -253,6 +253,46 @@
   opacity: 1;
   z-index: -1;
 }
+/*fondo para transito html*/
+.fondo-transito{
+  position:relative;
+  overflow: hidden;
+}
+
+.fondo-transito::before{
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('../img/transito.jpg');
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 1;
+  z-index: -1;
+}
+/*fondo para rechazos html*/
+.fondo-rechazo{
+  position:relative;
+  overflow: hidden;
+}
+
+.fondo-rechazo::before{
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('../img/rechazo.png');
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 1;
+  z-index: -1;
+}
 /*fondo para egresos.html*/
 .fondo-egresos{
   position:relative;
