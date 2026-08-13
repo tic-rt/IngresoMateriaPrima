@@ -19,6 +19,7 @@
                         <th class="text-center">Estado</th>
                         <!-- <th class="text-center">Proveedor</th>-->
                         <th class="text-center">Producto</th>
+                        <th class="text-center">Remito</th>
                         <th class="text-center">Dominio Chasis</th>
                         <th class="text-center">Dominio Semi</th>
                     </thead>
@@ -51,6 +52,9 @@
                             </td>
                             <td class="text-center">
                                 {{hdr.producto}}
+                            </td>
+                            <td class="text-center">
+                                {{hdr.remito}}
                             </td>
                             <td class="text-center">
                                 {{hdr.patente_chasis}}
@@ -127,7 +131,7 @@
                 language:{
                     url:'/static/vendor/datatables/es-Es.json'
                 },
-                order: [[0, 'desc']]
+                order: [[0, 'asc']]
             });
         
         let tabla = document.getElementById('tabla-hdr')
