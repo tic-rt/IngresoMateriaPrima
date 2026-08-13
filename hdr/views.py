@@ -1,27 +1,48 @@
 import os
+from io import BytesIO
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.template.loader import render_to_string
 from xhtml2pdf import pisa
 from django.contrib.auth.decorators import login_required, permission_required
 from IngresoMateriaPrima import settings
+from hdr.models import HDR
 from balanza.models import Balanza
 from laboratorio.models import Inspeccion
 from pamo.models import PamoPsul
 from porteria2.models import EPP, Egreso, Ingreso
+from reportlab.lib.pagesizes import A4
+from reportlab.lib import colors
+from reportlab.pdfgen import canvas
+from pypdf import PdfReader, PdfWriter
+from django.core.paginator import Paginator
+import sweetify
 
 # Create your views here.
 @login_required
 @permission_required('hdr.view_hdr', raise_exception=True)
 def lista_hdr(request):
     """Funcion que devuelve la vista principal de hdr"""
-    hdr = None
+    hdr_list = None
+    page_obj = None
     try:
-        hdr = Ingreso.objects.filter(ingresado = True)
+        hdr_list = Ingreso.objects.filter().all().order_by('-hora_ingreso')
+        
+        # Configurar paginación del lado del servidor
+        page_number = request.GET.get('page', 1)
+        items_per_page = 3  # Cantidad de registros por página
+        paginator = Paginator(hdr_list, items_per_page)
+        page_obj = paginator.get_page(page_number)
+
     except Exception as excepcion:
-        pass
+        sweetify.error(
+            request, 
+            'Error al cargar la lista de HDR. Por favor, intente nuevamente.', 
+            button='Ok', 
+            timer=5000
+        )
     
-    return render(request,'HDR/listaHDR.html',{'HDR':hdr})
+    return render(request,'HDR/listaHDR.html',{'page_obj': page_obj})
 
 @login_required
 @permission_required('hdr.view_hdr', raise_exception=True)
@@ -38,10 +59,103 @@ def exportar_hdr(request):
         "fmrt.jpg"
     )
     
-    respuesta = HttpResponse(content_type='application/pdf')
-    pisa.CreatePDF(render_to_string('HDR/HDR.html',contexto), dest=respuesta)
-
-    return respuesta
+    # Generar PDF base desde el HTML
+    buffer_base = BytesIO()
+    pisa.CreatePDF(render_to_string('HDR/HDR.html', contexto), dest=buffer_base)
+    
+    # Si el estado es "Rechazado", superponer el sello en diagonal
+    if contexto.get('estado_hdr') == 'Rechazado':
+        # Crear watermark con ReportLab
+        buffer_watermark = BytesIO()
+        c = canvas.Canvas(buffer_watermark, pagesize=A4)
+        width, height = A4  # 595.27 x 841.89 pts
+        
+        c.saveState()
+        # Mover al centro de la página
+        c.translate(width / 2, height / 2)
+        # Rotar -30 grados (diagonal)
+        c.rotate(-30)
+        
+        # Calcular tamaño de fuente para que ocupe exactamente el 80% del ancho de página
+        texto = "RECHAZADO"
+        # Usar un tamaño de referencia para calcular el factor de escala
+        font_size_ref = 100
+        c.setFont("Helvetica-Bold", font_size_ref)
+        text_width_ref = c.stringWidth(texto, "Helvetica-Bold", font_size_ref)
+        # Escalar para que ocupe el 80% del ancho de página
+        font_size = (width * 0.80) * font_size_ref / text_width_ref
+        c.setFont("Helvetica-Bold", font_size)
+        
+        # Color rojo semitransparente (alpha=0.40)
+        c.setFillColor(colors.Color(1, 0, 0, alpha=0.40))
+        
+        # Dibujar texto centrado
+        c.drawCentredString(0, 0, texto)
+        
+        # Obtener la observación (motivo del rechazo) y quien lo rechazó
+        observacion = contexto.get('observacion_hdr', '')
+        rechazado_por = contexto.get('rechazado_por_hdr', '')
+        rechazado_por_sector = contexto.get('rechazado_por_sector_hdr', '')
+        if rechazado_por:
+            if rechazado_por_sector:
+                texto_rechazado_por = f"Rechazado por: {rechazado_por} - Sector: {rechazado_por_sector}"
+            else:
+                texto_rechazado_por = f"Rechazado por: {rechazado_por}"
+        else:
+            texto_rechazado_por = ''
+        
+        # Calcular posiciones para el rectángulo considerando ambos textos
+        text_width = c.stringWidth(texto, "Helvetica-Bold", font_size)
+        text_height = font_size * 1.2
+        max_width = text_width
+        total_height = text_height
+        font_size_obs = font_size * 0.20
+        
+        def dibujar_texto_extra(extra_texto):
+            """Dibuja un texto extra bajo la observación y devuelve su ancho"""
+            nonlocal max_width, total_height
+            c.setFont("Helvetica", font_size_obs)
+            c.setFillColor(colors.Color(1, 0, 0, alpha=0.40))
+            y_offset = -total_height / 2 + font_size_obs * 0.5
+            c.drawCentredString(0, y_offset, extra_texto)
+            w_extra = c.stringWidth(extra_texto, "Helvetica", font_size_obs)
+            max_width = max(max_width, w_extra)
+            total_height = total_height + font_size_obs * 1.5
+        
+        # Si hay observación, dibujarla debajo en fuente más pequeña
+        if observacion:
+            dibujar_texto_extra(observacion)
+        # Si hay responsable del rechazo, dibujarlo debajo de la observación
+        if texto_rechazado_por:
+            dibujar_texto_extra(texto_rechazado_por)
+        
+        # Margen adicional para la observación
+        c.setStrokeColor(colors.Color(1, 0, 0, alpha=0.40))
+        c.setLineWidth(4)
+        c.rect(-max_width / 2 - 20, -total_height / 2 + font_size * 0.1, max_width + 40, total_height + font_size * 0.3, stroke=1, fill=0)
+        
+        c.restoreState()
+        c.save()
+        
+        # Fusionar watermark sobre el PDF base
+        buffer_watermark.seek(0)
+        base_pdf = PdfReader(buffer_base)
+        watermark_pdf = PdfReader(buffer_watermark)
+        writer = PdfWriter()
+        
+        for page_num in range(len(base_pdf.pages)):
+            page = base_pdf.pages[page_num]
+            page.merge_page(watermark_pdf.pages[0])
+            writer.add_page(page)
+        
+        resultado = BytesIO()
+        writer.write(resultado)
+        resultado.seek(0)
+        return HttpResponse(resultado, content_type='application/pdf')
+    
+    # Si no es rechazado, devolver el PDF base
+    buffer_base.seek(0)
+    return HttpResponse(buffer_base, content_type='application/pdf')
 
 def _completado(id_hdr):
     """funcion que devuelve todos los datos para completar la HDR"""
@@ -52,6 +166,14 @@ def _completado(id_hdr):
     contexto.update({'iquimica': _iquimica(id_hdr)})
     contexto.update({'pamo': _pamo(id_hdr)})
     contexto.update({'egreso': _egreso(id_hdr)})
+    try:
+        hdr_obj = HDR.objects.get(id=id_hdr)
+        contexto['estado_hdr'] = hdr_obj.estado
+        contexto['observacion_hdr'] = hdr_obj.observacion
+        contexto['rechazado_por_hdr'] = str(hdr_obj.rechazado_por)
+        contexto['rechazado_por_sector_hdr'] = hdr_obj.rechazado_por.sector if hdr_obj.rechazado_por else ''
+    except HDR.DoesNotExist:
+        contexto['estado_hdr'] = ''
     return contexto
 
 def _porteria_ingreso(id_hdr):
@@ -90,6 +212,7 @@ def _control_epp(id_hdr):
         ).get(hdr_id=id_hdr)
         
         return {
+            "fecha_control": epp.fecha_control,
             "casco": 'SI' if epp.casco else 'NO',
             "mascara": 'SI' if epp.mascara else 'NO',
             "antiparras": 'SI' if epp.antiparras else 'NO',
@@ -127,7 +250,7 @@ def _balanza(id_hdr):
             "peso_taquilla": balanza.peso_taquilla,
             "peso_bolsa_tarima": balanza.peso_bolsa_tarima,
             "peso_neto": balanza.peso_neto,
-            "responsable_salida": str(balanza.responsable_salida),
+            "responsable_salida": balanza.responsable_salida,
             }
     else:
         pass

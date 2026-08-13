@@ -1,0 +1,323 @@
+/* Estilos para el header */
+.header{
+    background: linear-gradient(311deg, rgba(2, 10, 46, 1) 0%, rgba(0, 73, 141, 1) 25%);
+    color: aliceblue;
+    width:100%;
+  }
+  
+  .boton-salida{
+    background-color: #00498d;
+    color: aliceblue;
+    width: 100%;
+  }
+  
+/* Ajustes para la navbar */
+.navbar .nav-item .nav-link{
+  color:rgb(199, 204, 209) !important;
+  font-size: 1.3rem;
+
+}
+.navbar .nav-item .nav-link:hover{
+  color: rgb(242, 242, 250)!important;
+  font-weight: 600;
+}
+
+/* Ajustes para la barra lateral */
+.lateral {
+  padding-top: 2%;
+  background: rgb(2, 10, 46);
+  background: linear-gradient(311deg, rgba(2, 10, 46, 1) 0%, rgba(0, 73, 141, 1) 25%);
+  min-height: 87vh;
+} 
+
+.lateral .nav-item .nav-link {
+  color: rgb(199, 204, 209);
+  font-size: 1.1rem;
+}
+.lateral .nav-item .nav-link:hover {
+  color: rgb(242, 242, 250)!important;
+  transition: 300ms;
+  font-weight: 600;
+  font-size: 1.2rem;
+  
+  
+}
+
+.sub-titulo2, .titulo {
+  color : aliceblue;
+}
+
+.link-side {
+  color:  rgb(193, 195, 197);
+  transition: 200ms; /* Suaviza la transición del cambio de tamaño */
+}
+.lateral .link-side:hover {
+  font-size: 1.2rem;
+  color: rgb(245, 245, 245);
+}
+
+/*Capitalizar la primer letra de cada palabra*/
+.cap{
+  text-transform: capitalize;
+}
+/*poner odo en mayuscula */
+.mayus{
+  text-transform: uppercase;
+}
+
+/*fondo para semis.html*/
+.fondo-semis {
+  position: relative; 
+  overflow: hidden; 
+}
+
+.fondo-semis::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('../img/semi-3D.png'); 
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 1; 
+  z-index: -1;
+}
+.disparador {
+  cursor: pointer; /* Cambia el cursor al pasar sobre la fila */
+}
+
+/*fondo para camiones.html*/
+.fondo-camiones {
+  position: relative; 
+  overflow: hidden; 
+}
+
+.fondo-camiones::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('../img/camiones.png'); 
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 1; 
+  z-index: -1;
+}
+
+/*fondo para transportes.html*/
+.fondo-transportes {
+  position: relative; 
+  overflow: hidden; 
+}
+
+.fondo-transportes::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('../img/Ingreso-camion.png'); 
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 1; 
+  z-index: -1;
+}
+/*fondo para hdr.html*/
+.fondo-hdr {
+  position: relative; 
+  overflow: hidden; 
+}
+
+.fondo-hdr::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('../img/hdr.png'); 
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 1; 
+  z-index: -1;
+}
+/*fondo para gestion.html*/
+.fondo-gestion {
+  position: relative; 
+  overflow: hidden; 
+}
+
+.fondo-gestion::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('../img/quality.png'); 
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 1; 
+  z-index: -1;
+}
+/*fondo para empresas.html*/
+.fondo-empresas {
+  position: relative; 
+  overflow: hidden; 
+}
+
+.fondo-empresas::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('../img/empresas2.png'); 
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 1; 
+  z-index: -1;
+}
+/*fondo para conductores.html*/
+.fondo-conductores {
+  position: relative; 
+  overflow: hidden; 
+}
+
+.fondo-conductores::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('../img/choferes.png'); 
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 1; 
+  z-index: -1;
+}
+/*fondo para responsabes.html*/
+.fondo-responsables {
+  position: relative; 
+  overflow: hidden; 
+}
+
+.fondo-responsables::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('../img/responsables.png'); 
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 1; 
+  z-index: -1;
+}
+/*fondo para controles html*/
+.fondo-control{
+  position:relative;
+  overflow: hidden;
+}
+
+.fondo-control::before{
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('../img/pendientes.png');
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 1;
+  z-index: -1;
+}
+/*fondo para egresos.html*/
+.fondo-egresos{
+  position:relative;
+  overflow: hidden;
+}
+
+.fondo-egresos::before{
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('../img/Egreso-camion.png');
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 1;
+  z-index: -1;
+}
+/*fondo para balanza.html*/
+.fondo-balanza {
+  position: relative;
+  overflow: hidden;
+  width: 180px;  /*Define un ancho fijo */
+  /*aspect-ratio: 1 / 1; /* Forzar a que sea un cuadrado perfecto */
+  /*border-radius: 30%; /* Corta el contenedor en forma circular */
+}
+
+.fondo-balanza::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('../img/Ingreso-camion.png');
+  background-size: cover; /* Cambiado a cover para llenar todo el círculo */
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 1;
+  z-index: -1;
+}
+/*fondo para datos-balanza.html*/
+.fondo-balanza-data {
+  position: relative;
+  overflow: hidden;
+  width: 180px; /* Define un ancho fijo */
+  aspect-ratio: 1 / 1; /* Forzar a que sea un cuadrado perfecto */
+  border-radius: 30%; /* Corta el contenedor en forma circular */
+}
+
+.fondo-balanza-data::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('../img/data.png');
+  background-size: cover; /* Cambiado a cover para llenar todo el círculo */
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 1;
+  z-index: -1;
+}
+
+.fondo-loguin {
+background: rgb(2,10,46);
+background: linear-gradient(311deg, rgba(2,10,46,1) 0%, rgba(0,73,141,1) 25%);
+}

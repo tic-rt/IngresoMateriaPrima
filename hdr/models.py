@@ -1,6 +1,7 @@
 from django.db import models
 
 from base.models import Base
+from personal.models import Personal
 
 # Create your models here.
 
@@ -25,6 +26,7 @@ class HDR(Base):
    sector = models.CharField(verbose_name= 'Sector', choices=sector, max_length=20, default='Porteria 2')
    estado=models.CharField(verbose_name='Estado', choices=estado, max_length=20, default='Activo')
    observacion = models.CharField(verbose_name='Observaciones', max_length=200,blank=True, default='')
+   rechazado_por = models.ForeignKey(Personal, verbose_name='Rechazado por', on_delete=models.PROTECT, null=True, blank=True)
    
    class Meta:
       """Meta defincion para HDR"""

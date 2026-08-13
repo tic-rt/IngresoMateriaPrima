@@ -3,7 +3,7 @@
 {% load crispy_forms_tags %}
 {% block content %}
 <div class="container-fluid d-flex flex-column">
-    <div class="container fondo-balanza" style="height: 120px;"></div>
+    <div class="container fondo-hdr" style="height: 180px;"></div>
     <div class="text-center pt-4 mb-5">
         <div>
             <h3>HDR</h3>
@@ -19,11 +19,12 @@
                         <th class="text-center">Estado</th>
                         <!-- <th class="text-center">Proveedor</th>-->
                         <th class="text-center">Producto</th>
+                        <th class="text-center">Remito</th>
                         <th class="text-center">Dominio Chasis</th>
                         <th class="text-center">Dominio Semi</th>
                     </thead>
                     <tbody>
-                        {% for hdr in HDR%}
+                        {% for hdr in page_obj%}
                         <tr class = "disparador" data-id="{{hdr.id}}" data-hdr="{{hdr.hdr_id}}">
                             <!--<td class="text-center">
                                 {{hdr.id}}
@@ -37,6 +38,11 @@
                                     class="text-success ">
                                     <i class="bi bi-check-circle-fill"></i>
                                 </div>
+                                {% elif hdr.hdr.estado == "Rechazado" %}
+                                <div style="font-size: larger;"
+                                    class="text-danger">
+                                    <i class="bi bi-slash-circle-fill"
+                                        title="Rechazado por: {{ hdr.hdr.rechazado_por }}"></i>
                                 {% else %}
                                 <div style="font-size: larger;"
                                     class="text-warning">
@@ -49,6 +55,9 @@
                                 {{hdr.producto}}
                             </td>
                             <td class="text-center">
+                                {{hdr.remito}}
+                            </td>
+                            <td class="text-center">
                                 {{hdr.patente_chasis}}
                             </td>
                             <td class="text-center">
@@ -58,6 +67,54 @@
                         {% endfor %}
                     </tbody>
                 </table>
+                
+                <!-- Controles de paginación -->
+                {% if page_obj.has_other_pages %}
+                <div class="d-flex justify-content-center mt-4">
+                    <nav aria-label="Paginación de HDR">
+                        <ul class="pagination">
+                            <!-- Botón Anterior -->
+                            {% if page_obj.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Anterior">
+                                    <span aria-hidden="true">&laquo; Anterior</span>
+                                </a>
+                            </li>
+                            {% else %}
+                            <li class="page-item disabled">
+                                <span class="page-link">&laquo; Anterior</span>
+                            </li>
+                            {% endif %}
+                            
+                            <!-- Números de página -->
+                            {% for num in page_obj.paginator.page_range %}
+                                {% if page_obj.number == num %}
+                                <li class="page-item active">
+                                    <span class="page-link">{{ num }}</span>
+                                </li>
+                                {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                                </li>
+                                {% endif %}
+                            {% endfor %}
+                            
+                            <!-- Botón Siguiente -->
+                            {% if page_obj.has_next %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Siguiente">
+                                    <span aria-hidden="true">Siguiente &raquo;</span>
+                                </a>
+                            </li>
+                            {% else %}
+                            <li class="page-item disabled">
+                                <span class="page-link">Siguiente &raquo;</span>
+                            </li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+                </div>
+                {% endif %}
             </div>
         </div>
         <button class="btn btn-danger float-end bi bi-arrow-left-circle"
@@ -67,15 +124,16 @@
 
 {% endblock content %}
 {% block js %}
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        let tabla_hdr = new DataTable('#tabla-hdr',{
-            responsive: true,
-            language:{
-                url:'/static/vendor/datatables/es-Es.json'
-            },
-            order: [[0, 'desc']]
-        });
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            let tabla_hdr = new DataTable('#tabla-hdr',{
+                responsive: true,
+                paging: false,  // Deshabilitar paginación de DataTables (usamos paginación del servidor)
+                language:{
+                    url:'/static/vendor/datatables/es-Es.json'
+                },
+                order: [[0, 'asc']]
+            });
         
         let tabla = document.getElementById('tabla-hdr')
         if (tabla && tabla.rows.length > 1 ){

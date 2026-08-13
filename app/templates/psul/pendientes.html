@@ -4,7 +4,7 @@
 
 {% block content %}
 <div class="container-fluid d-flex flex-column">
-    <div class="container fondo-balanza" style="height: 120px;"></div>
+    <div class="container fondo-control" style="height: 180px;"></div>
     <div class="text-center pt-4 mb-5">
         <div>
             <h3>Control PSUL</h3>
@@ -20,7 +20,7 @@
                     </thead>
                     <tbody>
                         {% for ingreso in ingresos%}
-                        <tr data-id="{{ingreso.id}}" data-hdr="{{ingreso.hdr_id}}">
+                        <tr class = "disparador" data-id="{{ingreso.id}}" data-hdr="{{ingreso.hdr_id}}">
                             <td>
                                 {{ingreso.empresa_transporte}}
                             </td>

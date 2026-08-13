@@ -12,6 +12,9 @@
   }
   
 /* Ajustes para la navbar */
+.navbar .navbar-collapse{
+    padding-left: 90px;
+}
 .navbar .nav-item .nav-link{
   color:rgb(199, 204, 209) !important;
   font-size: 1.3rem;
@@ -32,13 +35,13 @@
 
 .lateral .nav-item .nav-link {
   color: rgb(199, 204, 209);
-  font-size: 1.2rem;
+  font-size: 1.1rem;
 }
 .lateral .nav-item .nav-link:hover {
   color: rgb(242, 242, 250)!important;
   transition: 300ms;
   font-weight: 600;
-  font-size: 1.3rem;
+  font-size: 1.2rem;
   
   
 }
@@ -78,7 +81,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: url('../img/productos_quimicos.jpg'); 
+  background-image: url('../img/semi-3D.png'); 
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
@@ -102,7 +105,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: url('../img/camion3.jpg'); 
+  background-image: url('../img/camiones.png'); 
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
@@ -123,7 +126,67 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: url('../img/transporte2.jpg'); 
+  background-image: url('../img/Ingreso-camion.png'); 
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 1; 
+  z-index: -1;
+}
+/*fondo para hdr.html*/
+.fondo-hdr {
+  position: relative; 
+  overflow: hidden; 
+}
+
+.fondo-hdr::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('../img/hdr.png'); 
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 1; 
+  z-index: -1;
+}
+/*fondo para gestion.html*/
+.fondo-gestion {
+  position: relative; 
+  overflow: hidden; 
+}
+
+.fondo-gestion::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('../img/quality.png'); 
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 1; 
+  z-index: -1;
+}
+/*fondo para empresas.html*/
+.fondo-empresas {
+  position: relative; 
+  overflow: hidden; 
+}
+
+.fondo-empresas::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('../img/empresas2.png'); 
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
@@ -143,27 +206,67 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: url('../img/conductor.jpg'); 
+  background-image: url('../img/choferes.png'); 
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
   opacity: 1; 
   z-index: -1;
 }
-/*fondo para epp.html*/
-.fondo-epp{
-  position:relative;
-  overflow: hidden;
+/*fondo para responsabes.html*/
+.fondo-responsables {
+  position: relative; 
+  overflow: hidden; 
 }
 
-.fondo-epp::before{
+.fondo-responsables::before {
   content: '';
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: url('../img/epp.jpg');
+  background-image: url('../img/responsables.png'); 
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 1; 
+  z-index: -1;
+}
+/*fondo para controles html*/
+.fondo-control{
+  position:relative;
+  overflow: hidden;
+}
+
+.fondo-control::before{
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('../img/pendientes.png');
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 1;
+  z-index: -1;
+}
+/*fondo para egresos.html*/
+.fondo-egresos{
+  position:relative;
+  overflow: hidden;
+}
+
+.fondo-egresos::before{
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('../img/Egreso-camion.png');
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
@@ -183,13 +286,37 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: url('../img/fondo-balanza.webp');
+  background-image: url('../img/Ingreso-camion.png');
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
   opacity: 1;
   z-index: -1;
 }
+/*fondo para datos-balanza.html*/
+.fondo-balanza-data {
+  position: relative;
+  overflow: hidden;
+  width: 180px; /* Define un ancho fijo */
+  aspect-ratio: 1 / 1; /* Forzar a que sea un cuadrado perfecto */
+  border-radius: 30%; /* Corta el contenedor en forma circular */
+}
+
+.fondo-balanza-data::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('../img/data.png');
+  background-size: cover; /* Cambiado a cover para llenar todo el círculo */
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 1;
+  z-index: -1;
+}
+
 .fondo-loguin {
 background: rgb(2,10,46);
 background: linear-gradient(311deg, rgba(2,10,46,1) 0%, rgba(0,73,141,1) 25%);

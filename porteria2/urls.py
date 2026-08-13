@@ -1,11 +1,11 @@
 
 from django.urls import path
 
-from porteria2.views import controlEpp, egreso, egresosPendientes, guardarControlEpp, guardarEgreso, guardarNuevoIngreso, guardarRechazo, index, mostrarControlEpp, nuevoIngreso
-
+from porteria2.views import controlEpp, egreso, egresosPendientes, guardarControlEpp, guardarEgreso, guardarNuevoIngreso, guardarRechazo, mostrarControlEpp, nuevoIngreso
+from porteria2.dashboard import index_porteria, dashboard_json
 
 urlpatterns = [
-    path('', index, name='porteria2'),
+    path('', index_porteria, name='index_porteria'),
     path('nuevoIngreso', nuevoIngreso, name='nuevoIngreso'),
     path('guardarNuevoIngreso', guardarNuevoIngreso, name='guardarNuevoIngreso'),
     path('controlEpp/', controlEpp, name='controlEpp'),
@@ -14,5 +14,6 @@ urlpatterns = [
     path('guardarRechazo/', guardarRechazo, name='guardarRechazo'),
     path('egresosPendientes', egresosPendientes, name='egresosPendientes'),
     path('egreso/', egreso, name='egreso'),
-    path('guardarEgreso/', guardarEgreso, name='guardarEgreso')
+    path('guardarEgreso/', guardarEgreso, name='guardarEgreso'),
+    path('api/dashboard/', dashboard_json, name='dashboard_json'),
 ]

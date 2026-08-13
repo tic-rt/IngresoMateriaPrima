@@ -10,11 +10,7 @@ from django.db import transaction
 
 # Create your views here.
 
-@login_required
-@permission_required('porteria2.view_ingreso', login_url='index')
-def index(request):
-    """chart de vehiculos ingresados e informacion relevante para porteria"""
-    return render(request, 'porteria2/porteria2.html')
+
 
 @login_required
 @permission_required('porteria2.view_ingreso', login_url='index')
@@ -313,7 +309,3 @@ def guardarEgreso(request):
         sweetify.error(request, 'Error', text=f'Ocurrio un error {str(excepcion)} ', persistent = 'Aceptar')
         return redirect('egresosPendientes')
     
-@login_required
-def transito_vehiculos(request):
-    """Esta funcion devuelve datos (json) de los vehiculos en transito"""
-    pass

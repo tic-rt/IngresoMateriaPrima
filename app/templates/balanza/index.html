@@ -2,111 +2,136 @@
 {% load static %}
 
 {% block content %}
-<div class="overflow-y-scroll">
-    <div class="container center row flex">
-        <div class="container center col-6">
-            <div class="container text-center mt-3 mb-4">
-                <h2 class="bold">Azufre Líquido</h2>
-            </div>
-            <div class="container text-center card-body shadow p-3 mb-5 bg-body rounded border border-2">
-                <canvas class="center" id="chart" width="400" height="200">
 
-                </canvas>
+<div class="container card-body shadow p-3 mb-5 bg-body rounded border border-2">
+    <!-- Filtros -->
+    <div class="row mb-3">
+        <div class="col-12 d-flex justify-content-center gap-3 flex-wrap">
+            <!-- Agrupar por -->
+            <div class="btn-group" role="group" aria-label="Filtro de agrupación">
+                <button type="button" class="btn btn-outline-secondary active" data-filtro="producto" onclick="cambiarFiltro('producto', this)">Producto</button>
+                <button type="button" class="btn btn-outline-secondary" data-filtro="proveedor" onclick="cambiarFiltro('proveedor', this)">Proveedor</button>
+            </div>
+            <!-- Período -->
+            <div class="btn-group" role="group" aria-label="Filtro de período">
+                <button type="button" class="btn btn-outline-primary active" data-periodo="hoy" onclick="cambiarPeriodo('hoy', this)">Hoy</button>
+                <button type="button" class="btn btn-outline-primary" data-periodo="semana" onclick="cambiarPeriodo('semana', this)">Semanal</button>
+                <button type="button" class="btn btn-outline-primary" data-periodo="mensual" onclick="cambiarPeriodo('mensual', this)">Mensual</button>
             </div>
         </div>
     </div>
 
-    {% comment %} <div class="container col-6">
-        <div class="container text-center mt-3 mb-4">
-            <h2 class="bold">Sulfato de Amonio</h2>
-        <div class="container text-center mt-3 mb-4">
-            <h2 class="bold">Azufre sólido</h2>
+    <!-- Chart + Card -->
+    <div class="row align-items-center" >
+        <div class="col-md-8 mb-3">
+            <div class="card shadow-sm">
+                <div class="card-header bg-secondary text-white text-center">
+                    <h5 class="mb-0" id="chartTitle">Kilos por Producto</h5>
+                </div>
+                <div class="card-body d-flex justify-content-center" >
+                    <div style="width: 650px; height: 320px;">
+                        <canvas id="chartKilos"></canvas>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="container text-center card-body shadow p-3 mb-5 bg-body rounded border border-2">
-            <canvas class="center" id="chart" width="400" height="200">
-
-            </canvas>
-        </div>
-        </div>
-    </div> {% endcomment %}
-
-<div class="container center row flex offset-1">
-    <div class="container center col-6">
-        <div class="container text-center mt-3 mb-4">
-            <h2 class="bold">Amoníaco</h2>
-        </div>
-        <div class="container text-center card-body shadow p-3 mb-5 bg-body rounded border border-2">
-            <canvas class="center" id="chart" width="400" height="100">
-
-            </canvas>
-        </div>
-    </div>
-
-    <div class="container col-6">
-        <div class="container text-center mt-3 mb-4">
-            <h2 class="bold">Hipoclorito</h2>
-        </div>
-        <div class="container text-center card-body shadow p-3 mb-5 bg-body rounded border border-2">
-            <canvas class="center" id="chart" width="400" height="100">
-
-            </canvas>
+        <div class="col-md-4 mb-3">
+            <div class="card text-white bg-warning " style="box-shadow: 0px 0px 20px 0px black;">
+                <div class="card-body text-center">
+                    <h2 class="card-title" id="totalKilos">0</h2>
+                    <p class="card-text mb-0">Total Kilos</p>
+                </div>
+            </div>
         </div>
     </div>
 </div>
-</div>
-
 {% endblock content %}
+
 {% block js %}
+{{ block.super }}
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        function leerDatos(){
-            fetch('{% url "cantidad_camiones" %}')
-            .then(response => response.json())
-            .then(data => {
-                const ctx = document.getElementById('chart').getContext('2d');
-                const chart = new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels: data.labels,
-                        datasets: [{
-                            label: 'Cantidad de Camiones Ingresados hoy',
-                            data: data.data,
-                            backgroundColor: [
-                                'rgba(75, 192, 192, 0.2)',
-                                'rgba(255, 206, 86, 0.2)',
-                                'rgba(153, 102, 255, 0.2)',
-                                'rgba(255, 99, 132, 0.2)'
-                            ],
-                            borderColor: [
-                                'rgba(75, 192, 192, 1)',
-                                'rgba(255, 206, 86, 1)',
-                                'rgba(153, 102, 255, 1)',
-                                'rgba(255, 99, 132, 1)'
-                            ],
-                            borderWidth: 1
-                        }]
-                    },
-                    options: {
-                        label:false,
-                        borderWidth:1,
-                        borderWidth:1,
-                        responsive: true,
-                        maintainAspectRatio: true,
-                        scales: {
-                            y: {
-                                beginAtZero: true,
-                                ticks: {
-                                    stepSize: 1,
-                                    precision: 0
+// --- Dashboard Balanza ---
+let filtroActual = 'producto';
+let periodoActual = 'hoy';
+let chartKilos = null;
+
+function cargarDashboardKilos() {
+    const url = `{% url 'dashboard_kilos' %}?filtro=${filtroActual}&periodo=${periodoActual}`;
+
+    document.getElementById('chartTitle').textContent = 
+        filtroActual === 'producto' ? 'Kilos por Producto' : 'Kilos por Proveedor';
+
+    fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('totalKilos').textContent = data.total_kilos.toLocaleString('es-AR');
+
+            if (chartKilos) {
+                chartKilos.destroy();
+            }
+
+            const ctx = document.getElementById('chartKilos').getContext('2d');
+            chartKilos = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: data.labels,
+                    datasets: [{
+                        label: 'Kilos',
+                        data: data.data,
+                        backgroundColor: ['#4e73df', '#1cc88a', '#36b9cc', '#f6c23e', '#e74a3b', '#5a5c69'],
+                        borderColor: '#ffffff',
+                        borderWidth: 1,
+                        
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    scales: {
+                        x: {
+                            ticks: {
+                                font: {
+                                        size: 15   // Prueba con 15 o 16
+                                    }
+                                }
+                            },
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return value.toLocaleString('es-AR') + ' kg';
                                 }
                             }
                         }
+                    },
+                    plugins: {
+                        legend: { 
+                            display: false,
+                         }
                     }
-                });
+                }
             });
-        }
-        timer = setTimeout(leerDatos(), 1000); // Espera 1 segundo antes de la primera llamada
-        
-    });
+        })
+        .catch(error => console.error('Error al cargar dashboard kilos:', error));
+}
+
+function cambiarFiltro(filtro, btn) {
+    filtroActual = filtro;
+    document.querySelectorAll('[data-filtro]').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    cargarDashboardKilos();
+}
+
+function cambiarPeriodo(periodo, btn) {
+    periodoActual = periodo;
+    document.querySelectorAll('[data-periodo]').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    cargarDashboardKilos();
+}
+
+// Cargar dashboard al iniciar
+document.addEventListener('DOMContentLoaded', function() {
+    cargarDashboardKilos();
+});
 </script>
 {% endblock js %}

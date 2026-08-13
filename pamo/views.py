@@ -5,9 +5,13 @@ import sweetify
 from hdr.models import HDR
 from pamo.forms import formPamo
 from porteria2.models import Ingreso
+from django.contrib.auth.decorators import permission_required
+from django.db import transaction
 
 # Create your views here.
+@transaction.atomic 
 @login_required
+@permission_required('pamo.view_pamo', raise_exception=True)
 def pendientes(request):
     """muestra los camiones pendientes de control que provienen de IQ"""
     try:
@@ -18,7 +22,9 @@ def pendientes(request):
         sweetify.error(request, 'Error', text=f'Ocurrio un error {str(excepcion)}', persistent = 'Aceptar')
         return redirect ('index')
     
+@transaction.atomic    
 @login_required
+@permission_required('pamo.add_pamo', raise_exception=True)
 def controlPamo(request):
     """control de presion y temperatura para pamo"""
     try:
@@ -32,8 +38,9 @@ def controlPamo(request):
     except Exception as excepcion:
         sweetify.error(request, 'Error', text = f'Ocurrio un error {str(excepcion)}', persistent = 'Aceptar')
         return redirect('pendientesPAMO')
-
+@transaction.atomic
 @login_required
+@permission_required('pamo.add_pamo', raise_exception=True) 
 def guardarPamo(request):
     try:
         if request.method == 'POST':
