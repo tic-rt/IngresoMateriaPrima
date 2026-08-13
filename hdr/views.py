@@ -92,35 +92,47 @@ def exportar_hdr(request):
         # Dibujar texto centrado
         c.drawCentredString(0, 0, texto)
         
-        # Obtener la observación (motivo del rechazo)
+        # Obtener la observación (motivo del rechazo) y quien lo rechazó
         observacion = contexto.get('observacion_hdr', '')
+        rechazado_por = contexto.get('rechazado_por_hdr', '')
+        rechazado_por_sector = contexto.get('rechazado_por_sector_hdr', '')
+        if rechazado_por:
+            if rechazado_por_sector:
+                texto_rechazado_por = f"Rechazado por: {rechazado_por} - Sector: {rechazado_por_sector}"
+            else:
+                texto_rechazado_por = f"Rechazado por: {rechazado_por}"
+        else:
+            texto_rechazado_por = ''
         
         # Calcular posiciones para el rectángulo considerando ambos textos
         text_width = c.stringWidth(texto, "Helvetica-Bold", font_size)
         text_height = font_size * 1.2
+        max_width = text_width
+        total_height = text_height
+        font_size_obs = font_size * 0.20
+        
+        def dibujar_texto_extra(extra_texto):
+            """Dibuja un texto extra bajo la observación y devuelve su ancho"""
+            nonlocal max_width, total_height
+            c.setFont("Helvetica", font_size_obs)
+            c.setFillColor(colors.Color(1, 0, 0, alpha=0.40))
+            y_offset = -total_height / 2 + font_size_obs * 0.5
+            c.drawCentredString(0, y_offset, extra_texto)
+            w_extra = c.stringWidth(extra_texto, "Helvetica", font_size_obs)
+            max_width = max(max_width, w_extra)
+            total_height = total_height + font_size_obs * 1.5
         
         # Si hay observación, dibujarla debajo en fuente más pequeña
         if observacion:
-            font_size_obs = font_size * 0.20
-            c.setFont("Helvetica", font_size_obs)
-            c.setFillColor(colors.Color(1, 0, 0, alpha=0.40))
-            # Posicionar debajo del texto "RECHAZADO" con un pequeño margen
-            y_offset = -text_height / 2 + font_size_obs * 0.5
-            c.drawCentredString(0, y_offset, observacion)
-            
-            # Calcular ancho de la observación y ajustar el rectángulo
-            text_width_obs = c.stringWidth(observacion, "Helvetica", font_size_obs)
-            max_width = max(text_width, text_width_obs)
-            total_height = text_height + font_size_obs * 1.5
-            # Margen adicional para la observación
-            c.setStrokeColor(colors.Color(1, 0, 0, alpha=0.40))
-            c.setLineWidth(4)
-            c.rect(-max_width / 2 - 20, -total_height / 2 + font_size * 0.1, max_width + 40, total_height + font_size * 0.3, stroke=1, fill=0)
-        else:
-            # Sin observación, rectángulo original solo para "RECHAZADO"
-            c.setStrokeColor(colors.Color(1, 0, 0, alpha=0.40))
-            c.setLineWidth(4)
-            c.rect(-text_width / 2 - 20, -text_height / 2 + 15, text_width + 40, text_height + 20, stroke=1, fill=0)
+            dibujar_texto_extra(observacion)
+        # Si hay responsable del rechazo, dibujarlo debajo de la observación
+        if texto_rechazado_por:
+            dibujar_texto_extra(texto_rechazado_por)
+        
+        # Margen adicional para la observación
+        c.setStrokeColor(colors.Color(1, 0, 0, alpha=0.40))
+        c.setLineWidth(4)
+        c.rect(-max_width / 2 - 20, -total_height / 2 + font_size * 0.1, max_width + 40, total_height + font_size * 0.3, stroke=1, fill=0)
         
         c.restoreState()
         c.save()
@@ -158,6 +170,8 @@ def _completado(id_hdr):
         hdr_obj = HDR.objects.get(id=id_hdr)
         contexto['estado_hdr'] = hdr_obj.estado
         contexto['observacion_hdr'] = hdr_obj.observacion
+        contexto['rechazado_por_hdr'] = str(hdr_obj.rechazado_por)
+        contexto['rechazado_por_sector_hdr'] = hdr_obj.rechazado_por.sector if hdr_obj.rechazado_por else ''
     except HDR.DoesNotExist:
         contexto['estado_hdr'] = ''
     return contexto
