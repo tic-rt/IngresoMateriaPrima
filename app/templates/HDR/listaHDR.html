@@ -149,7 +149,10 @@
                     return;
                 }
                 if (fila) {
-                    id_hdr = fila.getAttribute('data-id')
+                    id_hdr = fila.getAttribute('data-hdr')
+                    if (!id_hdr) {
+                        id_hdr = fila.getAttribute('data-id')
+                    }
                     window.open(`{% url 'exportar_hdr' %}?id_hdr=${id_hdr}`,'_blank');
                 }
             })
