@@ -38,6 +38,11 @@
                                     class="text-success ">
                                     <i class="bi bi-check-circle-fill"></i>
                                 </div>
+                                {% elif hdr.hdr.estado == "RechazoConfirmado" %}
+                                <div style="font-size: larger;"
+                                    class="text-danger">
+                                    <i class="bi bi-slash-circle-fill"
+                                        title="Rechazado por: {{ hdr.hdr.rechazado_por }}"></i>
                                 {% elif hdr.hdr.estado == "Rechazado" %}
                                 <div style="font-size: larger;"
                                     class="text-danger">
