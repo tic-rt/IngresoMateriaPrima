@@ -58,7 +58,8 @@ def guardar_rechazo(request):
                 observacion = request.POST.get('observacion', '').strip()
                 ingreso = Ingreso.objects.get(id = id_ingreso)
                 hdr = ingreso.hdr
-                hdr.estado = 'Rechazado'
+                hdr.estado = 'RechazoConfirmado'
+                hdr.sector = 'Porteria 2 E'
                 if id_personal:
                     hdr.rechazado_por = Personal.objects.get(id = id_personal)
                 if observacion:
