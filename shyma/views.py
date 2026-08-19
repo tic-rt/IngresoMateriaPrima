@@ -25,7 +25,7 @@ def mostrar_en_transito(request):
 @permission_required('porteria2.view_ingreso', raise_exception=True)
 def cargar_en_transito(request):
     """Esta funcion carga un ingreso y la hdr para su rechazo"""
-    sweetify.warning(request, 'Advertencia', text= 'Esta a punto de rechazar una HDR,no se podá deshacer el rechazo', persistent = 'Aceptar')
+    sweetify.warning(request, 'Advertencia', text= 'Esta a punto de rechazar una HDR,no se podrá deshacer el rechazo', persistent = 'Aceptar')
     try:
         if request.method == 'GET' :
             id_ingreso = request.GET.get('id_ingreso')
