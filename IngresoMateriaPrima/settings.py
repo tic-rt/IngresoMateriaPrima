@@ -28,9 +28,9 @@ DEBUG = True
 ALLOWED_HOSTS = ['10.10.23.5','localhost','127.0.0.1']
 
 #auth
-LOGIN_URL = 'auth/login/'
+LOGIN_URL = '/auth/login/'
 LOGIN_REDIRECT_URL = '/'
-LOGOUT_REDIRECT_URL = 'auth/login/'
+LOGOUT_REDIRECT_URL = '/auth/login/'
 
 
 # Application definition
