@@ -30,7 +30,7 @@ def lista_hdr(request):
         
         # Configurar paginación del lado del servidor
         page_number = request.GET.get('page', 1)
-        items_per_page = 3  # Cantidad de registros por página
+        items_per_page = 20  # Cantidad de registros por página
         paginator = Paginator(hdr_list, items_per_page)
         page_obj = paginator.get_page(page_number)
 

@@ -18,6 +18,7 @@ estado=[
    ('Activo','Activo'),
    ('Anulado','Anulado'),
    ('Finalizado','Finalizado'),
+   ('RechazoConfirmado','RechazoConfirmado'),
    ('Rechazado','Rechazado')
 ]
 
