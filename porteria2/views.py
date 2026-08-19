@@ -229,7 +229,7 @@ def egresosPendientes(request):
     """Esta funcion devuelve a todos los egresos pendientes"""
     
     try:
-        ingreso = Ingreso.objects.filter(is_deleted=False, ingresado=True, hdr__sector ='Porteria 2 E',hdr__estado= 'Activo')
+        ingreso = Ingreso.objects.filter(is_deleted=False, ingresado=True, hdr__sector ='Porteria 2 E',hdr__estado__in= ['Activo','RechazoConfirmado'])
         if ingreso:
             sweetify.toast(request, 'Egresos Pendientes', text='hay egresos pendientes', icon='info', timer=3000, allowOutsideClick=False, timerProgressBar=False)
             return render(request,'porteria2/egresosPendientes.html',{'egresos':ingreso})
@@ -248,7 +248,7 @@ def egreso(request):
         if request.method == 'GET':
             id_ingreso = request.GET.get('id_ingreso')
 
-            if Ingreso.objects.filter(id=id_ingreso, is_deleted = False, ingresado=True, hdr__estado= 'Activo', hdr__sector = 'Porteria 2 E').exists():
+            if Ingreso.objects.filter(id=id_ingreso, is_deleted = False, ingresado=True, hdr__estado__in= ['Activo','RechazoConfirmado'], hdr__sector = 'Porteria 2 E').exists():
                 ingreso = Ingreso.objects.get(id=id_ingreso)
                 formulario_egreso = FormEgreso(initial={'verificacion':None,'salida_autorizada':None,})
                 
@@ -277,21 +277,34 @@ def guardarEgreso(request):
         if request.method == 'POST':
             formulario_egreso = FormEgreso(request.POST)            
             id_ingreso = request.GET.get('id_ingreso')            
-            existe_id = Ingreso.objects.filter(id = id_ingreso, is_deleted = False, ingresado = True, hdr__estado = 'Activo' ).exists()
+            existe_id = Ingreso.objects.filter(id = id_ingreso, is_deleted = False, ingresado = True, hdr__estado__in = ['Activo', 'RechazoConfirmado'] ).exists()
             
             if existe_id:
                 ingreso = Ingreso.objects.get(id = id_ingreso)
                 hdr = ingreso.hdr
-                print(formulario_egreso)
-                if formulario_egreso.is_valid():
+
+                #hdr.estado = activo (no rechazada)
+                if ((formulario_egreso.is_valid()) and (hdr.estado == 'Activo')):
                     egreso:Egreso = formulario_egreso.save(commit=False)
                     egreso.hdr = hdr
-                    egreso.sector = 'Porteria 2 E'
                     egreso.save()
+                    hdr.sector = 'Porteria 2 E'
+                    hdr.save()
                     hdr.estado = 'Finalizado'
                     hdr.save()
                     sweetify.success(request,'Egreso Guardado', text=f'El egreso del vehiculo {ingreso.patente_chasis} {ingreso.patente_semi} se ha guardado', timer=3000)
                     return redirect('egresosPendientes')
+                #hadr.estado = Rechazado , hdr rechazada
+                elif ((formulario_egreso.is_valid()) and (hdr.estado == 'RechazoConfirmado')):
+                                    egreso:Egreso = formulario_egreso.save(commit=False)
+                                    egreso.hdr = hdr
+                                    egreso.save()
+                                    hdr.sector = 'Porteria 2 E'
+                                    hdr.save()
+                                    hdr.estado = 'Rechazado'
+                                    hdr.save()
+                                    sweetify.success(request,'Egreso Guardado', text=f'El egreso del vehiculo {ingreso.patente_chasis} {ingreso.patente_semi} se ha guardado', timer=3000)
+                                    return redirect('egresosPendientes')
                 else:
                     sweetify.error(request, 'Formulario Inválido', text='Hubo un problema con el formulario, por favor revisa los campos.', persistent='Aceptar')
                     ingreso = Ingreso.objects.get(id=id_ingreso)
