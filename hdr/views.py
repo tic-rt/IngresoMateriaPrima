@@ -63,8 +63,8 @@ def exportar_hdr(request):
     buffer_base = BytesIO()
     pisa.CreatePDF(render_to_string('HDR/HDR.html', contexto), dest=buffer_base)
     
-    # Si el estado es "Rechazado", superponer el sello en diagonal
-    if contexto.get('estado_hdr') == 'Rechazado':
+    # Si el estado es "Rechazado" o "RechazoConfirmado", superponer el sello en diagonal
+    if contexto.get('estado_hdr') in ('Rechazado', 'RechazoConfirmado'):
         # Crear watermark con ReportLab
         buffer_watermark = BytesIO()
         c = canvas.Canvas(buffer_watermark, pagesize=A4)
@@ -187,7 +187,7 @@ def _porteria_ingreso(id_hdr):
             'patente_chasis',
             'patente_semi',
             'responsable'
-            ).get(id=id_hdr)
+            ).get(hdr_id=id_hdr)
         return {
             "fecha": ingreso.hora_ingreso,
             "calefaccion": 'SI' if ingreso.ingreso_calefaccion else 'NO',
@@ -347,4 +347,4 @@ def _producto(id_hdr):
 def __existe_hdr(id_hdr,objeto):
     """funcion que verifica si existe una hdr del objeto dado"""
     clase = objeto
-    return clase.objects.filter(id=id_hdr).exists()
+    return clase.objects.filter(hdr_id=id_hdr).exists()
