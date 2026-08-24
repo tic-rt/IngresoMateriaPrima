@@ -10,10 +10,25 @@
     color: aliceblue;
     width: 100%;
   }
+
+  /* Logo del header */
+  .logo-header {
+    width: 90px;
+    height: 90px;
+    object-fit: fill;
+    position: absolute;
+    margin-left:150px;
+  }
+  
+  /* Título del header */
+  .titulo-header {
+    font-size: 1.5rem;
+    text-align: center;
+  }
   
 /* Ajustes para la navbar */
 .navbar .navbar-collapse{
-    padding-left: 90px;
+    padding-left: 0;
 }
 .navbar .nav-item .nav-link{
   color:rgb(199, 204, 209) !important;
@@ -25,13 +40,21 @@
   font-weight: 600;
 }
 
+/* Toggle (hamburguesa) de los menús: icono claro sobre el fondo azul del header */
+.navbar-toggler {
+  color: aliceblue;
+  border-color: rgba(240, 248, 255, 0.6);
+}
+.navbar-toggler .navbar-toggler-icon {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(240,248,255,0.9)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+
 /* Ajustes para la barra lateral */
 .lateral {
   padding-top: 2%;
   background: rgb(2, 10, 46);
   background: linear-gradient(311deg, rgba(2, 10, 46, 1) 0%, rgba(0, 73, 141, 1) 25%);
-  min-height: 87vh;
-} 
+}
 
 .lateral .nav-item .nav-link {
   color: rgb(199, 204, 209);
@@ -360,4 +383,73 @@
 .fondo-loguin {
 background: rgb(2,10,46);
 background: linear-gradient(311deg, rgba(2,10,46,1) 0%, rgba(0,73,141,1) 25%);
+}
+
+/* ===== Media Queries para Responsividad ===== */
+
+/* Pantallas pequeñas (móviles) */
+@media (max-width: 767.98px) {
+  .logo-header {
+    width: 40px;
+    height: 40px;
+  }
+
+  .titulo-header {
+    font-size: 1.1rem;
+  }
+
+  .navbar .nav-item .nav-link {
+    font-size: 1.1rem;
+  }
+
+  /* La barra lateral se convierte en un menú hamburguesa (offcanvas) en móviles */
+  .lateral {
+    width: 320px !important;
+  }
+  .lateral .offcanvas-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding: 0;
+  }
+}
+
+/* Pantallas >= 768px: la barra lateral vuelve a ser fija (se deshace el offcanvas) */
+@media (min-width: 768px) {
+  .lateral {
+    position: sticky !important;
+    top: 0;
+    transform: none !important;
+    visibility: visible !important;
+    z-index: auto !important;
+    display: flex;
+    flex-direction: column;
+    flex: 0 0 auto;
+    width: 16.66666667% !important;
+    max-width: none;
+    min-height: 100vh;
+    height: 100vh;
+    overflow-y: auto;
+    background: rgb(2, 10, 46) !important;
+    background: linear-gradient(311deg, rgba(2, 10, 46, 1) 0%, rgba(0, 73, 141, 1) 25%) !important;
+  }
+
+  .lateral .offcanvas-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    overflow-y: visible;
+    padding: 0;
+  }
+}
+
+/* Pantallas medianas (tablets) */
+@media (min-width: 768px) and (max-width: 991.98px) {
+  .titulo-header {
+    font-size: 1.3rem;
+  }
+
+  .navbar .nav-item .nav-link {
+    font-size: 1.1rem;
+  }
 }
