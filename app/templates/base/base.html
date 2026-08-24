@@ -304,7 +304,7 @@
         <div class="pt-4 pb-4">
           <ul class="navbar-nav flex-column ">
             <li class="nav-item">
-              <a href="#" class="nav-link link-side text-info"><i class="bi bi-info-circle fill text-info"></i> Manual de uso</a>
+              <a href="{% if user.is_superuser %}{% static 'Manual_Usuario_Completo.html' %}{% elif 'G_Porteria2' in grupos_usuario %}{% static 'Manual_Porteria2.html' %}{% elif 'G_Balanza' in grupos_usuario %}{% static 'Manual_Balanza.html' %}{% elif 'G_Laboratorio' in grupos_usuario %}{% static 'Manual_InspeccionQuimica.html' %}{% elif 'G_Pamo' in grupos_usuario %}{% static 'Manual_PAMO.html' %}{% elif 'G_Psul' in grupos_usuario %}{% static 'Manual_PSUL.html' %}{% elif 'G_Calidad' in grupos_usuario %}{% static 'Manual_Calidad.html' %}{% elif 'G_Shyma' in grupos_usuario %}{% static 'Manual_SHYMA.html' %}{% else %}{% static 'Manual_Usuario_Completo.html' %}{% endif %}" target="_blank" class="nav-link link-side text-info"><i class="bi bi-info-circle fill text-info"></i> Manual de uso</a>
             </li>
           </ul>
         </div>

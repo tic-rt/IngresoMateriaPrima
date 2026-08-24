@@ -140,6 +140,11 @@ USE_TZ = False
 
 STATIC_URL = 'static/'
 
+# Archivos estáticos adicionales (manuales HTML generados por generar_manual.py)
+STATICFILES_DIRS = [
+    BASE_DIR / 'manuales_html',
+]
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
