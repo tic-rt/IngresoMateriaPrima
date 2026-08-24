@@ -39,7 +39,7 @@ def controlPsul(request):
     
 @transaction.atomic
 @login_required
-@permission_required('pamo.add_pamo psul', raise_exception=True)
+@permission_required('pamo.add_pamopsul', raise_exception=True) 
 def guardarPsul(request):
     try:
         if request.method == 'POST':
