@@ -1,0 +1,33 @@
+{
+  "control_epp": {
+    "id_ingreso": 1,
+    "id_hdr": 1
+  },
+  "pesaje_entrada": {
+    "id_ingreso": 3
+  },
+  "inspeccion": {
+    "id_ingreso": 5,
+    "id_hdr": 5
+  },
+  "inspeccion_pendiente": {
+    "id_ingreso": 7,
+    "id_hdr": 7
+  },
+  "pamo": {
+    "id_ingreso": 8
+  },
+  "psul": {
+    "id_ingreso": 9
+  },
+  "pesaje_salida": {
+    "id_ingreso": 7
+  },
+  "egreso": {
+    "id_ingreso": 12
+  },
+  "shyma": {
+    "id_ingreso": 3,
+    "id_hdr": 3
+  }
+}
