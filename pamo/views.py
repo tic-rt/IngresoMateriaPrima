@@ -11,7 +11,7 @@ from django.db import transaction
 # Create your views here.
 @transaction.atomic 
 @login_required
-@permission_required('pamo.view_pamo', raise_exception=True)
+@permission_required('porteria2.view_ingreso', raise_exception=True)
 def pendientes(request):
     """muestra los camiones pendientes de control que provienen de IQ"""
     try:
@@ -24,7 +24,7 @@ def pendientes(request):
     
 @transaction.atomic    
 @login_required
-@permission_required('pamo.add_pamo', raise_exception=True)
+@permission_required('porteria2.view_ingreso', raise_exception=True)
 def controlPamo(request):
     """control de presion y temperatura para pamo"""
     try:
@@ -40,7 +40,7 @@ def controlPamo(request):
         return redirect('pendientesPAMO')
 @transaction.atomic
 @login_required
-@permission_required('pamo.add_pamo', raise_exception=True) 
+@permission_required('pamo.add_pamopsul', raise_exception=True) 
 def guardarPamo(request):
     try:
         if request.method == 'POST':
