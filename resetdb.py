@@ -237,14 +237,14 @@ def main():
     print('=== Recreando usuarios y grupos ===')
     recrear_usuarios_grupos()
 
-    print('=== Poblando Personal ===')
-    poblar_personal()
+    #print('=== Poblando Personal ===')
+    #poblar_personal()
 
-    print('=== Poblando Transporte ===')
-    poblar_transporte()
+    #print('=== Poblando Transporte ===')
+    #poblar_transporte()
 
-    print('=== Poblando Proveedores ===')
-    poblar_proveedores()
+    #print('=== Poblando Proveedores ===')
+    #poblar_proveedores()
 
     print('=== RESET COMPLETADO ===')
 

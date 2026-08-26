@@ -1,15 +1,45 @@
 services:
+  db:
+    image: mysql:8.4
+    container_name: materias-primas-db
+
+    restart: unless-stopped
+
+    env_file:
+      - .env
+
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-p${MYSQL_ROOT_PASSWORD}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
   materias-primas:
     build: .
     container_name: materias-primas
-
+    
+    restart: unless-stopped
+    
     env_file:
       - .env
 
     ports:
       - "8000:8000"
 
-    volumes:
-      - ./db.sqlite3:/app/db.sqlite3
+    depends_on:
+      db:
+        condition: service_healthy
 
-    restart: unless-stopped
+volumes:
+  mysql_data:
+
+    
