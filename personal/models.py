@@ -8,7 +8,8 @@ sectores = [
     ('Almacen PQ','Almacen PQ'),
     ('SHYMA','SHYMA'),
     ('PAMO','PAMO'),
-    ('PSUL', 'PSUL')
+    ('PSUL', 'PSUL'),
+    ('Gestion de Acceso','Gestion de Acceso'),
 ]
 
 class Personal(models.Model):

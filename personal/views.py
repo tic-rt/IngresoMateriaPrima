@@ -16,6 +16,7 @@ def get_sector_form_initial(user):
         'SHYMA': 'SHYMA',
         'PAMO': 'PAMO',
         'PSUL': 'PSUL',
+        'Gestion de Acceso': 'Gestion de Acceso',
     }
 
     if user.is_superuser:
@@ -28,6 +29,7 @@ def get_sector_form_initial(user):
         'laboratorio': 'Inspeccion Quimica',
         'pamo': 'PAMO',
         'psul': 'PSUL',
+        'Gestion de Acceso': 'Gestion de Acceso',
     }
 
     sector = sector_por_usuario.get(user.username.lower())

@@ -23,3 +23,9 @@ Psul
 
 Calidad
 C4lidad2026/
+
+Gacceso
+G3st10n4cc3s0
+
+Monitoreo
+M0n1t0r30

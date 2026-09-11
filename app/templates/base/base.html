@@ -82,6 +82,7 @@
           <span class="navbar-toggler-icon"></span>
         </button>
 
+        {%if 'G_Balanza' in grupos_usuario or 'G_Laboratorio' in grupos_usuario or 'G_Pamo' in grupos_usuario or 'G_Porteria2' in grupos_usuario or 'G_Psul' in grupos_usuario or 'G_Shyma' in grupos_usuario or user.is_superuser %}
         <div class="collapse navbar-collapse justify-content-center" id="navbarNavDropdown">
 
           <ul class="navbar-nav">
@@ -113,6 +114,7 @@
           </ul>
 
         </div>
+        {% endif %}
 
         <!-- Botón Salir -->
         <div class="ms-3">
@@ -133,6 +135,7 @@
 
 
   <!-- contengo en un row la barra lateral y el contenido -->
+  {%if 'G_Balanza' in grupos_usuario or 'G_Laboratorio' in grupos_usuario or 'G_Pamo' in grupos_usuario or 'G_Porteria2' in grupos_usuario or 'G_Psul' in grupos_usuario or 'G_Shyma' in grupos_usuario or 'G_Gacceso' in grupos_usuario or user.is_superuser %}
   <div class="container-fluid p-0">
     <div class="row g-0">
       <!-- barra lateral -->
@@ -164,18 +167,6 @@
             </li>
             <li class="nav-item">
               <a class="nav-link link-side" href="{% url 'personal' %}">Responsables</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link dropdown-toggle link-side" href="#" role="button" data-bs-toggle="dropdown"
-                aria-expanded="false">
-                Transportes
-              </a>
-              <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="{% url 'transportes' %}">Empresas</a></li>
-                <li><a class="dropdown-item" href="{% url 'camiones' %}">Camiones</a></li>
-                <li><a class="dropdown-item" href="{% url 'semis' %}">Semis</a></li>
-                <li><a class="dropdown-item" href="{% url 'conductores' %}">Conductores</a></li>
-              </ul>
             </li>
           </ul>
         </div>
@@ -257,20 +248,6 @@
         </div>
         {% endif %}
 
-        <!--HDR -->
-        {% if 'user.is_autenticated' or user.is_superuser %}
-        <div class="pt-4 pb-4">
-          <div class="pb-4 container-fluid">
-            <h2 class="sub-titulo2">HDR</h2>
-          </div>
-          <ul class="navbar-nav flex-column ">
-            <li class="nav-item">
-              <a href="{% url 'lista_hdr' %}" class="nav-link link-side">Hojas de Ruta</a>
-            </li>
-          </ul>
-        </div>
-        {% endif %}
-
         <!--Calidad -->
         {% if 'G_Calidad' in grupos_usuario or user.is_superuser %}
         <div class="pt-4 pb-4">
@@ -304,8 +281,50 @@
           </ul>
         </div>
         {% endif %}
-        <!-- Ayuda-->
 
+        <!-- Gestion de acceso-->
+        {% if 'G_Gacceso' in grupos_usuario or user.is_superuser%}
+        <div class="pt-4 pb-4">
+          <div class="pb-4 container-fluid">
+            <h2 class="sub-titulo2">Gestión de Acceso</h2>
+          </div>
+          <ul class="navbar-nav flex-column ">
+            <li class="nav-item">
+              <a class="nav-link link-side" href="{% url 'personal' %}">Responsables</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link dropdown-toggle link-side" href="#" role="button" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                Transportes
+              </a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="{% url 'transportes' %}">Empresas</a></li>
+                <li><a class="dropdown-item" href="{% url 'camiones' %}">Camiones</a></li>
+                <li><a class="dropdown-item" href="{% url 'semis' %}">Semis</a></li>
+                <li><a class="dropdown-item" href="{% url 'conductores' %}">Conductores</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+        {% endif %}
+
+        <!--HDR -->
+        {% if 'G_Balanza' in grupos_usuario or 'G_Laboratorio' in grupos_usuario or 'G_Pamo' in grupos_usuario or 'G_Porteria2' in grupos_usuario or 'G_Psul' in grupos_usuario or 'G_Shyma' in grupos_usuario or user.is_superuser %}
+        <div class="pt-4 pb-4">
+          <div class="pb-4 container-fluid">
+            <h2 class="sub-titulo2">HDR</h2>
+          </div>
+          <ul class="navbar-nav flex-column ">
+            <li class="nav-item">
+              <a href="{% url 'lista_hdr' %}" class="nav-link link-side">Hojas de Ruta</a>
+            </li>
+          </ul>
+        </div>
+        {% endif %}
+
+
+        <!-- Ayuda-->
+        {%if 'G_Balanza' in grupos_usuario or 'G_Laboratorio' in grupos_usuario or 'G_Pamo' in grupos_usuario or 'G_Porteria2' in grupos_usuario or 'G_Psul' in grupos_usuario or 'G_Shyma' in grupos_usuario or user.is_superuser %}
         <div class="pt-4 pb-4">
           <ul class="navbar-nav flex-column ">
             <li class="nav-item">
@@ -313,11 +332,12 @@
             </li>
           </ul>
         </div>
+        {% endif %}
 
         </div><!-- /offcanvas-body -->
 
       </aside>
-
+      {% endif %}
       <!-- contenido -->
       <div class="container col-12 col-md-10 justify-content-center pt-4">
         {% block content %}
