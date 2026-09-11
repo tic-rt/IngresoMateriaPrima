@@ -36,10 +36,10 @@ def camiones(request):
                     'hoy':hoy
                     })
 @login_required
-@permission_required('transporte.view_semis', login_url='index')
+@permission_required('transporte.view_semi', login_url='index')
 def semis(request):
     """Esta funcion devolvera todos los semis de transportes registradas junto a los formularios correspondientes para la carga"""
-    
+    print('entrando a semis')
     semis = Semi.objects.filter(is_deleted = False)
     hoy = timezone.now().date()
     form_semi = FormSemi()
@@ -64,7 +64,7 @@ def conductores(request):
                     }
                 )
 @login_required
-
+@permission_required('transporte.add_transporte', login_url='index')
 def agregarTransporte(request):
     """esta funcion agrega una empresa de transporte nueva"""
 
@@ -91,7 +91,8 @@ def agregarTransporte(request):
         sweetify.error('Error al agregar Empresa de transporte', persistent=f'ocurrio un error {str(excepcion)}')
         return redirect('transportes')
     
-@login_required        
+@login_required
+@permission_required('transporte.change_transporte', login_url='index')        
 def editarTransporte(request):#porque no la haces generica?que venga que tipo es y lo filtras/editar/int/tipo
     """Esta funcion edita una empresa por su id"""
     
@@ -118,6 +119,7 @@ def editarTransporte(request):#porque no la haces generica?que venga que tipo es
         return redirect('transportes')
 
 @login_required
+@permission_required('transporte.delete_transporte', login_url='index')
 def eliminarTransporte(request):
     """Esta funcion elimina una empresa de transporte por su id   print('entrando a eliminar')"""
 
@@ -145,6 +147,7 @@ def eliminarTransporte(request):
         return redirect('transportes')
     
 @login_required    
+@permission_required('transporte.add_camion', login_url='index')
 def agregarCamion(request):
     """Esta funcion agrega un nuevo camion"""
 
@@ -172,6 +175,7 @@ def agregarCamion(request):
         return redirect('camiones')
     
 @login_required
+@permission_required('transporte.change_camion', login_url='index')
 def editarCamion(request):#porque no la haces generica?que venga que tipo es y lo filtras/editar/int/tipo
     """Esta funcion edita un camion por su id"""
     
@@ -198,6 +202,7 @@ def editarCamion(request):#porque no la haces generica?que venga que tipo es y l
         return redirect('camiones')
 
 @login_required
+@permission_required('transporte.delete_camion', login_url='index')
 def eliminarCamion(request):
     """Esta funcion elimina un camion de transporte por su id """
 
@@ -224,7 +229,8 @@ def eliminarCamion(request):
         sweetify.error(request, 'Error al eliminar', text=f'Ocurrió un error {str(excepcion)}', persistent = 'Aceptar')
         return redirect('camiones')
 
-@login_required            
+@login_required    
+@permission_required('transporte.add_semi', login_url='index')        
 def agregarSemi(request):
     """Esta funcion agrega un nuevo semi"""
 
@@ -252,6 +258,7 @@ def agregarSemi(request):
         return redirect('semis')
     
 @login_required
+@permission_required('transporte.change_semi', login_url='index')
 def editarSemi(request):#porque no la haces generica?que venga que tipo es y lo filtras/editar/int/tipo
     """Esta funcion edita un semi por su id"""
     
@@ -277,6 +284,7 @@ def editarSemi(request):#porque no la haces generica?que venga que tipo es y lo 
         return redirect('semis')
 
 @login_required
+@permission_required('transporte.delete_semi', login_url='index')
 def eliminarSemi(request):
     """Esta funcion elimina un camion de transporte por su id """
 
@@ -305,6 +313,7 @@ def eliminarSemi(request):
     
 
 @login_required
+@permission_required('transporte.add_conductor', login_url='index')
 def agregarConductor(request):
     """esta funcion agrega un conductor de transporte nuevo"""
 
@@ -332,6 +341,7 @@ def agregarConductor(request):
         return redirect('conductores')
 
 @login_required
+@permission_required('transporte.change_conductor', login_url='index')
 def editarConductor(request):#porque no la haces generica?que venga que tipo es y lo filtras/editar/int/tipo
     """Esta funcion edita un conductor por su id"""
     
@@ -358,6 +368,7 @@ def editarConductor(request):#porque no la haces generica?que venga que tipo es 
         return redirect('conductores')
 
 @login_required
+@permission_required('transporte.delete_conductor', login_url='index')
 def eliminarConductor(request):
     """Esta funcion elimina un conductor de transporte por su id """
 
