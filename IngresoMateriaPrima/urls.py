@@ -21,7 +21,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('',include('app.urls')),
     path('porteria/',include('porteria2.urls')),
-    path('transportes/',include('transporte.urls')),
+    path('GAcceso/',include('transporte.urls')),
     path('personal/',include('personal.urls')),
     path('balanza/', include('balanza.urls')),
     path('proveedor-producto/',include('proveedores.urls')),

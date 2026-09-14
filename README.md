@@ -9,7 +9,7 @@ Shyma
 Shyma2024$
 
 Balanza
-B4l4nz4$2024
+B4l4nz4$2026
 
 Laboratorio
 L4b0r4t0r10$

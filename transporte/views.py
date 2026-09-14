@@ -39,7 +39,7 @@ def camiones(request):
 @permission_required('transporte.view_semi', login_url='index')
 def semis(request):
     """Esta funcion devolvera todos los semis de transportes registradas junto a los formularios correspondientes para la carga"""
-    print('entrando a semis')
+    
     semis = Semi.objects.filter(is_deleted = False)
     hoy = timezone.now().date()
     form_semi = FormSemi()
