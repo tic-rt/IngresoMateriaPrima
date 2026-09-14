@@ -44,6 +44,15 @@ GRUPOS = [
         ],
     },
     {
+            'name': 'G_Gacceso',
+            'permisos': [
+                'add_personal', 'change_personal', 'view_personal',
+                'add_camion', 'change_camion', 'view_camion',
+                'add_conductor', 'change_conductor', 'view_conductor',  
+                'add_semi', 'change_semi', 'view_semi',
+            ],
+        },
+    {
         'name': 'G_Laboratorio',
         'permisos': [
             'change_hdr', 'view_hdr',
@@ -78,16 +87,21 @@ GRUPOS = [
             'view_ingreso',
         ],
     },
+    {
+        'name': 'G_Monitoreo',
+    },
 ]
 
 USUARIOS = [
     {'username': 'Tic', 'password': 'Magenta1', 'is_staff': True, 'is_superuser': True, 'grupos': []},
-    {'username': 'Porteria2', 'password': 'Password2024', 'grupos': ['G_Porteria2']},
-    {'username': 'Shyma', 'password': 'Shyma2024$', 'grupos': ['G_Shyma']},
-    {'username': 'Balanza', 'password': 'B4l4nz4$2024', 'grupos': ['G_Balanza']},
-    {'username': 'Laboratorio', 'password': 'L4b0r4t0r10$', 'grupos': ['G_Laboratorio']},
-    {'username': 'Pamo', 'password': 'Pamo#2025', 'grupos': ['G_Pamo']},
-    {'username': 'Psul', 'password': '2025%Psul', 'grupos': ['G_Psul']},
+    {'username': 'Porteria2', 'password': 'P0rt3r142026', 'grupos': ['G_Porteria2']},
+    {'username': 'Shyma', 'password': 'Shym42026', 'grupos': ['G_Shyma']},
+    {'username': 'Balanza', 'password': 'B4l4nz42026', 'grupos': ['G_Balanza']},
+    {'username': 'Laboratorio', 'password': 'L4b0r4t0r102026', 'grupos': ['G_Laboratorio']},
+    {'username': 'Pamo', 'password': 'P4m02026', 'grupos': ['G_Pamo']},
+    {'username': 'Psul', 'password': 'Psul2026', 'grupos': ['G_Psul']},
+    {'username': 'Gacceso', 'password': 'G3st10n4cc3s0', 'grupos': ['G_Gacceso']},
+    {'username': 'G_Monitoreo', 'password': 'M0n1t0r30', 'grupos': ['Monitoreo']},
 ]
 
 
@@ -98,7 +112,9 @@ def eliminar_y_migrar():
     if os.path.exists('db.sqlite3'):
         os.remove('db.sqlite3')
         print('Base de datos eliminada.')
+    call_command('makemigrations', verbosity=1)
     call_command('migrate', verbosity=1)
+    call_command('makemigrations', verbosity=1)
     print('Migraciones aplicadas.')
 
 
@@ -238,13 +254,13 @@ def main():
     recrear_usuarios_grupos()
 
     print('=== Poblando Personal ===')
-    poblar_personal()
+    #poblar_personal()
 
     print('=== Poblando Transporte ===')
-    poblar_transporte()
+    #poblar_transporte()
 
     print('=== Poblando Proveedores ===')
-    poblar_proveedores()
+    #poblar_proveedores()
 
     print('=== RESET COMPLETADO ===')
 

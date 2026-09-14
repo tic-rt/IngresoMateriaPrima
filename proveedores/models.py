@@ -7,6 +7,8 @@ from base.models import Base
     ('Azufre Líquido','Azufre Líquido'),
     ('Azufre sólido','Azufre sólido o a granel'),
     ('Amoníaco','Amoníaco'),
+    (Hidroxido de sodio','Hidróxido de sodio'),
+    ('Hipoclorito','Hipoclorito de sodio'),
 ] """
 
 class Producto(Base):
