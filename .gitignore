@@ -10,6 +10,7 @@ db.sqlite3
 
 # Ignorar credenciales y secretos
 credenciales.md
+README.md
 
 # Entorno virtual
 venv/
