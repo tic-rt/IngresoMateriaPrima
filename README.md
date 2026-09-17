@@ -22,7 +22,7 @@ Psul
 2025%Psul
 
 Calidad
-C4lidad2026/
+C4l1d4d*2026
 
 Gacceso
 G3st10n4cc3s0

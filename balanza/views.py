@@ -48,7 +48,7 @@ def pesaje(request):
                               {'ingreso':ingreso,
                                'formulario_peso':formulario_peso})
             else:
-                sweetify.error(request, 'Error', text='EL inreso referenciado no existe o ya fue guardado', persistent='Aceptar')
+                sweetify.error(request, 'Error', text='EL ingreso referenciado no existe o ya fue guardado', persistent='Aceptar')
                 return redirect('index')
         else:
             return redirect('index')
@@ -165,12 +165,15 @@ def guardarPesaje2(request):
         return redirect('egresos')
 
 def _definir_sector(ingreso,hdr):
-    """Funcion que define el sector de un hdr de acuerdo a si es dia laborable o no"""
-    if ingreso.laborable:
+    """Funcion que define el sector de un hdr de acuerdo a si es dia laborable o no y de acuerdo al producto que se esta ingresando"""
+    laborable = ingreso.laborable
+    producto = ingreso.producto.producto
+    
+    if laborable:
         hdr.sector = 'Inspeccion PQ'
-    #para dia no laborable se crea la inspeccion y se define el sector de acuerdo al producto
+    #para dia no laborable se define el sector de acuerdo al producto  y se crea la inspeccion
     else:
-        match ingreso.producto.producto:
+        match producto:
             case 'Azufre Líquido':
                 hdr.sector = 'PSUL'
             case 'Azufre Sólido':
