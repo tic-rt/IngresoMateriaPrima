@@ -10,7 +10,7 @@ Checklist de trabajo: marcar `[x]` cada ítem al corregirlo.
 |---|---|---|---|---|---|
 | C-01 | Vistas sin autenticación/permisos | `calidad`, `laboratorio`, `app` | Minutos | Alto | ☐ |
 | C-02 | Bug de plantilla: sección HDR visible para todos | `base.html` | 1 línea | Alto | ☐ |
-| C-03 | Credenciales en texto plano en el repo | `resetdb.py`, `capturar_pantallas.py` | Bajo | Alto | ☐ |
+| C-03 | Credenciales en texto plano en el repo | `resetdb.py`, `capturar_pantallas.py` | Bajo | Alto | [x] |
 | C-04 | Settings de producción por verificar | `settings.py` | Bajo | Alto | ☐ |
 | C-05 | Strings mágicos de `sector`/`estado` | varias vistas | Medio | Alto | ☐ |
 | C-06 | `try/except Exception` amplios + `print()` | todas las apps | Bajo | Medio | ☐ |

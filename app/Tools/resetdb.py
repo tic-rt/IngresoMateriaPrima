@@ -1,5 +1,6 @@
 import os
 import sys
+import json
 import django
 from datetime import date, timedelta
 from pathlib import Path
@@ -23,97 +24,10 @@ from transporte.models import Transporte, Camion, Semi, Conductor
 from proveedores.models import Proveedor, Producto, ProveedorProducto
 
 
-GRUPOS = [
-    {
-        'name': 'G_Porteria2',
-        'permisos': [
-            'add_hdr', 'change_hdr', 'view_hdr',
-            'add_personal', 'change_personal', 'view_personal',
-            'add_egreso', 'change_egreso', 'view_egreso',
-            'add_epp', 'view_epp',
-            'add_ingreso', 'change_ingreso', 'view_ingreso',
-            'add_camion', 'change_camion', 'view_camion',
-            'add_conductor', 'change_conductor', 'view_conductor',
-            'add_semi', 'change_semi', 'view_semi',
-            'add_transporte', 'change_transporte', 'view_transporte',
-            'add_producto', 'view_producto',
-            'add_proveedor', 'view_proveedor',
-            'add_proveedorproducto', 'view_proveedorproducto',
-        ],
-    },
-    {
-        'name': 'G_Balanza',
-        'permisos': [
-            'add_balanza', 'change_balanza', 'view_balanza',
-            'change_hdr', 'view_hdr',
-            'add_personal', 'change_personal', 'view_personal',
-            'add_egreso', 'change_egreso', 'view_egreso',
-            'change_ingreso', 'view_ingreso',
-            'add_proveedor', 'view_proveedor',
-            'add_producto', 'view_producto',
-            'add_proveedorproducto', 'view_proveedorproducto',
-        ],
-    },
-    {
-            'name': 'G_Gacceso',
-            'permisos': [
-                'add_personal', 'change_personal', 'view_personal',
-                'add_camion', 'change_camion', 'view_camion',
-                'add_conductor', 'change_conductor', 'view_conductor',  
-                'add_semi', 'change_semi', 'view_semi',
-            ],
-        },
-    {
-        'name': 'G_Laboratorio',
-        'permisos': [
-            'change_hdr', 'view_hdr',
-            'add_inspeccion', 'view_inspeccion',
-            'add_personal', 'change_personal', 'view_personal',
-            'change_ingreso', 'view_ingreso',
-        ],
-    },
-    {
-        'name': 'G_Pamo',
-        'permisos': [
-            'change_hdr', 'view_hdr',
-            'add_pamopsul', 'change_pamopsul', 'view_pamopsul', 'delete_pamopsul',
-            'add_personal', 'change_personal', 'view_personal',
-            'change_ingreso', 'view_ingreso',
-        ],
-    },
-    {
-        'name': 'G_Psul',
-        'permisos': [
-            'change_hdr', 'view_hdr',
-            'add_pamopsul', 'change_pamopsul', 'view_pamopsul',
-            'add_personal', 'view_personal',
-            'change_ingreso', 'view_ingreso',
-        ],
-    },
-    {
-        'name': 'G_Shyma',
-        'permisos': [
-            'change_hdr', 'view_hdr',
-            'add_personal', 'view_personal',
-            'view_ingreso',
-        ],
-    },
-    {
-        'name': 'G_Monitoreo',
-    },
-]
-
-USUARIOS = [
-    {'username': 'Tic', 'password': 'Magenta1', 'is_staff': True, 'is_superuser': True, 'grupos': []},
-    {'username': 'Porteria2', 'password': 'P0rt3r142026', 'grupos': ['G_Porteria2']},
-    {'username': 'Shyma', 'password': 'Shym42026', 'grupos': ['G_Shyma']},
-    {'username': 'Balanza', 'password': 'B4l4nz42026', 'grupos': ['G_Balanza']},
-    {'username': 'Laboratorio', 'password': 'L4b0r4t0r102026', 'grupos': ['G_Laboratorio']},
-    {'username': 'Pamo', 'password': 'P4m02026', 'grupos': ['G_Pamo']},
-    {'username': 'Psul', 'password': 'Psul2026', 'grupos': ['G_Psul']},
-    {'username': 'Gacceso', 'password': 'G3st10n4cc3s0', 'grupos': ['G_Gacceso']},
-    {'username': 'G_Monitoreo', 'password': 'M0n1t0r30', 'grupos': ['G_Monitoreo']},
-]
+GRUPOS = json.loads(os.environ.get('GRUPOS_JSON', '[]'))
+USUARIOS = json.loads(os.environ.get('USUARIOS_JSON', '[]'))
+if not GRUPOS or not USUARIOS:
+    raise SystemExit('resetdb: faltan GRUPOS_JSON / USUARIOS_JSON en el .env.')
 
 
 def eliminar_y_migrar():
