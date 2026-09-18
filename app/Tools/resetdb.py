@@ -112,7 +112,7 @@ USUARIOS = [
     {'username': 'Pamo', 'password': 'P4m02026', 'grupos': ['G_Pamo']},
     {'username': 'Psul', 'password': 'Psul2026', 'grupos': ['G_Psul']},
     {'username': 'Gacceso', 'password': 'G3st10n4cc3s0', 'grupos': ['G_Gacceso']},
-    {'username': 'G_Monitoreo', 'password': 'M0n1t0r30', 'grupos': ['Monitoreo']},
+    {'username': 'G_Monitoreo', 'password': 'M0n1t0r30', 'grupos': ['G_Monitoreo']},
 ]
 
 
@@ -157,7 +157,7 @@ def recrear_usuarios_grupos():
     # Recrear grupos con sus permisos
     for g in GRUPOS:
         grupo, _ = Group.objects.get_or_create(name=g['name'])
-        for codename in g['permisos']:
+        for codename in g.get('permisos', []):
             try:
                 perm = Permission.objects.get(codename=codename)
                 grupo.permissions.add(perm)
