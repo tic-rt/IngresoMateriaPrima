@@ -1,6 +1,17 @@
 import os
+import sys
 import django
 from datetime import date, timedelta
+from pathlib import Path
+from dotenv import load_dotenv
+
+# Raíz del proyecto: permite importar 'IngresoMateriaPrima.settings' desde cualquier cwd
+PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
+# Carga explícita del .env para usar la conexión SQL configurada
+load_dotenv(PROJECT_ROOT / 'IngresoMateriaPrima' / '.env')
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'IngresoMateriaPrima.settings')
 django.setup()
@@ -106,12 +117,35 @@ USUARIOS = [
 
 
 def eliminar_y_migrar():
-    """Elimina la base de datos y ejecuta migrate."""
+    """Elimina los datos de la BD configurada (SQLite o SQL/MySQL) y ejecuta migrate."""
+    from django.conf import settings
     from django.db import connection
-    connection.close()  # cerrar conexión antes de eliminar el archivo
-    if os.path.exists('db.sqlite3'):
-        os.remove('db.sqlite3')
-        print('Base de datos eliminada.')
+
+    engine = settings.DATABASES['default']['ENGINE']
+    connection.close()  # cerrar conexión antes de eliminar archivo/tablas
+
+    if 'sqlite' in engine:
+        db_path = settings.DATABASES['default']['NAME']
+        if os.path.exists(db_path):
+            os.remove(db_path)
+            print(f'Base de datos SQLite eliminada: {db_path}')
+        else:
+            print(f'No se encontró el archivo SQLite: {db_path}')
+    else:
+        # MySQL / otras SQL: vaciar el esquema eliminando todas las tablas de la BD actual
+        with connection.cursor() as cursor:
+            if 'mysql' in engine:
+                cursor.execute('SET FOREIGN_KEY_CHECKS = 0')
+            tablas = connection.introspection.table_names()
+            for tabla in tablas:
+                sql = f'DROP TABLE IF EXISTS {connection.ops.quote_name(tabla)}'
+                if 'postgresql' in engine:
+                    sql += ' CASCADE'
+                cursor.execute(sql)
+            if 'mysql' in engine:
+                cursor.execute('SET FOREIGN_KEY_CHECKS = 1')
+            print(f'Base SQL vaciada: {len(tablas)} tabla(s) eliminada(s) en '
+                  f'{settings.DATABASES["default"]["NAME"]}.')
     call_command('makemigrations', verbosity=1)
     call_command('migrate', verbosity=1)
     call_command('makemigrations', verbosity=1)

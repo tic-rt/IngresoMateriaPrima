@@ -101,10 +101,9 @@ def guardar_inspeccion(request):
                         hdr.sector = 'PSUL'
                     elif ingreso.producto.producto == 'Azufre Sólido':
                         hdr.sector = 'PSUL'
-                    elif ingreso.producto.producto == 'Hipoclorito':
-                        hdr.sector = 'PAMO'
                     elif ingreso.producto.producto == 'Amoníaco':
                         hdr.sector = 'PAMO'
+                        #todo lo que no sea amoniaco o azufre liquido se envia a almacen pq (egreso o segundo pesaje) como insumo
                     else:
                         hdr.sector = 'Almacen PQ E'
 
