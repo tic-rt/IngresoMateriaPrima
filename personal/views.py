@@ -29,7 +29,7 @@ def get_sector_form_initial(user):
         'laboratorio': 'Inspeccion Quimica',
         'pamo': 'PAMO',
         'psul': 'PSUL',
-        'Gestion de Acceso': 'Gestion de Acceso',
+        'gacceso': 'Gestion de Acceso',
     }
 
     sector = sector_por_usuario.get(user.username.lower())

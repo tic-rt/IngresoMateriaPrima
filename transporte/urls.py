@@ -4,7 +4,7 @@ from transporte.views import (actualizar, agregarCamion, agregarConductor, agreg
 
 
 urlpatterns = [
-    path('', transportes, name='transportes'),
+    path('empresas', transportes, name='transportes'),
     path('camiones', camiones, name='camiones'),
     path('semis', semis, name='semis'),
     path('conductores', conductores, name='conductores'),
