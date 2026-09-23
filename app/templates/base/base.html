@@ -55,7 +55,7 @@
       </div>
 
       <!-- Espaciador para alinear con el botón Salir (solo escritorio) -->
-      <div class="ms-3">
+      <div class="ms-3 position-fixed">
         <div class="invisible d-none d-md-block">
           <button class="btn btn-danger">
             <i class="bi bi-box-arrow-right me-2"></i>Salir
@@ -117,7 +117,7 @@
         {% endif %}
 
         <!-- Botón Salir -->
-        <div class="ms-3">
+        <div class="ms-3 position-fixed">
           <form method="post" action="{% url 'logout' %}">
             {% csrf_token %}
             <button type="submit" class="btn btn-danger">
