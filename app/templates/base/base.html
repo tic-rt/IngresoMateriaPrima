@@ -148,14 +148,14 @@
             aria-label="Cerrar"></button>
         </div>
 
-        <div class="offcanvas-body ms-1">
+        <div class="offcanvas-body">
         <!-- Porteria 2 -->
         {% if 'G_Porteria2' in grupos_usuario or user.is_superuser %}
         <div class="pt-4 pb-4">
           <div class="pb-4 container-fluid">
             <h2 class="sub-titulo2">Porteria 2</h2>
           </div>
-          <ul class="navbar-nav flex-column ">
+          <ul class="navbar-nav flex-column ms-3 ">
             <li class="nav-item">
               <a href="{% url 'nuevoIngreso' %}" class="nav-link link-side">Nuevo Ingreso</a>
             </li>
@@ -178,7 +178,7 @@
           <div class="pb-4 container-fluid">
             <h2 class="sub-titulo2">Balanza</h2>
           </div>
-          <ul class="navbar-nav flex-column ">
+          <ul class="navbar-nav flex-column ms-3">
             <li class="nav-item">
               <a href="{% url 'pendientesBalanza' %}" class="nav-link link-side">Pendientes</a>
             </li>
@@ -201,7 +201,7 @@
           <div class="pb-4 container-fluid">
             <h2 class="sub-titulo2">Inspección Quimica</h2>
           </div>
-          <ul class="navbar-nav flex-column ">
+          <ul class="navbar-nav flex-column ms-3">
             <li class="nav-item">
               <a href="{% url 'pendientesInspeccion' %}" class="nav-link link-side">Pendientes</a>
             </li>
@@ -220,7 +220,7 @@
           <div class="pb-4 container-fluid">
             <h2 class="sub-titulo2">PAMO</h2>
           </div>
-          <ul class="navbar-nav flex-column ">
+          <ul class="navbar-nav flex-column ms-3">
             <li class="nav-item">
               <a href="{% url 'pendientesPAMO' %}" class="nav-link link-side">Pendientes</a>
             </li>
@@ -237,7 +237,7 @@
           <div class="pb-4 container-fluid">
             <h2 class="sub-titulo2">PSUL</h2>
           </div>
-          <ul class="navbar-nav flex-column ">
+          <ul class="navbar-nav flex-column ms-3">
             <li class="nav-item">
               <a href="{% url 'pendientesPSUL' %}" class="nav-link link-side">Pendientes</a>
             </li>
@@ -254,7 +254,7 @@
           <div class="pb-4 container-fluid">
             <h2 class="sub-titulo2">Calidad</h2>
           </div>
-          <ul class="navbar-nav flex-column ">
+          <ul class="navbar-nav flex-column ms-3 ">
             <li class="nav-item">
               <a href="{% url 'gestion_calidad' %}" class="nav-link link-side">Gestión</a>
             </li>
@@ -271,7 +271,7 @@
           <div class="pb-4 container-fluid">
             <h2 class="sub-titulo2">Shyma</h2>
           </div>
-          <ul class="navbar-nav flex-column ">
+          <ul class="navbar-nav flex-column ms-3 ">
             <li class="nav-item">
               <a href="{% url 'en_transito' %}" class="nav-link link-side">Vehiculos en Tránsito</a>
             </li>
@@ -287,7 +287,7 @@
           <div class="pb-4 container-fluid">
             <h2 class="sub-titulo2">Gestión de Acceso</h2>
           </div>
-          <ul class="navbar-nav flex-column ">
+          <ul class="navbar-nav flex-column ms-3 ">
             <li class="nav-item">
               <a class="nav-link link-side" href="{% url 'personal' %}">Responsables</a>
             </li>
@@ -313,7 +313,7 @@
           <div class="pb-4 container-fluid">
             <h2 class="sub-titulo2">HDR</h2>
           </div>
-          <ul class="navbar-nav flex-column ">
+          <ul class="navbar-nav flex-column ms-3">
             <li class="nav-item">
               <a href="{% url 'lista_hdr' %}" class="nav-link link-side">Hojas de Ruta</a>
             </li>
@@ -325,7 +325,7 @@
         <!-- Ayuda-->
         {%if 'G_Balanza' in grupos_usuario or 'G_Laboratorio' in grupos_usuario or 'G_Pamo' in grupos_usuario or 'G_Porteria2' in grupos_usuario or 'G_Psul' in grupos_usuario or 'G_Shyma' in grupos_usuario or user.is_superuser %}
         <div class="pt-4 pb-4">
-          <ul class="navbar-nav flex-column ">
+          <ul class="navbar-nav flex-column ms-3 ">
             <li class="nav-item">
               <a href="{% if user.is_superuser %}{% static 'Manual_Usuario_Completo.html' %}{% elif 'G_Porteria2' in grupos_usuario %}{% static 'Manual_Porteria2.html' %}{% elif 'G_Balanza' in grupos_usuario %}{% static 'Manual_Balanza.html' %}{% elif 'G_Laboratorio' in grupos_usuario %}{% static 'Manual_InspeccionQuimica.html' %}{% elif 'G_Pamo' in grupos_usuario %}{% static 'Manual_PAMO.html' %}{% elif 'G_Psul' in grupos_usuario %}{% static 'Manual_PSUL.html' %}{% elif 'G_Calidad' in grupos_usuario %}{% static 'Manual_Calidad.html' %}{% elif 'G_Shyma' in grupos_usuario %}{% static 'Manual_SHYMA.html' %}{% else %}{% static 'Manual_Usuario_Completo.html' %}{% endif %}" target="_blank" class="nav-link link-side text-info"><i class="bi bi-info-circle fill text-info"></i> Manual de uso</a>
             </li>
